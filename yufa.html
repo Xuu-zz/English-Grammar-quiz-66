@@ -1,0 +1,3559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>六上英语刷题系统 | 译林版（2024）</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;}
+  body{background:#eef2f7;padding:24px 14px 60px;color:#1e293b;-webkit-text-size-adjust:100%;}
+  .container{max-width:880px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 6px 24px rgba(30,41,59,.08);padding:26px 26px 22px;}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .brand h1{font-size:20px;font-weight:700;letter-spacing:.01em;}
+  .brand p{font-size:12.5px;color:#64748b;margin-top:3px;}
+  .progress-text{color:#64748b;font-size:14px;white-space:nowrap;padding-top:3px;}
+
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:16px 0 4px;margin:0 -4px;scrollbar-width:none;}
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{flex:0 0 auto;border:1px solid #d5dee9;background:#fff;color:#475569;border-radius:999px;padding:7px 13px;font-size:13px;cursor:pointer;}
+  .chip:hover{border-color:#93b4f5;}
+  .chip.on{background:#2563eb;border-color:#2563eb;color:#fff;font-weight:600;}
+
+  .progress-bar-wrap{width:100%;height:6px;background:#e6edf6;border-radius:99px;margin:14px 0 22px;}
+  .progress-bar{height:100%;background:#3b82f6;border-radius:99px;transition:.25s;width:0;}
+
+  .qmeta{font-size:12px;color:#94a3b8;margin-bottom:8px;letter-spacing:.03em;}
+  .question-box{font-size:18px;line-height:1.75;color:#0f172a;margin-bottom:20px;white-space:pre-wrap;
+    font-family:"Iowan Old Style",Palatino,Georgia,"Times New Roman",serif;}
+  .question-box .cn{font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13.5px;color:#64748b;display:block;margin-top:4px;}
+
+  .opt-item{padding:13px 16px;border:1px solid #d5dee9;border-radius:10px;margin-bottom:10px;cursor:pointer;transition:.15s;
+    display:flex;gap:12px;align-items:flex-start;background:#fff;font-size:16px;line-height:1.55;}
+  .opt-item:hover{border-color:#93b4f5;background:#f8fafc;}
+  .opt-item .lt{font-weight:700;color:#64748b;min-width:18px;}
+  .opt-item .tx{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:16.5px;}
+  .opt-item.right{background:#dcfce7;border-color:#22c55e;}
+  .opt-item.right .lt{color:#15803d;}
+  .opt-item.wrong{background:#fee2e2;border-color:#ef4444;}
+  .opt-item.wrong .lt{color:#b91c1c;}
+  .opt-item.sel{border-color:#3b82f6;background:#eff6ff;}
+
+  .fill-row{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+  .fill-row input{flex:1;min-width:200px;padding:11px 14px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;outline:none;
+    font-family:"Iowan Old Style",Palatino,Georgia,serif;}
+  .fill-row input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px #dbeafe;}
+  .fill-row input.ok{border-color:#22c55e;background:#f0fdf4;}
+  .fill-row input.bad{border-color:#ef4444;background:#fef2f2;}
+  .hint{font-size:12px;color:#94a3b8;margin-bottom:16px;}
+
+  .btn-row{display:flex;gap:12px;margin:22px 0 6px;flex-wrap:wrap;}
+  button{font-family:inherit;}
+  .btn{padding:11px 20px;border:none;border-radius:9px;font-size:15px;cursor:pointer;background:#3b82f6;color:#fff;}
+  .btn:hover{filter:brightness(.95);}
+  .btn.gray{background:#94a3b8;}
+  .btn.light{background:#fff;color:#2563eb;border:1px solid #cbd5e1;}
+  .btn.small{padding:8px 14px;font-size:13.5px;}
+  .btn[disabled]{opacity:.45;cursor:default;}
+
+  .fold-card{border:1px solid #e2e8f0;border-radius:12px;margin-top:18px;overflow:hidden;}
+  .fold-header{padding:13px 16px;background:#f1f5f9;display:flex;justify-content:space-between;align-items:center;
+    cursor:pointer;font-weight:600;font-size:14px;color:#334155;}
+  .fold-header .arrow{color:#94a3b8;font-size:12px;font-weight:400;}
+  .fold-body{padding:16px;display:none;line-height:1.75;font-size:14.5px;color:#334155;}
+  .fold-body.open{display:block;}
+  .label-title{font-weight:700;color:#2563eb;margin:12px 0 4px;font-size:13.5px;display:flex;align-items:center;gap:6px;}
+  .label-title::before{content:"";width:6px;height:6px;border-radius:2px;background:#2563eb;display:inline-block;}
+  .label-title:first-child{margin-top:0;}
+  .answer-line{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:16px;color:#15803d;font-weight:600;}
+
+  .score-info{margin-top:16px;color:#16a34a;font-weight:600;font-size:14.5px;}
+  .result{display:none;margin-top:22px;padding:18px;border:1px solid #dbeafe;background:#f8fbff;border-radius:12px;}
+  .result.on{display:block;}
+  .result h2{font-size:17px;margin-bottom:6px;}
+  .result .big{font-size:34px;font-weight:800;color:#2563eb;font-family:Georgia,serif;}
+  .result .sub{font-size:13.5px;color:#64748b;margin:4px 0 12px;}
+  .wrong-list{font-size:13.5px;color:#b91c1c;line-height:1.8;margin-bottom:12px;}
+  .foot{font-size:12px;color:#94a3b8;line-height:1.7;margin-top:22px;border-top:1px solid #eef2f7;padding-top:12px;}
+
+  @media (min-width:700px){
+    .chips{flex-wrap:wrap;overflow:visible;}
+  }
+  @media (max-width:560px){
+    body{padding:10px 8px 40px;}
+    .container{padding:18px 15px 16px;border-radius:13px;}
+    .question-box{font-size:17px;}
+    .btn{padding:11px 16px;font-size:14.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="top">
+    <div class="brand">
+      <h1>六上英语刷题系统</h1>
+      <p>译林版（三起）六年级上册（2024 版）· 真题 + 变式 · 离线可用</p>
+    </div>
+    <div class="progress-text" id="progressDom">1 / 1</div>
+  </div>
+
+  <div class="chips" id="chipWrap"></div>
+
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div class="qmeta" id="qmetaDom"></div>
+  <div class="question-box" id="questionDom"></div>
+  <div id="answerWrap"></div>
+
+  <div class="btn-row">
+    <button class="btn gray" id="prevBtn">上一题</button>
+    <button class="btn" id="nextBtn">下一题</button>
+    <button class="btn light" id="submitBtn" style="display:none">提交答案</button>
+    <button class="btn light" id="finishBtn">交卷</button>
+  </div>
+
+  <div class="fold-card">
+    <div class="fold-header" id="foldTrigger"><span id="foldTitle">查看解析 &amp; 知识点</span><span class="arrow" id="foldArrow">点开 / 收起</span></div>
+    <div class="fold-body" id="foldContent">
+      <div class="label-title">正确答案</div>
+      <div id="ansDom" class="answer-line"></div>
+      <div class="label-title">题目解析</div>
+      <div id="analysisDom"></div>
+      <div class="label-title">语法知识点</div>
+      <div id="knowledgeDom"></div>
+    </div>
+  </div>
+
+  <div class="score-info" id="scoreDom"></div>
+
+  <div class="result" id="resultDom">
+    <h2>本组结果</h2>
+    <div class="big" id="resultScore">0 / 0</div>
+    <div class="sub" id="resultSub"></div>
+    <div class="wrong-list" id="wrongList"></div>
+    <div class="btn-row" style="margin:0">
+      <button class="btn" id="redoWrongBtn">重做错题</button>
+      <button class="btn light" id="restartBtn">重做本组</button>
+    </div>
+  </div>
+
+  <div class="foot">
+    题目来源：U2/U3 为教材与《U2–U3 语法知识点分层资料包》+ 拔高测试卷原题；U1/U4/U5 依公开单元卷整理；U6–U8 按单元主题整理（词汇请与课本核对）。<br>
+    做题记录只存在本机浏览器，换设备不自动同步。
+  </div>
+</div>
+
+<script>
+const QUIZ = {
+ "groups": [
+  {
+   "id": "u1",
+   "name": "U1 Try your best",
+   "items": [
+    {
+     "type": "choice",
+     "question": "— What do you want to be?  — I want to be a ______. I like flying planes.",
+     "options": {
+      "A": "driver",
+      "B": "pilot",
+      "C": "farmer",
+      "D": "cook"
+     },
+     "answer": "B",
+     "analysis": "问职业理想，答句给了线索 flying planes（开飞机），所以是 pilot 飞行员。",
+     "knowledge": "问职业：What do you want to be? 答 I want to be + a/an + 职业。pilot 前用 a。",
+     "id": 1
+    },
+    {
+     "type": "choice",
+     "question": "She is good at ______. She can draw nice pictures.",
+     "options": {
+      "A": "draw",
+      "B": "draws",
+      "C": "drawing",
+      "D": "to draw"
+     },
+     "answer": "C",
+     "analysis": "be good at 中 at 是介词，介词后面动词要加 -ing，所以用 drawing。",
+     "knowledge": "be good at + 名词/动词-ing：擅长（做）某事。同类：be interested in doing、thanks for doing。",
+     "id": 2
+    },
+    {
+     "type": "choice",
+     "question": "Don't give up. You should ______ your best.",
+     "options": {
+      "A": "do",
+      "B": "try",
+      "C": "make",
+      "D": "take"
+     },
+     "answer": "B",
+     "analysis": "固定搭配 try one's best 尽某人最大努力，best 前用 my/your/his 等物主代词。",
+     "knowledge": "try one's best = do one's best，后面不接 to。should 后接动词原形。",
+     "id": 3
+    },
+    {
+     "type": "choice",
+     "question": "My brother wants to be a ______. He likes helping sick people.",
+     "options": {
+      "A": "teacher",
+      "B": "doctor",
+      "C": "cook",
+      "D": "farmer"
+     },
+     "answer": "B",
+     "analysis": "helping sick people（帮助生病的人）指向医生 doctor。",
+     "knowledge": "职业名词：teach→teacher, drive→driver, farm→farmer, sing→singer, dance→dancer, play→player, write→writer。",
+     "id": 4
+    },
+    {
+     "type": "choice",
+     "question": "He works in a school. He teaches English. He is a ______.",
+     "options": {
+      "A": "teacher",
+      "B": "doctor",
+      "C": "pilot",
+      "D": "writer"
+     },
+     "answer": "A",
+     "analysis": "在学校教英语，所以是 teacher。",
+     "knowledge": "问职业还可以用 What does he do? / What is he? 答 He is a teacher.",
+     "id": 5
+    },
+    {
+     "type": "choice",
+     "question": "I like playing basketball. I want to be a basketball ______.",
+     "options": {
+      "A": "player",
+      "B": "singer",
+      "C": "writer",
+      "D": "dancer"
+     },
+     "answer": "A",
+     "analysis": "basketball player 篮球运动员；-er 表示做这个动作的人。",
+     "knowledge": "play→player；注意 play 后接球类不加 the（play basketball），接乐器才加 the（play the piano）。",
+     "id": 6
+    },
+    {
+     "type": "fill",
+     "question": "Look! The boys ______ (swim) in the lake.",
+     "answer": "swimming",
+     "accept": [
+      "swimming",
+      "are swimming"
+     ],
+     "analysis": "Look! 提示动作正在进行，用 be + doing；主语 The boys 用 are，所以是 are swimming。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 7
+    },
+    {
+     "type": "fill",
+     "question": "Listen! The children ______ (play) football on the playground.",
+     "answer": "playing",
+     "accept": [
+      "playing",
+      "are playing"
+     ],
+     "analysis": "Listen! 提示动作正在进行，用 be + doing；主语 The children 用 are，所以是 are playing。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 8
+    },
+    {
+     "type": "fill",
+     "question": "Look! My mother ______ (cook) dinner.",
+     "answer": "cooking",
+     "accept": [
+      "cooking",
+      "is cooking"
+     ],
+     "analysis": "Look! 提示动作正在进行，用 be + doing；主语 My mother 用 is，所以是 is cooking。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 9
+    },
+    {
+     "type": "fill",
+     "question": "Listen! Sam ______ (read) a storybook.",
+     "answer": "reading",
+     "accept": [
+      "reading",
+      "is reading"
+     ],
+     "analysis": "Listen! 提示动作正在进行，用 be + doing；主语 Sam 用 is，所以是 is reading。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 10
+    },
+    {
+     "type": "fill",
+     "question": "Listen! The children ______ (play) football on the playground.",
+     "answer": "playing",
+     "accept": [
+      "playing",
+      "are playing"
+     ],
+     "analysis": "Listen! 提示动作正在进行，用 be + doing；主语 The children 用 are，所以是 are playing。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 11
+    },
+    {
+     "type": "fill",
+     "question": "Look! My mother ______ (cook) dinner.",
+     "answer": "cooking",
+     "accept": [
+      "cooking",
+      "is cooking"
+     ],
+     "analysis": "Look! 提示动作正在进行，用 be + doing；主语 My mother 用 is，所以是 is cooking。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 12
+    }
+   ]
+  },
+  {
+   "id": "u2",
+   "name": "U2 Honesty",
+   "items": [
+    {
+     "type": "choice",
+     "question": "— ______ book is this?  — It's Bobby's.",
+     "options": {
+      "A": "Who",
+      "B": "Whose",
+      "C": "Which",
+      "D": "What"
+     },
+     "answer": "B",
+     "analysis": "答语是 Bobby's（博比的），问“谁的书”用 whose + 名词。",
+     "knowledge": "whose 提问所属，后面必须跟名词（whose book）；who 问“谁”，不能修饰名词。",
+     "id": 13
+    },
+    {
+     "type": "choice",
+     "question": "Sam ______ a storybook on his way home yesterday.",
+     "options": {
+      "A": "find",
+      "B": "finds",
+      "C": "found",
+      "D": "finding"
+     },
+     "answer": "C",
+     "analysis": "yesterday 是过去时间标志，find 的过去式是 found。",
+     "knowledge": "一般过去时：不规则动词 find–found。on one's way home 在回家的路上，home 前不加 to。",
+     "id": 14
+    },
+    {
+     "type": "choice",
+     "question": "— Did you see my storybook yesterday?  — No, I ______.",
+     "options": {
+      "A": "don't",
+      "B": "didn't",
+      "C": "wasn't",
+      "D": "haven't"
+     },
+     "answer": "B",
+     "analysis": "Did 提问必须用 did 回答，时态要一致，所以是 No, I didn't.",
+     "knowledge": "Did…? 的简答只能用 Yes, I did. / No, I didn't. 不能用 don't，也不能用 Yes, I saw.",
+     "id": 15
+    },
+    {
+     "type": "choice",
+     "question": "Honesty ______ important. This you should know.",
+     "options": {
+      "A": "are",
+      "B": "is",
+      "C": "were",
+      "D": "be"
+     },
+     "answer": "B",
+     "analysis": "honesty 是不可数抽象名词，作主语谓语用单数 is。",
+     "knowledge": "抽象名词作主语谓语用单数：Honesty is important. / Happiness is important.",
+     "id": 16
+    },
+    {
+     "type": "choice",
+     "question": "He repaired the book ______. The book looks new now.",
+     "options": {
+      "A": "careful",
+      "B": "carefully",
+      "C": "careless",
+      "D": "care"
+     },
+     "answer": "B",
+     "analysis": "修饰动词 repaired 要用副词 carefully。",
+     "knowledge": "形容词修饰名词，副词修饰动词：a careful boy / repair it carefully。",
+     "id": 17
+    },
+    {
+     "type": "choice",
+     "question": "I can give ______.",
+     "options": {
+      "A": "Mrs Fox it",
+      "B": "it to Mrs Fox",
+      "C": "it Mrs Fox",
+      "D": "to it Mrs Fox"
+     },
+     "answer": "B",
+     "analysis": "give sb sth = give sth to sb；但代词 it/them 只能放在 give 后面，即 give it to sb。",
+     "knowledge": "双宾语：give sb sth ↔ give sth to sb。代词作宾语时只能用 give it to sb，不能说 give sb it。",
+     "id": 18
+    },
+    {
+     "type": "choice",
+     "question": "Sam didn't ______ the book. He was careful.",
+     "options": {
+      "A": "broke",
+      "B": "break",
+      "C": "breaks",
+      "D": "breaking"
+     },
+     "answer": "B",
+     "analysis": "didn't 后面必须用动词原形，broke 是过去式，不能再用。",
+     "knowledge": "过去时否定：主语 + didn't + 动词原形（× didn't broke）。",
+     "id": 19
+    },
+    {
+     "type": "choice",
+     "question": "It was great ______. We all laughed.",
+     "options": {
+      "A": "fun",
+      "B": "funny",
+      "C": "a fun",
+      "D": "funs"
+     },
+     "answer": "A",
+     "analysis": "fun 是不可数名词，“很有趣”说 It was great fun.，不加 a，也没有复数。",
+     "knowledge": "fun（乐趣，不可数）vs funny（滑稽的，形容词）：a funny story / It was great fun.",
+     "id": 20
+    },
+    {
+     "type": "fill",
+     "question": "The children ______ (pick) up the litter just now.",
+     "answer": "picked",
+     "accept": [
+      "picked"
+     ],
+     "analysis": "just now 是过去时间标志 → 用过去式。pick 一般情况直接加 -ed，所以填 picked。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 21
+    },
+    {
+     "type": "fill",
+     "question": "I ______ (not read) a story yesterday.",
+     "answer": "didn't read",
+     "accept": [
+      "didn't read",
+      "did not read"
+     ],
+     "analysis": "过去时否定用 didn't，后面动词必须回原形。× didn't read，√ didn't read。",
+     "knowledge": "过去时否定：主语 + didn't + 动词原形。didn't 后面一定回原形，不能写 didn't broke；be 动词的过去式不加 did（× was broke）。",
+     "id": 22
+    },
+    {
+     "type": "choice",
+     "question": "— Did you feed the animals yesterday? — ______",
+     "options": {
+      "A": "Yes, I was.",
+      "B": "Yes, I did.",
+      "C": "Yes, I am.",
+      "D": "Yes, I do."
+     },
+     "answer": "B",
+     "analysis": "Did 提问必须用 did/didn't 回答，时态要一致：Yes, I did.。用 do/don't 是本单元最大的失分点。",
+     "knowledge": "过去时一般疑问句：Did + 主语 + 动词原形 + 其他? 简答只能用 Yes, 主语 + did. / No, 主语 + didn't. 用 don't 回答是本单元最大的失分点。",
+     "id": 23
+    },
+    {
+     "type": "choice",
+     "question": "He ______ at home last week.",
+     "options": {
+      "A": "was",
+      "B": "were",
+      "C": "is",
+      "D": "are"
+     },
+     "answer": "A",
+     "analysis": "主语 He 是单数，last week 是过去时间，所以用 was。",
+     "knowledge": "be 动词过去式：I/he/she/it + was；you/we/they + were。否定 wasn't / weren't；疑问把 was/were 提前。",
+     "id": 24
+    },
+    {
+     "type": "choice",
+     "question": "Everyone ______ a dream. We should work hard.",
+     "options": {
+      "A": "have",
+      "B": "has",
+      "C": "is having",
+      "D": "had"
+     },
+     "answer": "B",
+     "analysis": "everyone 作主语，谓语用第三人称单数 has。",
+     "knowledge": "主谓一致：everyone / someone / nobody 作主语用单数；抽象名词 honesty 不可数，谓语用 is；news 不可数；many 后接复数。",
+     "id": 25
+    },
+    {
+     "type": "choice",
+     "question": "He ______ to school by bike every day.",
+     "options": {
+      "A": "go",
+      "B": "goes",
+      "C": "went",
+      "D": "going"
+     },
+     "answer": "B",
+     "analysis": "every day 表习惯；主语 he → goes。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 26
+    },
+    {
+     "type": "choice",
+     "question": "This is your book. That one is ______.",
+     "options": {
+      "A": "mine",
+      "B": "hers",
+      "C": "yours",
+      "D": "your"
+     },
+     "answer": "C",
+     "analysis": "第一句 your book 后面有名词，用形容词性；第二句后面没有名词，用名词性 yours。",
+     "knowledge": "物主代词：形容词性 my/your/her/our/their 后面必须带名词；名词性 mine/yours/hers/ours/theirs 单独用，后面不能再加名词。",
+     "id": 27
+    },
+    {
+     "type": "fill",
+     "question": "改为否定句： I planted some trees yesterday.",
+     "answer": "I didn't plant some trees yesterday.",
+     "accept": [
+      "I didn't plant some trees yesterday.",
+      "I did not plant some trees yesterday."
+     ],
+     "analysis": "找到过去式 planted，把助动词 didn't 放在主语后，动词还原成 plant。",
+     "knowledge": "改否定句：找到过去式动词，在主语后加 didn't，动词还原成原形；be 动词句直接加 not（was not / were not）。",
+     "id": 28
+    }
+   ]
+  },
+  {
+   "id": "u3",
+   "name": "U3 Great people",
+   "items": [
+    {
+     "type": "choice",
+     "question": "Yuan Longping was born ______ 1930 ______ Beijing.",
+     "options": {
+      "A": "in; in",
+      "B": "on; in",
+      "C": "in; on",
+      "D": "on; on"
+     },
+     "answer": "A",
+     "analysis": "be born in + 年份、in + 地点；只有具体到某一天才用 on（on May 1st）。",
+     "knowledge": "be born in 1930 / in Beijing；be born on May 1st。年份、月份、地点用 in，具体某一天用 on。",
+     "id": 29
+    },
+    {
+     "type": "choice",
+     "question": "Cai Lun kept ______ and trying, and he never ______.",
+     "options": {
+      "A": "think; give up",
+      "B": "thinking; gave up",
+      "C": "to think; gives up",
+      "D": "thought; gave up"
+     },
+     "answer": "B",
+     "analysis": "keep 后接 doing；后半句讲过去的事，never 后用过去式 gave up。",
+     "knowledge": "keep doing sth 一直做某事；give up doing sth 放弃做某事。give 的过去式是 gave。",
+     "id": 30
+    },
+    {
+     "type": "choice",
+     "question": "Beethoven was a great ______. He wrote a lot of famous ______.",
+     "options": {
+      "A": "musician; music",
+      "B": "music; musician",
+      "C": "musician; musics",
+      "D": "musical; music"
+     },
+     "answer": "A",
+     "analysis": "指人用 musician（可数）；music 不可数，没有 musics。",
+     "knowledge": "music 不可数名词；musician 音乐家（可数）；musical 是形容词“音乐的”。",
+     "id": 31
+    },
+    {
+     "type": "choice",
+     "question": "Many ______ are around us — our parents, our teachers and our friends.",
+     "options": {
+      "A": "hero",
+      "B": "heros",
+      "C": "heroes",
+      "D": "heroies"
+     },
+     "answer": "C",
+     "analysis": "many 后接复数；hero 以 o 结尾加 -es → heroes。",
+     "knowledge": "以 o 结尾多数加 -es：heroes, potatoes, tomatoes, mangoes；例外 photos, pianos。",
+     "id": 32
+    },
+    {
+     "type": "choice",
+     "question": "Marie Curie was the first woman ______ a Nobel Prize.",
+     "options": {
+      "A": "win",
+      "B": "won",
+      "C": "to win",
+      "D": "winning"
+     },
+     "answer": "C",
+     "analysis": "the first + 名词 后面用动词不定式 to do 作定语。",
+     "knowledge": "序数词修饰名词后用 to do：the first woman to win… / the first student to arrive。",
+     "id": 33
+    },
+    {
+     "type": "choice",
+     "question": "Confucius ______ people to be kind and honest.",
+     "options": {
+      "A": "teach",
+      "B": "teaches",
+      "C": "taught",
+      "D": "teaching"
+     },
+     "answer": "C",
+     "analysis": "讲古人的事用一般过去时，teach 的过去式是 taught。",
+     "knowledge": "teach sb to do sth 教某人做某事；teach–taught–taught。",
+     "id": 34
+    },
+    {
+     "type": "choice",
+     "question": "She is famous ______ helping others.",
+     "options": {
+      "A": "as",
+      "B": "for",
+      "C": "to",
+      "D": "with"
+     },
+     "answer": "B",
+     "analysis": "be famous for + 原因/特点（因为帮助别人而著名）；be famous as + 身份。",
+     "knowledge": "be famous for（因……而著名）vs be famous as（作为……而著名）：famous for her songs / famous as a writer。",
+     "id": 35
+    },
+    {
+     "type": "choice",
+     "question": "— ______ did his dreams come true?  — He never gave up and worked hard.",
+     "options": {
+      "A": "What",
+      "B": "Why",
+      "C": "How",
+      "D": "When"
+     },
+     "answer": "C",
+     "analysis": "答句讲的是“方式”（怎么做到的），用 How 提问。",
+     "knowledge": "How 问方式；Why 问原因要用 Because 答。注意 How did + 主语 + 动词原形。",
+     "id": 36
+    },
+    {
+     "type": "choice",
+     "question": "— ______ did Cai Lun want to make?  — Cheap paper.",
+     "options": {
+      "A": "What",
+      "B": "Who",
+      "C": "When",
+      "D": "How"
+     },
+     "answer": "A",
+     "analysis": "答句是物 → 问宾语用 What。",
+     "knowledge": "特殊疑问词：Who 问人，Whose 问所属（后接名词），When 问时间，Where 问地点，Why 问原因（Because 答），How 问方式/感受。实义动词句用 疑问词 + did + 主语 + 原形。",
+     "id": 37
+    },
+    {
+     "type": "fill",
+     "question": "We all know the ______ (important) of honesty.",
+     "answer": "importance",
+     "accept": [
+      "importance"
+     ],
+     "analysis": "the … of 中间要用名词，important 的名词是 importance。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 38
+    },
+    {
+     "type": "choice",
+     "question": "Would you like ______ (come) to my party?",
+     "options": {
+      "A": "comeing",
+      "B": "to come",
+      "C": "come",
+      "D": "comes"
+     },
+     "answer": "B",
+     "analysis": "would like to do sth，所以用 to come。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 39
+    },
+    {
+     "type": "fill",
+     "question": "There are many ______ (child) in the story.",
+     "answer": "children",
+     "accept": [
+      "children"
+     ],
+     "analysis": "不规则复数 child→children。",
+     "knowledge": "名词复数：一般加 -s；s/x/ch/sh 加 -es；辅音+y 变 i 加 es；o 结尾多数加 -es（heroes, potatoes, tomatoes；photos, pianos 例外）；f/fe 改 v 加 es。不规则：child→children, man→men, mouse→mice。",
+     "id": 40
+    },
+    {
+     "type": "choice",
+     "question": "Yuan Longping was born ______ 1930 ______ Beijing.",
+     "options": {
+      "A": "in; in",
+      "B": "on; in",
+      "C": "in; on",
+      "D": "on; on"
+     },
+     "answer": "A",
+     "analysis": "be born in + 年份/地点；只有具体到某一天才用 on（on May 1st）。",
+     "knowledge": "时间介词：in + 年/月/季节/朝代（in 1930, in the Han Dynasty）；on + 具体某天（on May 1st, on the ninth day）；at + 钟点/固定搭配（at the age of six, at night）。",
+     "id": 41
+    },
+    {
+     "type": "fill",
+     "question": "对划线部分提问（in 1973）： He developed hybrid rice in 1973.",
+     "answer": "When did he develop hybrid rice?",
+     "accept": [
+      "When did he develop hybrid rice?",
+      "When did he develop hybrid rice",
+      "When did he develop hybrid rice?"
+     ],
+     "analysis": "问时间用 When；did 后接动词原形 develop。 口诀：疑问词 + did + 主语 + 动词原形。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "id": 42
+    },
+    {
+     "type": "fill",
+     "question": "根据汉语完成句子（每空一词）： 不要放弃，继续努力！ Don't ______ and keep working hard!",
+     "answer": "give up",
+     "accept": [
+      "give up"
+     ],
+     "analysis": "祈使句否定 Don't + 动词原形；give up 放弃。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "id": 43
+    }
+   ]
+  },
+  {
+   "id": "u4",
+   "name": "U4 Getting together",
+   "items": [
+    {
+     "type": "choice",
+     "question": "It's ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "B",
+     "analysis": "具体到某一天（the ninth day）用 on。",
+     "knowledge": "on + 具体某天/某天的上下午；in + 月份、年份；at + 钟点、at the age of。",
+     "id": 44
+    },
+    {
+     "type": "choice",
+     "question": "We ______ a party for Grandma last week.",
+     "options": {
+      "A": "hold",
+      "B": "holds",
+      "C": "held",
+      "D": "holding"
+     },
+     "answer": "C",
+     "analysis": "last week 是过去时间，hold 的过去式是 held。",
+     "knowledge": "不规则动词：hold–held；hold a party 举办聚会。",
+     "id": 45
+    },
+    {
+     "type": "choice",
+     "question": "The baby ______ loudly last night.",
+     "options": {
+      "A": "cry",
+      "B": "crys",
+      "C": "cried",
+      "D": "crying"
+     },
+     "answer": "C",
+     "analysis": "辅音字母 + y 结尾，变 y 为 i 再加 -ed：cry→cried。",
+     "knowledge": "规则动词 -ed：辅音+y → 变 y 为 i 加 ed（cry→cried, try→tried, study→studied）。",
+     "id": 46
+    },
+    {
+     "type": "choice",
+     "question": "Which word is correct?  the ______ day of the ninth lunar month",
+     "options": {
+      "A": "nineth",
+      "B": "ninth",
+      "C": "ninthth",
+      "D": "nine"
+     },
+     "answer": "B",
+     "analysis": "nine 变序数词要去掉 e 再加 th：ninth。",
+     "knowledge": "序数词：nine→ninth（去 e）；twelve→twelfth（ve→f）；five→fifth。",
+     "id": 47
+    },
+    {
+     "type": "choice",
+     "question": "We should ______ and love old people.",
+     "options": {
+      "A": "respect",
+      "B": "respects",
+      "C": "respecting",
+      "D": "to respect"
+     },
+     "answer": "A",
+     "analysis": "should 后接动词原形。",
+     "knowledge": "should + 动词原形，表建议；否定 shouldn't。",
+     "id": 48
+    },
+    {
+     "type": "choice",
+     "question": "Grandpa is old. We must look after ______.",
+     "options": {
+      "A": "he",
+      "B": "him",
+      "C": "his",
+      "D": "himself"
+     },
+     "answer": "B",
+     "analysis": "look after 是介词短语，后面用宾格 him。",
+     "knowledge": "look after sb = take care of sb；代词用宾格（me/him/her/them）。",
+     "id": 49
+    },
+    {
+     "type": "choice",
+     "question": "— When is the Double Ninth Festival? — It's ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "B",
+     "analysis": "具体到某一天（the ninth day）用 on；月份/年份用 in，钟点用 at。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 50
+    },
+    {
+     "type": "fill",
+     "question": "It's on the ______ (two) day of the ninth lunar month.",
+     "answer": "second",
+     "accept": [
+      "second"
+     ],
+     "analysis": "表示“第几个”用序数词，前面加 the：second（缩写 2nd）。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 51
+    },
+    {
+     "type": "choice",
+     "question": "— When is the Double Ninth Festival? — It's ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "B",
+     "analysis": "具体到某一天（the ninth day）用 on；月份/年份用 in，钟点用 at。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 52
+    },
+    {
+     "type": "fill",
+     "question": "It's on the ______ (five) day of the ninth lunar month.",
+     "answer": "fifth",
+     "accept": [
+      "fifth"
+     ],
+     "analysis": "表示“第几个”用序数词，前面加 the：fifth（缩写 5th）。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 53
+    },
+    {
+     "type": "fill",
+     "question": "It's on the ______ (three) day of the ninth lunar month.",
+     "answer": "third",
+     "accept": [
+      "third"
+     ],
+     "analysis": "表示“第几个”用序数词，前面加 the：third（缩写 3rd）。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 54
+    },
+    {
+     "type": "choice",
+     "question": "— When is the Double Ninth Festival? — It's ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "B",
+     "analysis": "具体到某一天（the ninth day）用 on；月份/年份用 in，钟点用 at。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 55
+    }
+   ]
+  },
+  {
+   "id": "u5",
+   "name": "U5 Keeping it clean",
+   "items": [
+    {
+     "type": "choice",
+     "question": "Rubbish ______ our city dirty.",
+     "options": {
+      "A": "make",
+      "B": "makes",
+      "C": "making",
+      "D": "to make"
+     },
+     "answer": "B",
+     "analysis": "rubbish 不可数作主语，谓语用单数 makes。",
+     "knowledge": "make + 宾语 + 形容词：make the city dirty；主语是第三人称单数时 make→makes。",
+     "id": 56
+    },
+    {
+     "type": "choice",
+     "question": "We should ______ the rubbish into the bin.",
+     "options": {
+      "A": "put",
+      "B": "puts",
+      "C": "putting",
+      "D": "to put"
+     },
+     "answer": "A",
+     "analysis": "should 后接动词原形 put。",
+     "knowledge": "should + 原形；put … into the bin 把……放进垃圾桶。",
+     "id": 57
+    },
+    {
+     "type": "choice",
+     "question": "The bottle is on the ground. Please ______.",
+     "options": {
+      "A": "pick up it",
+      "B": "pick it up",
+      "C": "pick up",
+      "D": "it pick up"
+     },
+     "answer": "B",
+     "analysis": "代词 it 要放在动词和副词中间：pick it up。",
+     "knowledge": "动词 + 副词短语遇代词要放中间：pick it up / throw them away / turn it off。",
+     "id": 58
+    },
+    {
+     "type": "choice",
+     "question": "There is a lot of ______ on the ground.",
+     "options": {
+      "A": "rubbish",
+      "B": "rubbishes",
+      "C": "a rubbish",
+      "D": "rubbishs"
+     },
+     "answer": "A",
+     "analysis": "rubbish 是不可数名词，没有复数，也不能加 a。",
+     "knowledge": "不可数名词：rubbish / litter / waste / plastic / water / energy，用 a lot of / much 修饰。",
+     "id": 59
+    },
+    {
+     "type": "choice",
+     "question": "What can we do ______ it clean?",
+     "options": {
+      "A": "keep",
+      "B": "keeps",
+      "C": "to keep",
+      "D": "keeping"
+     },
+     "answer": "C",
+     "analysis": "to do 表目的：做什么来保持清洁。",
+     "knowledge": "动词不定式表目的：We can pick up rubbish to keep the city clean.",
+     "id": 60
+    },
+    {
+     "type": "choice",
+     "question": "We ______ throw rubbish everywhere.",
+     "options": {
+      "A": "should",
+      "B": "shouldn't",
+      "C": "shouldn't to",
+      "D": "not should"
+     },
+     "answer": "B",
+     "analysis": "否定建议用 shouldn't + 动词原形。",
+     "knowledge": "shouldn't = should not，后接原形：We shouldn't throw rubbish everywhere.",
+     "id": 61
+    },
+    {
+     "type": "fill",
+     "question": "The children ______ (pick) up the litter just now.",
+     "answer": "picked",
+     "accept": [
+      "picked"
+     ],
+     "analysis": "just now 是过去时间标志 → 用过去式。pick 一般情况直接加 -ed，所以填 picked。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 62
+    },
+    {
+     "type": "fill",
+     "question": "We all know the ______ (important) of honesty.",
+     "answer": "importance",
+     "accept": [
+      "importance"
+     ],
+     "analysis": "the … of 中间要用名词，important 的名词是 importance。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 63
+    },
+    {
+     "type": "choice",
+     "question": "Would you like ______ (come) to my party?",
+     "options": {
+      "A": "comeing",
+      "B": "to come",
+      "C": "come",
+      "D": "comes"
+     },
+     "answer": "B",
+     "analysis": "would like to do sth，所以用 to come。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 64
+    },
+    {
+     "type": "choice",
+     "question": "He ______ to school by bike every day.",
+     "options": {
+      "A": "go",
+      "B": "goes",
+      "C": "went",
+      "D": "going"
+     },
+     "answer": "B",
+     "analysis": "every day 表习惯；主语 he → goes。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 65
+    },
+    {
+     "type": "fill",
+     "question": "There are many ______ (tomato) in the story.",
+     "answer": "tomatoes",
+     "accept": [
+      "tomatoes"
+     ],
+     "analysis": "以 o 结尾加 -es。",
+     "knowledge": "名词复数：一般加 -s；s/x/ch/sh 加 -es；辅音+y 变 i 加 es；o 结尾多数加 -es（heroes, potatoes, tomatoes；photos, pianos 例外）；f/fe 改 v 加 es。不规则：child→children, man→men, mouse→mice。",
+     "id": 66
+    },
+    {
+     "type": "choice",
+     "question": "He began to work on the farm ______ the age of six.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "C",
+     "analysis": "固定搭配 at the age of + 数字。",
+     "knowledge": "时间介词：in + 年/月/季节/朝代（in 1930, in the Han Dynasty）；on + 具体某天（on May 1st, on the ninth day）；at + 钟点/固定搭配（at the age of six, at night）。",
+     "id": 67
+    }
+   ]
+  },
+  {
+   "id": "u6",
+   "name": "U6 Going green",
+   "items": [
+    {
+     "type": "choice",
+     "question": "We should ______ water and energy.",
+     "options": {
+      "A": "save",
+      "B": "saves",
+      "C": "saving",
+      "D": "to save"
+     },
+     "answer": "A",
+     "analysis": "should 后接动词原形 save。",
+     "knowledge": "should + 原形；save water / save energy 节约用水/能源。",
+     "id": 68
+    },
+    {
+     "type": "choice",
+     "question": "______ throwing it away, we can reuse it.",
+     "options": {
+      "A": "Instead of",
+      "B": "Instead",
+      "C": "Because",
+      "D": "So"
+     },
+     "answer": "A",
+     "analysis": "instead of 是介词短语，后面接名词或动词-ing。",
+     "knowledge": "instead of + 名词/doing（而不是……）；instead 是副词，单独用。",
+     "id": 69
+    },
+    {
+     "type": "choice",
+     "question": "______ old things is good for the Earth.",
+     "options": {
+      "A": "Reuse",
+      "B": "Reusing",
+      "C": "Reused",
+      "D": "Reuses"
+     },
+     "answer": "B",
+     "analysis": "动名词短语作主语，谓语用单数 is，所以用 Reusing。",
+     "knowledge": "动名词作主语：Reusing old things is good. / Saving water is important.",
+     "id": 70
+    },
+    {
+     "type": "choice",
+     "question": "Please turn ______ the lights when you leave the room.",
+     "options": {
+      "A": "on",
+      "B": "off",
+      "C": "up",
+      "D": "down"
+     },
+     "answer": "B",
+     "analysis": "离开房间要关灯，turn off 关掉。",
+     "knowledge": "turn on 打开 / turn off 关掉；代词放中间：turn it off。",
+     "id": 71
+    },
+    {
+     "type": "choice",
+     "question": "There is a lot of ______ in our city. We should plant more trees.",
+     "options": {
+      "A": "pollution",
+      "B": "pollutions",
+      "C": "a pollution",
+      "D": "pollute"
+     },
+     "answer": "A",
+     "analysis": "pollution 不可数，用 a lot of 修饰。",
+     "knowledge": "pollution 污染（不可数）；pollute 是动词；plant trees 种树。",
+     "id": 72
+    },
+    {
+     "type": "fill",
+     "question": "The children ______ (pick) up the litter just now.",
+     "answer": "picked",
+     "accept": [
+      "picked"
+     ],
+     "analysis": "just now 是过去时间标志 → 用过去式。pick 一般情况直接加 -ed，所以填 picked。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 73
+    },
+    {
+     "type": "fill",
+     "question": "We all know the ______ (important) of honesty.",
+     "answer": "importance",
+     "accept": [
+      "importance"
+     ],
+     "analysis": "the … of 中间要用名词，important 的名词是 importance。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 74
+    },
+    {
+     "type": "choice",
+     "question": "Would you like ______ (come) to my party?",
+     "options": {
+      "A": "comeing",
+      "B": "to come",
+      "C": "come",
+      "D": "comes"
+     },
+     "answer": "B",
+     "analysis": "would like to do sth，所以用 to come。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 75
+    },
+    {
+     "type": "choice",
+     "question": "He ______ to school by bike every day.",
+     "options": {
+      "A": "go",
+      "B": "goes",
+      "C": "went",
+      "D": "going"
+     },
+     "answer": "B",
+     "analysis": "every day 表习惯；主语 he → goes。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 76
+    },
+    {
+     "type": "fill",
+     "question": "There are many ______ (tomato) in the story.",
+     "answer": "tomatoes",
+     "accept": [
+      "tomatoes"
+     ],
+     "analysis": "以 o 结尾加 -es。",
+     "knowledge": "名词复数：一般加 -s；s/x/ch/sh 加 -es；辅音+y 变 i 加 es；o 结尾多数加 -es（heroes, potatoes, tomatoes；photos, pianos 例外）；f/fe 改 v 加 es。不规则：child→children, man→men, mouse→mice。",
+     "id": 77
+    },
+    {
+     "type": "choice",
+     "question": "He began to work on the farm ______ the age of six.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "C",
+     "analysis": "固定搭配 at the age of + 数字。",
+     "knowledge": "时间介词：in + 年/月/季节/朝代（in 1930, in the Han Dynasty）；on + 具体某天（on May 1st, on the ninth day）；at + 钟点/固定搭配（at the age of six, at night）。",
+     "id": 78
+    },
+    {
+     "type": "fill",
+     "question": "I ______ (keep) a diary this morning.",
+     "answer": "kept",
+     "accept": [
+      "kept"
+     ],
+     "analysis": "this morning 是过去时间标志 → 用过去式。keep 是不规则动词，过去式是 kept，要单独记。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 79
+    }
+   ]
+  },
+  {
+   "id": "u7",
+   "name": "U7 Old things, new life",
+   "items": [
+    {
+     "type": "choice",
+     "question": "We can turn an old bottle ______ a vase.",
+     "options": {
+      "A": "into",
+      "B": "in",
+      "C": "out of",
+      "D": "for"
+     },
+     "answer": "A",
+     "analysis": "turn A into B 把 A 变成 B，介词用 into。",
+     "knowledge": "turn … into …（变成）；make … out of …（用……做成）；cut … into …（剪成）。",
+     "id": 80
+    },
+    {
+     "type": "choice",
+     "question": "My mum made a bag ______ old clothes.",
+     "options": {
+      "A": "into",
+      "B": "out of",
+      "C": "from",
+      "D": "with"
+     },
+     "answer": "B",
+     "analysis": "make B out of A 用 A 做成 B。",
+     "knowledge": "make A out of B：The bag is made out of old clothes. 注意 out of 不能换成 into。",
+     "id": 81
+    },
+    {
+     "type": "choice",
+     "question": "I ______ the paper into pieces yesterday.",
+     "options": {
+      "A": "cut",
+      "B": "cutted",
+      "C": "cuts",
+      "D": "cutting"
+     },
+     "answer": "A",
+     "analysis": "cut 的过去式还是 cut（三态同形），yesterday 提示过去时。",
+     "knowledge": "cut–cut–cut 三态同形；同类：put–put–put, let–let–let, read–read–read。",
+     "id": 82
+    },
+    {
+     "type": "choice",
+     "question": "Old things can have a new ______.",
+     "options": {
+      "A": "life",
+      "B": "live",
+      "C": "living",
+      "D": "lives"
+     },
+     "answer": "A",
+     "analysis": "have a new life 获得新生命，life 是名词。",
+     "knowledge": "life 生活/生命（复数 lives）；live 动词“居住/生活”；living 活着的。",
+     "id": 83
+    },
+    {
+     "type": "choice",
+     "question": "First we cut the box, and ______ we decorated it.",
+     "options": {
+      "A": "then",
+      "B": "than",
+      "C": "because",
+      "D": "so"
+     },
+     "answer": "A",
+     "analysis": "描述制作过程用 first … then … finally …。",
+     "knowledge": "顺序词：first / next / then / finally，写制作过程时整段用一般过去时。",
+     "id": 84
+    },
+    {
+     "type": "choice",
+     "question": "Old things can have a new ______ .",
+     "options": {
+      "A": "life",
+      "B": "live",
+      "C": "living",
+      "D": "lives"
+     },
+     "answer": "A",
+     "analysis": "have a new life 获得新生命，life 是名词。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 85
+    },
+    {
+     "type": "choice",
+     "question": "We can turn an old bottle ______ a vase.",
+     "options": {
+      "A": "into",
+      "B": "in",
+      "C": "out of",
+      "D": "for"
+     },
+     "answer": "A",
+     "analysis": "turn A into B 把 A 变成 B。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 86
+    },
+    {
+     "type": "choice",
+     "question": "My mum made a bag ______ old clothes.",
+     "options": {
+      "A": "into",
+      "B": "out of",
+      "C": "from",
+      "D": "with"
+     },
+     "answer": "B",
+     "analysis": "make B out of A 用 A 做成 B。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 87
+    },
+    {
+     "type": "choice",
+     "question": "My mum made a bag ______ old clothes.",
+     "options": {
+      "A": "into",
+      "B": "out of",
+      "C": "from",
+      "D": "with"
+     },
+     "answer": "B",
+     "analysis": "make B out of A 用 A 做成 B。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 88
+    },
+    {
+     "type": "choice",
+     "question": "We can turn an old bottle ______ a vase.",
+     "options": {
+      "A": "into",
+      "B": "in",
+      "C": "out of",
+      "D": "for"
+     },
+     "answer": "A",
+     "analysis": "turn A into B 把 A 变成 B。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 89
+    },
+    {
+     "type": "choice",
+     "question": "My mum made a bag ______ old clothes.",
+     "options": {
+      "A": "into",
+      "B": "out of",
+      "C": "from",
+      "D": "with"
+     },
+     "answer": "B",
+     "analysis": "make B out of A 用 A 做成 B。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 90
+    },
+    {
+     "type": "choice",
+     "question": "My mum made a bag ______ old clothes.",
+     "options": {
+      "A": "into",
+      "B": "out of",
+      "C": "from",
+      "D": "with"
+     },
+     "answer": "B",
+     "analysis": "make B out of A 用 A 做成 B。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 91
+    }
+   ]
+  },
+  {
+   "id": "u8",
+   "name": "U8 Then and now",
+   "items": [
+    {
+     "type": "choice",
+     "question": "There ______ a small shop here ten years ago.",
+     "options": {
+      "A": "is",
+      "B": "was",
+      "C": "were",
+      "D": "are"
+     },
+     "answer": "B",
+     "analysis": "ten years ago 是过去时间，a small shop 是单数，用 There was。",
+     "knowledge": "there be 的过去式：There was + 单数/不可数；There were + 复数。就近原则看最近的名词。",
+     "id": 92
+    },
+    {
+     "type": "choice",
+     "question": "There ______ many cars on the road now.",
+     "options": {
+      "A": "is",
+      "B": "was",
+      "C": "are",
+      "D": "were"
+     },
+     "answer": "C",
+     "analysis": "now 是现在时间，many cars 是复数，用 There are。",
+     "knowledge": "There is/are 表现在；There was/were 表过去。看时间和后面的名词单复数。",
+     "id": 93
+    },
+    {
+     "type": "choice",
+     "question": "People ______ to write letters, but now they send emails.",
+     "options": {
+      "A": "use",
+      "B": "used",
+      "C": "using",
+      "D": "are used"
+     },
+     "answer": "B",
+     "analysis": "used to + 动词原形，表示“过去常常”。",
+     "knowledge": "used to do sth 过去常常做某事；be used to doing sth 习惯于做某事（两者不要混）。",
+     "id": 94
+    },
+    {
+     "type": "choice",
+     "question": "Life is ______ than before.",
+     "options": {
+      "A": "good",
+      "B": "well",
+      "C": "better",
+      "D": "best"
+     },
+     "answer": "C",
+     "analysis": "than 提示比较级，good 的比较级是 better。",
+     "knowledge": "比较级：good/well→better, many/much→more, bad→worse。than 前用比较级。",
+     "id": 95
+    },
+    {
+     "type": "choice",
+     "question": "Now people can shop ______ at home.",
+     "options": {
+      "A": "online",
+      "B": "on line",
+      "C": "in line",
+      "D": "line"
+     },
+     "answer": "A",
+     "analysis": "shop online 网上购物，online 是副词。",
+     "knowledge": "online 作副词/形容词：shop online / an online class。",
+     "id": 96
+    },
+    {
+     "type": "fill",
+     "question": "The children ______ (pick) up the litter just now.",
+     "answer": "picked",
+     "accept": [
+      "picked"
+     ],
+     "analysis": "just now 是过去时间标志 → 用过去式。pick 一般情况直接加 -ed，所以填 picked。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 97
+    },
+    {
+     "type": "fill",
+     "question": "We all know the ______ (important) of honesty.",
+     "answer": "importance",
+     "accept": [
+      "importance"
+     ],
+     "analysis": "the … of 中间要用名词，important 的名词是 importance。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 98
+    },
+    {
+     "type": "choice",
+     "question": "Would you like ______ (come) to my party?",
+     "options": {
+      "A": "comeing",
+      "B": "to come",
+      "C": "come",
+      "D": "comes"
+     },
+     "answer": "B",
+     "analysis": "would like to do sth，所以用 to come。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 99
+    },
+    {
+     "type": "choice",
+     "question": "He ______ to school by bike every day.",
+     "options": {
+      "A": "go",
+      "B": "goes",
+      "C": "went",
+      "D": "going"
+     },
+     "answer": "B",
+     "analysis": "every day 表习惯；主语 he → goes。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 100
+    },
+    {
+     "type": "fill",
+     "question": "There are many ______ (tomato) in the story.",
+     "answer": "tomatoes",
+     "accept": [
+      "tomatoes"
+     ],
+     "analysis": "以 o 结尾加 -es。",
+     "knowledge": "名词复数：一般加 -s；s/x/ch/sh 加 -es；辅音+y 变 i 加 es；o 结尾多数加 -es（heroes, potatoes, tomatoes；photos, pianos 例外）；f/fe 改 v 加 es。不规则：child→children, man→men, mouse→mice。",
+     "id": 101
+    },
+    {
+     "type": "choice",
+     "question": "He began to work on the farm ______ the age of six.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "C",
+     "analysis": "固定搭配 at the age of + 数字。",
+     "knowledge": "时间介词：in + 年/月/季节/朝代（in 1930, in the Han Dynasty）；on + 具体某天（on May 1st, on the ninth day）；at + 钟点/固定搭配（at the age of six, at night）。",
+     "id": 102
+    },
+    {
+     "type": "fill",
+     "question": "I ______ (keep) a diary this morning.",
+     "answer": "kept",
+     "accept": [
+      "kept"
+     ],
+     "analysis": "this morning 是过去时间标志 → 用过去式。keep 是不规则动词，过去式是 kept，要单独记。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 103
+    }
+   ]
+  },
+  {
+   "id": "bank",
+   "name": "U2–U3 拔高卷（真题）",
+   "items": [
+    {
+     "type": "choice",
+     "question": "— ______ book is this? — It's Bobby's.",
+     "options": {
+      "A": "Who",
+      "B": "Whose",
+      "C": "Which",
+      "D": "What"
+     },
+     "answer": "B",
+     "analysis": "问“谁的书”用 whose + 名词；Who 问“谁”，不能直接修饰 book。",
+     "knowledge": "特殊疑问词：Who 问人，Whose 问所属（后接名词），When 问时间，Where 问地点，Why 问原因（Because 答），How 问方式/感受。实义动词句用 疑问词 + did + 主语 + 原形。",
+     "id": 104
+    },
+    {
+     "type": "choice",
+     "question": "Sam ______ a storybook on his way home yesterday.",
+     "options": {
+      "A": "find",
+      "B": "finds",
+      "C": "found",
+      "D": "finding"
+     },
+     "answer": "C",
+     "analysis": "yesterday 是过去时标志，find 的过去式是 found。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 105
+    },
+    {
+     "type": "choice",
+     "question": "— Did you see my storybook yesterday? — No, I ______.",
+     "options": {
+      "A": "don't",
+      "B": "didn't",
+      "C": "wasn't",
+      "D": "haven't"
+     },
+     "answer": "B",
+     "analysis": "Did 提问必须用 did 回答，且时态与问句一致；No, I didn't. 是固定答语。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 106
+    },
+    {
+     "type": "choice",
+     "question": "Yuan Longping was born ______ 1930 ______ Beijing.",
+     "options": {
+      "A": "in; in",
+      "B": "on; in",
+      "C": "in; on",
+      "D": "on; on"
+     },
+     "answer": "A",
+     "analysis": "be born in + 年份/地点；be born on + 具体某一天（如 on May 1st）。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 107
+    },
+    {
+     "type": "choice",
+     "question": "Cai Lun kept ______ and trying, and he never ______.",
+     "options": {
+      "A": "think; give up",
+      "B": "thinking; gave up",
+      "C": "to think; gives up",
+      "D": "thought; gave up"
+     },
+     "answer": "B",
+     "analysis": "keep 后接 doing；后半句 never 后用过去式 gave up，因为故事发生在过去。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 108
+    },
+    {
+     "type": "choice",
+     "question": "It was very difficult, ______ he didn't give up.",
+     "options": {
+      "A": "and",
+      "B": "so",
+      "C": "but",
+      "D": "because"
+     },
+     "answer": "C",
+     "analysis": "前后是转折关系（困难，但没放弃），用 but。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 109
+    },
+    {
+     "type": "choice",
+     "question": "Beethoven was a great ______. He wrote a lot of famous ______.",
+     "options": {
+      "A": "musician; music",
+      "B": "music; musician",
+      "C": "musician; musics",
+      "D": "musical; music"
+     },
+     "answer": "A",
+     "analysis": "人用 musician（可数）；music 不可数，没有复数是 musics。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 110
+    },
+    {
+     "type": "choice",
+     "question": "Marie Curie was the first woman ______ a Nobel Prize.",
+     "options": {
+      "A": "win",
+      "B": "won",
+      "C": "to win",
+      "D": "winning"
+     },
+     "answer": "C",
+     "analysis": "序数词 the first 修饰名词时，后面用动词不定式作定语。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 111
+    },
+    {
+     "type": "choice",
+     "question": "My mother often asks me ______ my homework first.",
+     "options": {
+      "A": "do",
+      "B": "to do",
+      "C": "doing",
+      "D": "did"
+     },
+     "answer": "B",
+     "analysis": "ask sb to do sth 让某人做某事；否定是 ask sb not to do sth。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 112
+    },
+    {
+     "type": "choice",
+     "question": "— Why are you so happy? — ______ I have a good idea.",
+     "options": {
+      "A": "So",
+      "B": "Because",
+      "C": "But",
+      "D": "And"
+     },
+     "answer": "B",
+     "analysis": "Why 问原因，必须用 Because 引导的句子回答。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 113
+    },
+    {
+     "type": "choice",
+     "question": "Everyone ______ a dream. We should work hard.",
+     "options": {
+      "A": "have",
+      "B": "has",
+      "C": "is having",
+      "D": "had"
+     },
+     "answer": "B",
+     "analysis": "everyone 作主语时谓语用第三人称单数；本句是普遍事实，用一般现在时。",
+     "knowledge": "主谓一致：everyone / someone / nobody 作主语用单数；抽象名词 honesty 不可数，谓语用 is；news 不可数；many 后接复数。",
+     "id": 114
+    },
+    {
+     "type": "choice",
+     "question": "Mrs Fox ______ us to write about our heroes last week.",
+     "options": {
+      "A": "ask",
+      "B": "asks",
+      "C": "asked",
+      "D": "asking"
+     },
+     "answer": "C",
+     "analysis": "last week 表明过去时；ask 的过去式是 asked。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 115
+    },
+    {
+     "type": "choice",
+     "question": "— How ______ school today? — It was great!",
+     "options": {
+      "A": "is",
+      "B": "was",
+      "C": "did",
+      "D": "does"
+     },
+     "answer": "B",
+     "analysis": "问“今天在学校过得怎么样”，答句是 It was…，故问句用 was。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 116
+    },
+    {
+     "type": "choice",
+     "question": "Thanks for ______ the shopping for me every week.",
+     "options": {
+      "A": "do",
+      "B": "doing",
+      "C": "to do",
+      "D": "did"
+     },
+     "answer": "B",
+     "analysis": "thanks for 中 for 是介词，后接动名词 doing。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 117
+    },
+    {
+     "type": "choice",
+     "question": "— ______ did his dreams come true? — He never gave up and worked hard.",
+     "options": {
+      "A": "What",
+      "B": "Why",
+      "C": "How",
+      "D": "When"
+     },
+     "answer": "C",
+     "analysis": "答句讲的是“方式”（怎么做），用 How 提问。",
+     "knowledge": "特殊疑问词：Who 问人，Whose 问所属（后接名词），When 问时间，Where 问地点，Why 问原因（Because 答），How 问方式/感受。实义动词句用 疑问词 + did + 主语 + 原形。",
+     "id": 118
+    },
+    {
+     "type": "fill",
+     "question": "________ (honest) is the best policy.",
+     "answer": "Honesty",
+     "accept": [
+      "Honesty"
+     ],
+     "analysis": "作主语要用名词 honesty，且位于句首需大写；谓语 is 与单数一致。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "multiline": false,
+     "id": 119
+    },
+    {
+     "type": "fill",
+     "question": "It is important ________ (be) honest with our friends.",
+     "answer": "to be",
+     "accept": [
+      "to be"
+     ],
+     "analysis": "It 是形式主语，真正主语是动词不定式 to be honest。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "multiline": false,
+     "id": 120
+    },
+    {
+     "type": "fill",
+     "question": "Yuan Longping did a lot of ________ (study) on rice.",
+     "answer": "studies",
+     "accept": [
+      "studies"
+     ],
+     "analysis": "do studies on sth 对……做研究；study 作名词“研究”可数，复数是 studies。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 121
+    },
+    {
+     "type": "fill",
+     "question": "Tu Youyou is a great ________ (science). We are proud of her.",
+     "answer": "scientist",
+     "accept": [
+      "scientist"
+     ],
+     "analysis": "指人用 scientist；-ist 后缀常表示“……家/人”。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 122
+    },
+    {
+     "type": "fill",
+     "question": "Edison was a famous ________ (invent). He made many great ________ (invent).",
+     "answer": "inventor; inventions",
+     "accept": [
+      "inventor; inventions",
+      "inventor, inventions",
+      "inventor；inventions"
+     ],
+     "analysis": "-or 指人（发明家），-ion 指物（发明物）；many 后接可数名词复数。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 123
+    },
+    {
+     "type": "fill",
+     "question": "Beethoven was a great ________ (music). His ________ (music) is still popular today.",
+     "answer": "musician; music",
+     "accept": [
+      "musician; music",
+      "musician, music",
+      "musician；music"
+     ],
+     "analysis": "第一空指人用 musician；第二空 music 不可数，不加 s。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 124
+    },
+    {
+     "type": "fill",
+     "question": "The boy repaired the book ________ (careful).",
+     "answer": "carefully",
+     "accept": [
+      "carefully"
+     ],
+     "analysis": "修饰动词 repaired 要用副词 carefully。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 125
+    },
+    {
+     "type": "fill",
+     "question": "Many ________ (hero) are around us — our parents, our teachers and our friends.",
+     "answer": "heroes",
+     "accept": [
+      "heroes"
+     ],
+     "analysis": "以 o 结尾的名词多数加 -es：heroes, potatoes, tomatoes；photos, pianos 例外。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 126
+    },
+    {
+     "type": "fill",
+     "question": "He liked ________ (farm) when he was a little boy.",
+     "answer": "farming",
+     "accept": [
+      "farming"
+     ],
+     "analysis": "like doing sth 表示长期喜好；farm 的名词形式是 farming（农业）。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "multiline": false,
+     "id": 127
+    },
+    {
+     "type": "fill",
+     "question": "Confucius ________ (teach) people to be kind and honest.",
+     "answer": "taught",
+     "accept": [
+      "taught"
+     ],
+     "analysis": "讲古人用过去时；teach 的过去式是 taught。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "multiline": false,
+     "id": 128
+    },
+    {
+     "type": "fill",
+     "question": "Lily sings ________ (well) than me, and she is also ________ (good) at English.",
+     "answer": "better; better",
+     "accept": [
+      "better; better",
+      "better, better",
+      "better；better"
+     ],
+     "analysis": "than 提示比较级；well 的比较级是 better，be good at 的比较级也是 better。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 129
+    },
+    {
+     "type": "fill",
+     "question": "We all know the ________ (important) of honesty.",
+     "answer": "importance",
+     "accept": [
+      "importance"
+     ],
+     "analysis": "the … of 中间要用名词，important 的名词是 importance。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "multiline": false,
+     "id": 130
+    },
+    {
+     "type": "fill",
+     "question": "Look! The children ________ (play) football on the playground.",
+     "answer": "are playing",
+     "accept": [
+      "are playing"
+     ],
+     "analysis": "Look! 提示动作正在进行，用 be + doing。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "multiline": false,
+     "id": 131
+    },
+    {
+     "type": "fill",
+     "question": "Sam ________ (break) the book last week, but he ________ (repair) it later.",
+     "answer": "broke; repaired",
+     "accept": [
+      "broke; repaired"
+     ],
+     "analysis": "last week / later 都是过去时间；break–broke，repair–repaired。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "multiline": false,
+     "id": 132
+    },
+    {
+     "type": "fill",
+     "question": "When he grew up, he began ________ (work) on hybrid rice.",
+     "answer": "to work / working",
+     "accept": [
+      "to work",
+      "working",
+      "to work / working"
+     ],
+     "analysis": "begin 后可接 to do 或 doing，意思基本相同。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "multiline": false,
+     "id": 133
+    },
+    {
+     "type": "fill",
+     "question": "He never gave up ________ (try) new ideas.",
+     "answer": "trying",
+     "accept": [
+      "trying"
+     ],
+     "analysis": "give up 后接动名词；give up 的过去式是 gave up。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "multiline": false,
+     "id": 134
+    },
+    {
+     "type": "fill",
+     "question": "My father ________ (not go) to work yesterday.",
+     "answer": "didn't go",
+     "accept": [
+      "didn't go"
+     ],
+     "analysis": "didn't + 动词原形，不能写 didn't went。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "multiline": false,
+     "id": 135
+    },
+    {
+     "type": "fill",
+     "question": "I saw him ________ (go) to school just now.",
+     "answer": "go",
+     "accept": [
+      "go"
+     ],
+     "analysis": "see sb do sth 表示看见动作全过程，省略 to。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "multiline": false,
+     "id": 136
+    },
+    {
+     "type": "fill",
+     "question": "Would you like ________ (come) to my birthday party?",
+     "answer": "to come",
+     "accept": [
+      "to come"
+     ],
+     "analysis": "would like to do sth = want to do sth。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "multiline": false,
+     "id": 137
+    },
+    {
+     "type": "fill",
+     "question": "Keep ________ (think), and you will find the answer.",
+     "answer": "thinking",
+     "accept": [
+      "thinking"
+     ],
+     "analysis": "keep doing sth 一直做某事。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "multiline": false,
+     "id": 138
+    },
+    {
+     "type": "fill",
+     "question": "The storybook ________ (be) on the desk an hour ago.",
+     "answer": "was",
+     "accept": [
+      "was"
+     ],
+     "analysis": "an hour ago 是过去时间；主语单数用 was。",
+     "knowledge": "be 动词过去式：I/he/she/it + was；you/we/they + were。否定 wasn't / weren't；疑问把 was/were 提前。",
+     "multiline": false,
+     "id": 139
+    },
+    {
+     "type": "fill",
+     "question": "Listen! Someone ________ (sing) in the next room.",
+     "answer": "is singing",
+     "accept": [
+      "is singing"
+     ],
+     "analysis": "Listen! 提示正在进行；someone 作主语谓语用单数，故用 is singing。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "multiline": false,
+     "id": 140
+    },
+    {
+     "type": "fill",
+     "question": "原句：Yuan Longping was a Chinese rice scientist.\n要求：对划线部分（Yuan Longping）提问",
+     "answer": "Who was a Chinese rice scientist?",
+     "accept": [
+      "Who was a Chinese rice scientist?",
+      "Who was a Chinese rice scientist",
+      "Who was a Chinese rice scientist?",
+      "Who was a Chinese rice scientist?"
+     ],
+     "analysis": "划线部分指人且原句有 be 动词 → Who + was + 其他，语序不变。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "multiline": true,
+     "id": 141
+    },
+    {
+     "type": "fill",
+     "question": "原句：His dreams came true because he never gave up.\n要求：对划线部分（because he never gave up）提问",
+     "answer": "Why did his dreams come true?",
+     "accept": [
+      "Why did his dreams come true?",
+      "Why did his dreams come true",
+      "Why did his dreams come true?",
+      "Why did his dreams come true?"
+     ],
+     "analysis": "问原因用 Why；原句是实义动词 came，加 did 并把 came 还原为 come。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "multiline": true,
+     "id": 142
+    },
+    {
+     "type": "fill",
+     "question": "原句：He developed hybrid rice in 1973.\n要求：对划线部分（in 1973）提问",
+     "answer": "When did he develop hybrid rice?",
+     "accept": [
+      "When did he develop hybrid rice?",
+      "When did he develop hybrid rice",
+      "When did he develop hybrid rice?",
+      "When did he develop hybrid rice?"
+     ],
+     "analysis": "问时间用 When；did 后接动词原形 develop。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "multiline": true,
+     "id": 143
+    },
+    {
+     "type": "fill",
+     "question": "原句：Sam broke the book last week.\n要求：改为否定句",
+     "answer": "Sam didn't break the book last week.",
+     "accept": [
+      "Sam didn't break the book last week.",
+      "Sam didn't break the book last week.",
+      "Sam did not break the book last week.",
+      "Sam didn't break the book last week."
+     ],
+     "analysis": "实义动词的否定用 didn't + 原形。",
+     "knowledge": "改否定句：找到过去式动词，在主语后加 didn't，动词还原成原形；be 动词句直接加 not（was not / were not）。",
+     "multiline": true,
+     "id": 144
+    },
+    {
+     "type": "fill",
+     "question": "原句：Cai Lun made paper with cheap things.\n要求：改为一般疑问句",
+     "answer": "Did Cai Lun make paper with cheap things?",
+     "accept": [
+      "Did Cai Lun make paper with cheap things?",
+      "Did Cai Lun make paper with cheap things",
+      "Did Cai Lun make paper with cheap things?",
+      "Did Cai Lun make paper with cheap things?"
+     ],
+     "analysis": "Did 提前，made 还原为 make。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "multiline": true,
+     "id": 145
+    },
+    {
+     "type": "fill",
+     "question": "原句：I want to help Mrs Pig.\n要求：改为同义句（每空一词）",
+     "answer": "would like",
+     "accept": [
+      "would like",
+      "would like",
+      "would like",
+      "would like"
+     ],
+     "analysis": "want to do = would like to do。",
+     "knowledge": "改否定句：找到过去式动词，在主语后加 didn't，动词还原成原形；be 动词句直接加 not（was not / were not）。",
+     "multiline": true,
+     "id": 146
+    },
+    {
+     "type": "fill",
+     "question": "原句：The book is Bobby's.\n要求：对划线部分（Bobby's）提问",
+     "answer": "Whose book is it?",
+     "accept": [
+      "Whose book is it?",
+      "Whose book is it",
+      "Whose book is it?",
+      "Whose book is it?"
+     ],
+     "analysis": "问所属用 whose，后接名词 book。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "multiline": true,
+     "id": 147
+    },
+    {
+     "type": "fill",
+     "question": "原句：It was not easy. He tried his best.\n要求：用 but 合并为一句",
+     "answer": "It was not easy, but he tried his best.",
+     "accept": [
+      "It was not easy, but he tried his best.",
+      "It was not easy, but he tried his best.",
+      "It was not easy, but he tried his best.",
+      "It was not easy, but he tried his best."
+     ],
+     "analysis": "两句是转折关系，用 but 连接，逗号前保留原句。",
+     "knowledge": "改否定句：找到过去式动词，在主语后加 didn't，动词还原成原形；be 动词句直接加 not（was not / were not）。",
+     "multiline": true,
+     "id": 148
+    },
+    {
+     "type": "fill",
+     "question": "你能从伟人身上学到什么？\nWhat can you ______ ______ great people?",
+     "answer": "learn from",
+     "accept": [
+      "learn from",
+      "learn from"
+     ],
+     "analysis": "learn from sb 向某人学习。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 149
+    },
+    {
+     "type": "fill",
+     "question": "他六岁时就开始干农活。\nHe began to work on the farm ______ ______ ______ ______ six.",
+     "answer": "at the age of",
+     "accept": [
+      "at the age of",
+      "at the age of"
+     ],
+     "analysis": "at the age of + 数字 = when he was … years old。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 150
+    },
+    {
+     "type": "fill",
+     "question": "她因为帮助别人而闻名。\nShe is ______ ______ helping others.",
+     "answer": "famous for",
+     "accept": [
+      "famous for",
+      "famous for"
+     ],
+     "analysis": "be famous for + 特点/原因；be famous as + 身份。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 151
+    },
+    {
+     "type": "fill",
+     "question": "汤姆昨天没有做作业。\nTom ______ ______ his homework yesterday.",
+     "answer": "didn't do",
+     "accept": [
+      "didn't do",
+      "didn't do"
+     ],
+     "analysis": "过去时否定：didn't + 动词原形。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 152
+    },
+    {
+     "type": "fill",
+     "question": "— 你昨天看到我的故事书了吗？— 不，我没有。\n— Did you see my storybook yesterday? — No, ______ ______.",
+     "answer": "I didn't",
+     "accept": [
+      "I didn't",
+      "I didn't"
+     ],
+     "analysis": "Did 问句用 did 简答，且与问句时态一致。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 153
+    },
+    {
+     "type": "fill",
+     "question": "我妈妈让我每天读书。\nMy mother ______ me ______ ______ every day.",
+     "answer": "asks; to read",
+     "accept": [
+      "asks; to read",
+      "asks",
+      "to read"
+     ],
+     "analysis": "ask sb to do sth；every day 提示一般现在时，主语第三人称单数用 asks。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 154
+    },
+    {
+     "type": "fill",
+     "question": "很抱歉我弄坏了你的书。\nI'm ______ I ______ your book.",
+     "answer": "sorry; broke",
+     "accept": [
+      "sorry; broke",
+      "sorry",
+      "broke"
+     ],
+     "analysis": "I'm sorry 道歉；break 的过去式 broke。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 155
+    },
+    {
+     "type": "fill",
+     "question": "不要放弃，继续努力！\nDon't ______ ______ and keep working hard!",
+     "answer": "give up",
+     "accept": [
+      "give up",
+      "give up"
+     ],
+     "analysis": "祈使句否定用 Don't + 动词原形。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 156
+    },
+    {
+     "type": "fill",
+     "question": "每个人都可以了不起。\nEveryone ______ ______ great.",
+     "answer": "can be",
+     "accept": [
+      "can be",
+      "can be"
+     ],
+     "analysis": "情态动词 can 后接动词原形 be。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 157
+    },
+    {
+     "type": "fill",
+     "question": "诚实很重要。\n______ is important.",
+     "answer": "Honesty",
+     "accept": [
+      "Honesty",
+      "Honesty"
+     ],
+     "analysis": "抽象名词作主语，谓语用单数 is。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "multiline": false,
+     "id": 158
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 1 空）________",
+     "options": {
+      "A": "get up",
+      "B": "gets up",
+      "C": "got up",
+      "D": "getting up"
+     },
+     "answer": "B",
+     "analysis": "Every morning 表示习惯，主语 she 用 gets up。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 159
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 2 空）________",
+     "options": {
+      "A": "clean",
+      "B": "cleans",
+      "C": "cleaned",
+      "D": "cleaning"
+     },
+     "answer": "B",
+     "analysis": "与 gets up 并列，同样用第三人称单数 cleans。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 160
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 3 空）________",
+     "options": {
+      "A": "help",
+      "B": "helps",
+      "C": "helped",
+      "D": "helping"
+     },
+     "answer": "B",
+     "analysis": "often 表示经常性动作，主语 she 用 helps。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 161
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 4 空）________",
+     "options": {
+      "A": "shopping",
+      "B": "shop",
+      "C": "shops",
+      "D": "shopped"
+     },
+     "answer": "A",
+     "analysis": "do the shopping 购物（家务），shopping 在此为名词。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 162
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 5 空）________",
+     "options": {
+      "A": "look",
+      "B": "looks",
+      "C": "looked",
+      "D": "looking"
+     },
+     "answer": "B",
+     "analysis": "与前面并列，用第三人称单数 looks after。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 163
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 6 空）________",
+     "options": {
+      "A": "cook",
+      "B": "cooks",
+      "C": "cooked",
+      "D": "cooking"
+     },
+     "answer": "C",
+     "analysis": "Last winter 是过去时间，用 cooked。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 164
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 7 空）________",
+     "options": {
+      "A": "tell",
+      "B": "tells",
+      "C": "told",
+      "D": "telling"
+     },
+     "answer": "C",
+     "analysis": "与 cooked 并列，tell 的过去式是 told。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 165
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 8 空）________",
+     "options": {
+      "A": "What",
+      "B": "Why",
+      "C": "How",
+      "D": "When"
+     },
+     "answer": "B",
+     "analysis": "答句用 Because 说明问的是原因，故问句用 Why。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 166
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 9 空）________",
+     "options": {
+      "A": "So",
+      "B": "But",
+      "C": "Because",
+      "D": "Or"
+     },
+     "answer": "C",
+     "analysis": "回答 Why 的提问用 Because。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 167
+    },
+    {
+     "type": "choice",
+     "question": "完形填空 · 邻居王奶奶：（见短文第 10 空）________",
+     "options": {
+      "A": "and",
+      "B": "so",
+      "C": "but",
+      "D": "because"
+     },
+     "answer": "C",
+     "analysis": "“没写书没获奖”与“大家都认为她伟大”是转折关系，用 but。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 168
+    },
+    {
+     "type": "choice",
+     "question": "阅读 A · 蔡伦与造纸术：Cai Lun lived ______.",
+     "options": {
+      "A": "in the Tang Dynasty",
+      "B": "about 1,900 years ago",
+      "C": "in a small village in Beijing",
+      "D": "about 190 years ago"
+     },
+     "answer": "B",
+     "analysis": "原文 He lived in the Han Dynasty, about 1,900 years ago。",
+     "knowledge": "阅读理解 · 细节题",
+     "id": 169
+    },
+    {
+     "type": "choice",
+     "question": "阅读 A · 蔡伦与造纸术：What did people write on at that time?",
+     "options": {
+      "A": "Paper and silk.",
+      "B": "Bamboo and silk.",
+      "C": "Bamboo and paper.",
+      "D": "Cloth and paper."
+     },
+     "answer": "B",
+     "analysis": "原文 At that time, people wrote on bamboo or silk。",
+     "knowledge": "阅读理解 · 细节题",
+     "id": 170
+    },
+    {
+     "type": "choice",
+     "question": "阅读 A · 蔡伦与造纸术：Cai Lun used the following things to make paper EXCEPT ______.",
+     "options": {
+      "A": "tree bark",
+      "B": "old cloth",
+      "C": "fishing nets",
+      "D": "silk"
+     },
+     "answer": "D",
+     "analysis": "原文列出的材料是 tree bark, old cloth and fishing nets；silk 是当时书写用的材料，不是造纸材料。",
+     "knowledge": "阅读理解 · 细节判断题",
+     "id": 171
+    },
+    {
+     "type": "choice",
+     "question": "阅读 A · 蔡伦与造纸术：Why was Cai Lun's paper important?",
+     "options": {
+      "A": "Because it was very dear.",
+      "B": "Because it helped more people read and write.",
+      "C": "Because it was made of bamboo.",
+      "D": "Because only a few people could use it."
+     },
+     "answer": "B",
+     "analysis": "原文 Cai Lun's paper helped more people read and write. It was very important。",
+     "knowledge": "阅读理解 · 因果细节题",
+     "id": 172
+    },
+    {
+     "type": "choice",
+     "question": "阅读 A · 蔡伦与造纸术：What can we learn from Cai Lun?",
+     "options": {
+      "A": "We should never give up and keep trying.",
+      "B": "We should write on bamboo.",
+      "C": "We should make paper every day.",
+      "D": "We should only use cheap things."
+     },
+     "answer": "A",
+     "analysis": "他“did not give up. He kept thinking and trying”，这正是文章想告诉我们的道理。",
+     "knowledge": "阅读理解 · 主旨/推断题",
+     "id": 173
+    },
+    {
+     "type": "choice",
+     "question": "阅读 B · 一则诚实的日记：What did the writer break?",
+     "options": {
+      "A": "A window.",
+      "B": "Mrs Li's glass.",
+      "C": "A football.",
+      "D": "A desk."
+     },
+     "answer": "B",
+     "analysis": "原文 The ball hit Mrs Li's glass and it fell off the desk。",
+     "knowledge": "阅读理解 · 细节题",
+     "id": 174
+    },
+    {
+     "type": "choice",
+     "question": "阅读 B · 一则诚实的日记：How did the writer feel at first?",
+     "options": {
+      "A": "Happy.",
+      "B": "Angry.",
+      "C": "Afraid.",
+      "D": "Excited."
+     },
+     "answer": "C",
+     "analysis": "原文 I was afraid, so I put the broken glass into the bin and said nothing。",
+     "knowledge": "阅读理解 · 细节/情感题",
+     "id": 175
+    },
+    {
+     "type": "choice",
+     "question": "阅读 B · 一则诚实的日记：Who did the writer tell the truth to first?",
+     "options": {
+      "A": "Mrs Li.",
+      "B": "His/Her mother.",
+      "C": "His/Her teacher.",
+      "D": "His/Her classmate."
+     },
+     "answer": "B",
+     "analysis": "原文 My mother saw my face and asked… I told her the truth。",
+     "knowledge": "阅读理解 · 细节题",
+     "id": 176
+    },
+    {
+     "type": "choice",
+     "question": "阅读 B · 一则诚实的日记：What did Mrs Li think was more important?",
+     "options": {
+      "A": "The glass.",
+      "B": "The football match.",
+      "C": "Telling the truth.",
+      "D": "Saying nothing."
+     },
+     "answer": "C",
+     "analysis": "Mrs Li 说 That is more important than the glass，指“说实话”。",
+     "knowledge": "阅读理解 · 细节题",
+     "id": 177
+    },
+    {
+     "type": "choice",
+     "question": "阅读 B · 一则诚实的日记：What's the best title for the passage?",
+     "options": {
+      "A": "A Bad Day",
+      "B": "Telling the Truth",
+      "C": "Mrs Li's Glass",
+      "D": "A Football Match"
+     },
+     "answer": "B",
+     "analysis": "全文围绕“犯错后说实话”展开，结尾点明 honesty is not easy, but it always makes us free。",
+     "knowledge": "阅读理解 · 主旨题",
+     "id": 178
+    }
+   ]
+  },
+  {
+   "id": "gram",
+   "name": "语法专项（18 类）",
+   "items": [
+    {
+     "type": "fill",
+     "question": "My father ______ (break) the glass this morning.",
+     "answer": "broke",
+     "accept": [
+      "broke"
+     ],
+     "analysis": "this morning 是过去时间标志 → 用过去式。break 是不规则动词，过去式是 broke，要单独记。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 179
+    },
+    {
+     "type": "fill",
+     "question": "Mrs Fox ______ (plant) some trees two days ago.",
+     "answer": "planted",
+     "accept": [
+      "planted"
+     ],
+     "analysis": "two days ago 是过去时间标志 → 用过去式。plant 一般情况直接加 -ed，所以填 planted。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 180
+    },
+    {
+     "type": "fill",
+     "question": "I ______ (practise) singing yesterday.",
+     "answer": "practised",
+     "accept": [
+      "practised"
+     ],
+     "analysis": "yesterday 是过去时间标志 → 用过去式。practise 以不发音的 e 结尾，直接加 -d，所以填 practised。",
+     "knowledge": "一般过去时：看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（以 e 加 d；辅音+y 变 i 加 ed；重读闭音节双写），不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。",
+     "id": 181
+    },
+    {
+     "type": "fill",
+     "question": "Bobby ______ (not plant) some trees two days ago.",
+     "answer": "didn't plant",
+     "accept": [
+      "didn't plant",
+      "did not plant"
+     ],
+     "analysis": "过去时否定用 didn't，后面动词必须回原形。× didn't planted，√ didn't plant。",
+     "knowledge": "过去时否定：主语 + didn't + 动词原形。didn't 后面一定回原形，不能写 didn't broke；be 动词的过去式不加 did（× was broke）。",
+     "id": 182
+    },
+    {
+     "type": "fill",
+     "question": "You ______ (not feed) the animals yesterday.",
+     "answer": "didn't feed",
+     "accept": [
+      "didn't feed",
+      "did not feed"
+     ],
+     "analysis": "过去时否定用 didn't，后面动词必须回原形。× didn't fed，√ didn't feed。",
+     "knowledge": "过去时否定：主语 + didn't + 动词原形。didn't 后面一定回原形，不能写 didn't broke；be 动词的过去式不加 did（× was broke）。",
+     "id": 183
+    },
+    {
+     "type": "fill",
+     "question": "Yuan Longping ______ (not climb) a mountain last year.",
+     "answer": "didn't climb",
+     "accept": [
+      "didn't climb",
+      "did not climb"
+     ],
+     "analysis": "过去时否定用 didn't，后面动词必须回原形。× didn't climbed，√ didn't climb。",
+     "knowledge": "过去时否定：主语 + didn't + 动词原形。didn't 后面一定回原形，不能写 didn't broke；be 动词的过去式不加 did（× was broke）。",
+     "id": 184
+    },
+    {
+     "type": "choice",
+     "question": "— Did you repair the book yesterday? — ______",
+     "options": {
+      "A": "Yes, I was.",
+      "B": "Yes, I do.",
+      "C": "Yes, I did.",
+      "D": "Yes, I am."
+     },
+     "answer": "C",
+     "analysis": "Did 提问必须用 did/didn't 回答，时态要一致：Yes, I did.。用 do/don't 是本单元最大的失分点。",
+     "knowledge": "过去时一般疑问句：Did + 主语 + 动词原形 + 其他? 简答只能用 Yes, 主语 + did. / No, 主语 + didn't. 用 don't 回答是本单元最大的失分点。",
+     "id": 185
+    },
+    {
+     "type": "choice",
+     "question": "— Did you climb a mountain yesterday? — ______",
+     "options": {
+      "A": "No, I didn't.",
+      "B": "No, I haven't.",
+      "C": "No, I don't.",
+      "D": "No, I wasn't."
+     },
+     "answer": "A",
+     "analysis": "Did 提问必须用 did/didn't 回答，时态要一致：No, I didn't.。用 do/don't 是本单元最大的失分点。",
+     "knowledge": "过去时一般疑问句：Did + 主语 + 动词原形 + 其他? 简答只能用 Yes, 主语 + did. / No, 主语 + didn't. 用 don't 回答是本单元最大的失分点。",
+     "id": 186
+    },
+    {
+     "type": "choice",
+     "question": "— Did you keep a diary yesterday? — ______",
+     "options": {
+      "A": "Yes, I do.",
+      "B": "Yes, I did.",
+      "C": "Yes, I was.",
+      "D": "Yes, I am."
+     },
+     "answer": "B",
+     "analysis": "Did 提问必须用 did/didn't 回答，时态要一致：Yes, I did.。用 do/don't 是本单元最大的失分点。",
+     "knowledge": "过去时一般疑问句：Did + 主语 + 动词原形 + 其他? 简答只能用 Yes, 主语 + did. / No, 主语 + didn't. 用 don't 回答是本单元最大的失分点。",
+     "id": 187
+    },
+    {
+     "type": "choice",
+     "question": "My friends ______ at home just now.",
+     "options": {
+      "A": "are",
+      "B": "were",
+      "C": "is",
+      "D": "was"
+     },
+     "answer": "B",
+     "analysis": "主语 My friends 是复数，just now 是过去时间，所以用 were。",
+     "knowledge": "be 动词过去式：I/he/she/it + was；you/we/they + were。否定 wasn't / weren't；疑问把 was/were 提前。",
+     "id": 188
+    },
+    {
+     "type": "choice",
+     "question": "The children ______ at home two days ago.",
+     "options": {
+      "A": "was",
+      "B": "are",
+      "C": "is",
+      "D": "were"
+     },
+     "answer": "D",
+     "analysis": "主语 The children 是复数，two days ago 是过去时间，所以用 were。",
+     "knowledge": "be 动词过去式：I/he/she/it + was；you/we/they + were。否定 wasn't / weren't；疑问把 was/were 提前。",
+     "id": 189
+    },
+    {
+     "type": "choice",
+     "question": "Cai Lun ______ at home last year.",
+     "options": {
+      "A": "was",
+      "B": "is",
+      "C": "were",
+      "D": "are"
+     },
+     "answer": "A",
+     "analysis": "主语 Cai Lun 是单数，last year 是过去时间，所以用 was。",
+     "knowledge": "be 动词过去式：I/he/she/it + was；you/we/they + were。否定 wasn't / weren't；疑问把 was/were 提前。",
+     "id": 190
+    },
+    {
+     "type": "choice",
+     "question": "— ______ are you so happy?  — Because I have a good idea.",
+     "options": {
+      "A": "Where",
+      "B": "When",
+      "C": "Why",
+      "D": "How"
+     },
+     "answer": "C",
+     "analysis": "Because 回答原因 → 问句用 Why。",
+     "knowledge": "特殊疑问词：Who 问人，Whose 问所属（后接名词），When 问时间，Where 问地点，Why 问原因（Because 答），How 问方式/感受。实义动词句用 疑问词 + did + 主语 + 原形。",
+     "id": 191
+    },
+    {
+     "type": "choice",
+     "question": "— ______ did Cai Lun want to make?  — Cheap paper.",
+     "options": {
+      "A": "When",
+      "B": "What",
+      "C": "How",
+      "D": "Who"
+     },
+     "answer": "B",
+     "analysis": "答句是物 → 问宾语用 What。",
+     "knowledge": "特殊疑问词：Who 问人，Whose 问所属（后接名词），When 问时间，Where 问地点，Why 问原因（Because 答），How 问方式/感受。实义动词句用 疑问词 + did + 主语 + 原形。",
+     "id": 192
+    },
+    {
+     "type": "choice",
+     "question": "— ______ did Cai Lun want to make?  — Cheap paper.",
+     "options": {
+      "A": "How",
+      "B": "What",
+      "C": "Who",
+      "D": "When"
+     },
+     "answer": "B",
+     "analysis": "答句是物 → 问宾语用 What。",
+     "knowledge": "特殊疑问词：Who 问人，Whose 问所属（后接名词），When 问时间，Where 问地点，Why 问原因（Because 答），How 问方式/感受。实义动词句用 疑问词 + did + 主语 + 原形。",
+     "id": 193
+    },
+    {
+     "type": "fill",
+     "question": "He is ______ (care) with his homework, so he makes many mistakes.",
+     "answer": "careless",
+     "accept": [
+      "careless"
+     ],
+     "analysis": "根据后句“常犯错”判断是“粗心的”，用 careless。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 194
+    },
+    {
+     "type": "fill",
+     "question": "______ (honest) is the best policy.",
+     "answer": "Honesty",
+     "accept": [
+      "Honesty"
+     ],
+     "analysis": "作主语要用名词 honesty，位于句首大写；抽象名词作主语谓语用单数 is。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 195
+    },
+    {
+     "type": "fill",
+     "question": "The story is ______ (truth).",
+     "answer": "true",
+     "accept": [
+      "true"
+     ],
+     "analysis": "作表语要用形容词 true，truth 是名词。",
+     "knowledge": "词族转换：honest→honesty，important→importance，careful→carefully，science→scientist，invent→inventor/invention，music→musician，farm→farming。先判断空格要名词、形容词还是副词，再变形。",
+     "id": 196
+    },
+    {
+     "type": "choice",
+     "question": "Thanks for ______ (do) the shopping for me.",
+     "options": {
+      "A": "dos",
+      "B": "to do",
+      "C": "doing",
+      "D": "do"
+     },
+     "answer": "C",
+     "analysis": "介词 for 后接动名词，所以用 doing。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 197
+    },
+    {
+     "type": "choice",
+     "question": "Thanks for ______ (do) the shopping for me.",
+     "options": {
+      "A": "doing",
+      "B": "dos",
+      "C": "to do",
+      "D": "do"
+     },
+     "answer": "A",
+     "analysis": "介词 for 后接动名词，所以用 doing。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 198
+    },
+    {
+     "type": "choice",
+     "question": "Would you like ______ (come) to my party?",
+     "options": {
+      "A": "comeing",
+      "B": "to come",
+      "C": "come",
+      "D": "comes"
+     },
+     "answer": "B",
+     "analysis": "would like to do sth，所以用 to come。",
+     "knowledge": "动词后面跟什么：+to do（want, would like, begin, ask sb, be the first to）；+doing（keep, give up, be good at, thanks for, enjoy, practise）；+sb do 省 to（make, let, see, watch, hear）。",
+     "id": 199
+    },
+    {
+     "type": "fill",
+     "question": "There are many ______ (poem) in the story.",
+     "answer": "poems",
+     "accept": [
+      "poems"
+     ],
+     "analysis": "一般情况直接加 -s。",
+     "knowledge": "名词复数：一般加 -s；s/x/ch/sh 加 -es；辅音+y 变 i 加 es；o 结尾多数加 -es（heroes, potatoes, tomatoes；photos, pianos 例外）；f/fe 改 v 加 es。不规则：child→children, man→men, mouse→mice。",
+     "id": 200
+    },
+    {
+     "type": "fill",
+     "question": "The book is about some ______ (man).",
+     "answer": "men",
+     "accept": [
+      "men"
+     ],
+     "analysis": "不规则复数 man→men。",
+     "knowledge": "名词复数：一般加 -s；s/x/ch/sh 加 -es；辅音+y 变 i 加 es；o 结尾多数加 -es（heroes, potatoes, tomatoes；photos, pianos 例外）；f/fe 改 v 加 es。不规则：child→children, man→men, mouse→mice。",
+     "id": 201
+    },
+    {
+     "type": "fill",
+     "question": "There are many ______ (hero) in the story.",
+     "answer": "heroes",
+     "accept": [
+      "heroes"
+     ],
+     "analysis": "以 o 结尾多数加 -es（heroes, potatoes, tomatoes）；photos, pianos 例外。",
+     "knowledge": "名词复数：一般加 -s；s/x/ch/sh 加 -es；辅音+y 变 i 加 es；o 结尾多数加 -es（heroes, potatoes, tomatoes；photos, pianos 例外）；f/fe 改 v 加 es。不规则：child→children, man→men, mouse→mice。",
+     "id": 202
+    },
+    {
+     "type": "choice",
+     "question": "— When is the Double Ninth Festival? — It's ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "B",
+     "analysis": "具体到某一天（the ninth day）用 on；月份/年份用 in，钟点用 at。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 203
+    },
+    {
+     "type": "choice",
+     "question": "— When is the Double Ninth Festival? — It's ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "B",
+     "analysis": "具体到某一天（the ninth day）用 on；月份/年份用 in，钟点用 at。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 204
+    },
+    {
+     "type": "choice",
+     "question": "— When is the Double Ninth Festival? — It's ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "B",
+     "analysis": "具体到某一天（the ninth day）用 on；月份/年份用 in，钟点用 at。",
+     "knowledge": "序数词与日期：one→first, two→second, three→third, five→fifth, nine→ninth（去 e）, twelve→twelfth（ve→f）, twenty→twentieth。具体到某一天用 on，月份年份用 in。",
+     "id": 205
+    },
+    {
+     "type": "choice",
+     "question": "He began to work on the farm ______ the age of six.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "for"
+     },
+     "answer": "C",
+     "analysis": "固定搭配 at the age of + 数字。",
+     "knowledge": "时间介词：in + 年/月/季节/朝代（in 1930, in the Han Dynasty）；on + 具体某天（on May 1st, on the ninth day）；at + 钟点/固定搭配（at the age of six, at night）。",
+     "id": 206
+    },
+    {
+     "type": "choice",
+     "question": "The Double Ninth Festival is ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "by"
+     },
+     "answer": "B",
+     "analysis": "具体某一天用 on。",
+     "knowledge": "时间介词：in + 年/月/季节/朝代（in 1930, in the Han Dynasty）；on + 具体某天（on May 1st, on the ninth day）；at + 钟点/固定搭配（at the age of six, at night）。",
+     "id": 207
+    },
+    {
+     "type": "choice",
+     "question": "The Double Ninth Festival is ______ the ninth day of the ninth lunar month.",
+     "options": {
+      "A": "in",
+      "B": "on",
+      "C": "at",
+      "D": "by"
+     },
+     "answer": "B",
+     "analysis": "具体某一天用 on。",
+     "knowledge": "时间介词：in + 年/月/季节/朝代（in 1930, in the Han Dynasty）；on + 具体某天（on May 1st, on the ninth day）；at + 钟点/固定搭配（at the age of six, at night）。",
+     "id": 208
+    },
+    {
+     "type": "choice",
+     "question": "Honesty ______ important.",
+     "options": {
+      "A": "are",
+      "B": "is",
+      "C": "were",
+      "D": "be"
+     },
+     "answer": "B",
+     "analysis": "抽象名词 honesty 不可数，谓语用 is。",
+     "knowledge": "主谓一致：everyone / someone / nobody 作主语用单数；抽象名词 honesty 不可数，谓语用 is；news 不可数；many 后接复数。",
+     "id": 209
+    },
+    {
+     "type": "choice",
+     "question": "Honesty ______ important.",
+     "options": {
+      "A": "are",
+      "B": "is",
+      "C": "were",
+      "D": "be"
+     },
+     "answer": "B",
+     "analysis": "抽象名词 honesty 不可数，谓语用 is。",
+     "knowledge": "主谓一致：everyone / someone / nobody 作主语用单数；抽象名词 honesty 不可数，谓语用 is；news 不可数；many 后接复数。",
+     "id": 210
+    },
+    {
+     "type": "choice",
+     "question": "Many ______ are around us — our parents, our teachers and our friends.",
+     "options": {
+      "A": "hero",
+      "B": "heros",
+      "C": "heroes",
+      "D": "heroies"
+     },
+     "answer": "C",
+     "analysis": "many 后接复数；hero→heroes。",
+     "knowledge": "主谓一致：everyone / someone / nobody 作主语用单数；抽象名词 honesty 不可数，谓语用 is；news 不可数；many 后接复数。",
+     "id": 211
+    },
+    {
+     "type": "fill",
+     "question": "Look! Sam ______ (read) a storybook.",
+     "answer": "reading",
+     "accept": [
+      "reading",
+      "is reading"
+     ],
+     "analysis": "Look! 提示动作正在进行，用 be + doing；主语 Sam 用 is，所以是 is reading。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 212
+    },
+    {
+     "type": "fill",
+     "question": "Look! My mother ______ (cook) dinner.",
+     "answer": "cooking",
+     "accept": [
+      "cooking",
+      "is cooking"
+     ],
+     "analysis": "Look! 提示动作正在进行，用 be + doing；主语 My mother 用 is，所以是 is cooking。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 213
+    },
+    {
+     "type": "fill",
+     "question": "Look! My mother ______ (cook) dinner.",
+     "answer": "cooking",
+     "accept": [
+      "cooking",
+      "is cooking"
+     ],
+     "analysis": "Look! 提示动作正在进行，用 be + doing；主语 My mother 用 is，所以是 is cooking。",
+     "knowledge": "现在进行时：be + 动词-ing，标志词 Look! / Listen! / now。注意双写（swimming, chatting）和去 e（making）。",
+     "id": 214
+    },
+    {
+     "type": "choice",
+     "question": "He ______ to school by bike every day.",
+     "options": {
+      "A": "go",
+      "B": "goes",
+      "C": "went",
+      "D": "going"
+     },
+     "answer": "B",
+     "analysis": "every day 表习惯；主语 he → goes。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 215
+    },
+    {
+     "type": "choice",
+     "question": "He ______ to school by bike every day.",
+     "options": {
+      "A": "go",
+      "B": "goes",
+      "C": "went",
+      "D": "going"
+     },
+     "answer": "B",
+     "analysis": "every day 表习惯；主语 he → goes。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 216
+    },
+    {
+     "type": "choice",
+     "question": "Mrs Fox ______ us to write about our heroes last week.",
+     "options": {
+      "A": "ask",
+      "B": "asks",
+      "C": "asked",
+      "D": "asking"
+     },
+     "answer": "C",
+     "analysis": "last week 是过去时间 → asked。",
+     "knowledge": "时态看标志词：every day / usually 用一般现在时；yesterday / last … / … ago 用一般过去时；now / Look! 用现在进行时；tomorrow / next … 用 will + 原形。",
+     "id": 217
+    },
+    {
+     "type": "choice",
+     "question": "This is our book. That one is ______.",
+     "options": {
+      "A": "ours",
+      "B": "our",
+      "C": "hers",
+      "D": "yours"
+     },
+     "answer": "A",
+     "analysis": "第一句 our book 后面有名词，用形容词性；第二句后面没有名词，用名词性 ours。",
+     "knowledge": "物主代词：形容词性 my/your/her/our/their 后面必须带名词；名词性 mine/yours/hers/ours/theirs 单独用，后面不能再加名词。",
+     "id": 218
+    },
+    {
+     "type": "choice",
+     "question": "This is her book. That one is ______.",
+     "options": {
+      "A": "theirs",
+      "B": "yours",
+      "C": "hers",
+      "D": "her"
+     },
+     "answer": "C",
+     "analysis": "第一句 her book 后面有名词，用形容词性；第二句后面没有名词，用名词性 hers。",
+     "knowledge": "物主代词：形容词性 my/your/her/our/their 后面必须带名词；名词性 mine/yours/hers/ours/theirs 单独用，后面不能再加名词。",
+     "id": 219
+    },
+    {
+     "type": "choice",
+     "question": "This is our book. That one is ______.",
+     "options": {
+      "A": "ours",
+      "B": "hers",
+      "C": "yours",
+      "D": "our"
+     },
+     "answer": "A",
+     "analysis": "第一句 our book 后面有名词，用形容词性；第二句后面没有名词，用名词性 ours。",
+     "knowledge": "物主代词：形容词性 my/your/her/our/their 后面必须带名词；名词性 mine/yours/hers/ours/theirs 单独用，后面不能再加名词。",
+     "id": 220
+    },
+    {
+     "type": "fill",
+     "question": "改为否定句： Mrs Fox grew rice yesterday.",
+     "answer": "Mrs Fox didn't grow rice yesterday.",
+     "accept": [
+      "Mrs Fox didn't grow rice yesterday.",
+      "Mrs Fox did not grow rice yesterday."
+     ],
+     "analysis": "找到过去式 grew，把助动词 didn't 放在主语后，动词还原成 grow。",
+     "knowledge": "改否定句：找到过去式动词，在主语后加 didn't，动词还原成原形；be 动词句直接加 not（was not / were not）。",
+     "id": 221
+    },
+    {
+     "type": "fill",
+     "question": "改为否定句： Mrs Fox reused the old box last year.",
+     "answer": "Mrs Fox didn't reuse the old box last year.",
+     "accept": [
+      "Mrs Fox didn't reuse the old box last year.",
+      "Mrs Fox did not reuse the old box last year."
+     ],
+     "analysis": "找到过去式 reused，把助动词 didn't 放在主语后，动词还原成 reuse。",
+     "knowledge": "改否定句：找到过去式动词，在主语后加 didn't，动词还原成原形；be 动词句直接加 not（was not / were not）。",
+     "id": 222
+    },
+    {
+     "type": "fill",
+     "question": "改为否定句： I decorated the bottle last week.",
+     "answer": "I didn't decorate the bottle last week.",
+     "accept": [
+      "I didn't decorate the bottle last week.",
+      "I did not decorate the bottle last week."
+     ],
+     "analysis": "找到过去式 decorated，把助动词 didn't 放在主语后，动词还原成 decorate。",
+     "knowledge": "改否定句：找到过去式动词，在主语后加 didn't，动词还原成原形；be 动词句直接加 not（was not / were not）。",
+     "id": 223
+    },
+    {
+     "type": "fill",
+     "question": "对划线部分提问（with cheap things）： Cai Lun made paper with cheap things.",
+     "answer": "How did Cai Lun make paper?",
+     "accept": [
+      "How did Cai Lun make paper?",
+      "How did Cai Lun make paper",
+      "How did Cai Lun make paper?"
+     ],
+     "analysis": "问“用什么方式”用 How。 口诀：疑问词 + did + 主语 + 动词原形。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "id": 224
+    },
+    {
+     "type": "fill",
+     "question": "对划线部分提问（in 1973）： He developed hybrid rice in 1973.",
+     "answer": "When did he develop hybrid rice?",
+     "accept": [
+      "When did he develop hybrid rice?",
+      "When did he develop hybrid rice",
+      "When did he develop hybrid rice?"
+     ],
+     "analysis": "问时间用 When；did 后接动词原形 develop。 口诀：疑问词 + did + 主语 + 动词原形。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "id": 225
+    },
+    {
+     "type": "fill",
+     "question": "对划线部分提问（because he never gave up）： His dreams came true because he never gave up.",
+     "answer": "Why did his dreams come true?",
+     "accept": [
+      "Why did his dreams come true?",
+      "Why did his dreams come true",
+      "why did his dreams come true?"
+     ],
+     "analysis": "问原因用 Why；原句是实义动词 came，加 did 并把 came 还原为 come。 口诀：疑问词 + did + 主语 + 动词原形。",
+     "knowledge": "对划线部分提问：疑问词 + did + 主语 + 动词原形？原句有 be 动词则用 疑问词 + was/were + 主语。口诀：一选疑问词，二加 did，三还原动词。",
+     "id": 226
+    },
+    {
+     "type": "fill",
+     "question": "根据汉语完成句子（每空一词）： 如果你永不放弃，梦想就会实现。 If you never give up, your dream will ______ .",
+     "answer": "come true",
+     "accept": [
+      "come true"
+     ],
+     "analysis": "come true 实现，主语是梦想。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "id": 227
+    },
+    {
+     "type": "fill",
+     "question": "根据汉语完成句子（每空一词）： 她因为帮助别人而闻名。 She is ______ helping others.",
+     "answer": "famous for",
+     "accept": [
+      "famous for"
+     ],
+     "analysis": "be famous for + 特点/原因；be famous as + 身份。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "id": 228
+    },
+    {
+     "type": "fill",
+     "question": "根据汉语完成句子（每空一词）： 我们可以走路而不是坐车。 We can walk ______ taking a car.",
+     "answer": "instead of",
+     "accept": [
+      "instead of"
+     ],
+     "analysis": "instead of + 名词/doing，of 是介词。",
+     "knowledge": "固定搭配要整体记：learn from sb、at the age of、be famous for、give up、take part in、look after、on one's way home、instead of + doing、used to + 原形、come true。",
+     "id": 229
+    },
+    {
+     "type": "choice",
+     "question": "First we cut the box ______ small pieces.",
+     "options": {
+      "A": "into",
+      "B": "out of",
+      "C": "on",
+      "D": "at"
+     },
+     "answer": "A",
+     "analysis": "cut … into … 把……剪成……。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 230
+    },
+    {
+     "type": "choice",
+     "question": "Old things can have a new ______ .",
+     "options": {
+      "A": "life",
+      "B": "live",
+      "C": "living",
+      "D": "lives"
+     },
+     "answer": "A",
+     "analysis": "have a new life 获得新生命，life 是名词。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 231
+    },
+    {
+     "type": "choice",
+     "question": "We can turn an old bottle ______ a vase.",
+     "options": {
+      "A": "into",
+      "B": "in",
+      "C": "out of",
+      "D": "for"
+     },
+     "answer": "A",
+     "analysis": "turn A into B 把 A 变成 B。",
+     "knowledge": "turn A into B（把 A 变成 B）；make B out of A（用 A 做成 B）；cut … into …（把……剪成……）。介词固定，不能互换。",
+     "id": 232
+    }
+   ]
+  }
+ ]
+};
+
+(function () {
+  var state = { gi: 0, queue: [], pos: 0, ans: {} };
+  var LS = 'yl6a_tpl_v1';
+
+  var chipWrap = document.getElementById('chipWrap');
+  var progressDom = document.getElementById('progressDom');
+  var progressBar = document.getElementById('progressBar');
+  var qmetaDom = document.getElementById('qmetaDom');
+  var questionDom = document.getElementById('questionDom');
+  var answerWrap = document.getElementById('answerWrap');
+  var foldTrigger = document.getElementById('foldTrigger');
+  var foldContent = document.getElementById('foldContent');
+  var ansDom = document.getElementById('ansDom');
+  var analysisDom = document.getElementById('analysisDom');
+  var knowledgeDom = document.getElementById('knowledgeDom');
+  var scoreDom = document.getElementById('scoreDom');
+  var resultDom = document.getElementById('resultDom');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var submitBtn = document.getElementById('submitBtn');
+  var finishBtn = document.getElementById('finishBtn');
+
+  function norm(s) {
+    if (s === null || s === undefined) return '';
+    var t = String(s).toLowerCase().trim();
+    t = t.replace(/[，,；;\/、]/g, ';').replace(/\s*;\s*/g, ';');
+    t = t.replace(/[.。!！?？]+$/g, '').replace(/\s+/g, ' ').replace(/’/g, "'");
+    return t;
+  }
+  function isRight(item, val) {
+    if (item.type === 'choice') return String(val).toUpperCase() === String(item.answer).toUpperCase();
+    var acc = item.accept && item.accept.length ? item.accept : [item.answer];
+    var n = norm(val);
+    for (var i = 0; i < acc.length; i++) if (norm(acc[i]) === n) return true;
+    return false;
+  }
+  function letter(i) { return String.fromCharCode(65 + i); }
+  function group() { return QUIZ.groups[state.gi]; }
+  function item() { return group().items[state.queue[state.pos]]; }
+  function curKey() { return group().id + '#' + state.queue[state.pos]; }
+
+  /* ---------- 进度存储 ---------- */
+  function save() {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS) || '{}');
+      all[group().id] = { ans: state.ans, pos: state.pos };
+      localStorage.setItem(LS, JSON.stringify(all));
+    } catch (e) {}
+  }
+  function load(gid) {
+    try {
+      var all = JSON.parse(localStorage.getItem(LS) || '{}');
+      return all[gid] || null;
+    } catch (e) { return null; }
+  }
+
+  /* ---------- 顶部分组 ---------- */
+  function renderChips() {
+    chipWrap.innerHTML = '';
+    QUIZ.groups.forEach(function (g, i) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (i === state.gi ? ' on' : '');
+      b.textContent = g.name;
+      b.onclick = function () { switchGroup(i); };
+      chipWrap.appendChild(b);
+    });
+  }
+
+  function switchGroup(i) {
+    state.gi = i;
+    state.queue = group().items.map(function (_, k) { return k; });
+    var saved = load(group().id);
+    state.ans = saved && saved.ans ? saved.ans : {};
+    state.pos = 0;
+    resultDom.classList.remove('on');
+    renderChips();
+    render();
+  }
+
+  /* ---------- 渲染 ---------- */
+  function render() {
+    var g = group(), it = item(), key = curKey(), rec = state.ans[key];
+    var total = state.queue.length;
+
+    progressDom.textContent = (state.pos + 1) + ' / ' + total;
+    progressBar.style.width = ((state.pos + 1) / total * 100) + '%';
+    qmetaDom.textContent = g.name + ' · 第 ' + (state.pos + 1) + ' 题';
+
+    var q = String(it.question || '').split('\n');
+    questionDom.innerHTML = '';
+    var main = document.createElement('div');
+    main.textContent = q[0];
+    questionDom.appendChild(main);
+    for (var i = 1; i < q.length; i++) {
+      var sp = document.createElement('span');
+      sp.className = 'cn'; sp.textContent = q[i];
+      questionDom.appendChild(sp);
+    }
+
+    answerWrap.innerHTML = '';
+    submitBtn.style.display = 'none';
+
+    if (it.type === 'choice') {
+      Object.keys(it.options).forEach(function (L) {
+        var d = document.createElement('div');
+        d.className = 'opt-item';
+        var lt = document.createElement('span'); lt.className = 'lt'; lt.textContent = L;
+        var tx = document.createElement('span'); tx.className = 'tx'; tx.textContent = it.options[L];
+        d.appendChild(lt); d.appendChild(tx);
+        if (rec) {
+          if (L === it.answer) d.classList.add('right');
+          else if (L === rec.val) d.classList.add('wrong');
+          d.style.cursor = 'default';
+        } else {
+          d.onclick = function () { pick(L); };
+        }
+        answerWrap.appendChild(d);
+      });
+    } else {
+      var row = document.createElement('div');
+      row.className = 'fill-row';
+      var inp = document.createElement('input');
+      inp.id = 'fillInput';
+      inp.autocomplete = 'off'; inp.spellcheck = false;
+      inp.placeholder = '填写横线上的内容';
+      if (rec) { inp.value = rec.val; inp.disabled = true; inp.className = rec.ok ? 'ok' : 'bad'; }
+      row.appendChild(inp);
+      answerWrap.appendChild(row);
+      var h = document.createElement('div');
+      h.className = 'hint';
+      h.textContent = '大小写、句末标点不严格扣分；多个空用分号隔开（inventor; inventions）。';
+      answerWrap.appendChild(h);
+      if (!rec) {
+        submitBtn.style.display = 'inline-block';
+        inp.onkeydown = function (e) { if (e.key === 'Enter') { e.preventDefault(); submitFill(); } };
+      }
+    }
+
+    // 解析
+    ansDom.textContent = it.type === 'choice'
+      ? (it.answer + '. ' + it.options[it.answer])
+      : it.answer;
+    analysisDom.textContent = it.analysis || '';
+    knowledgeDom.textContent = it.knowledge || '';
+    var ft = document.getElementById('foldTitle');
+    var fa = document.getElementById('foldArrow');
+    if (rec) {
+      ft.textContent = '查看解析 & 知识点';
+      fa.textContent = '点开 / 收起';
+      foldContent.classList.add('open');
+    } else {
+      ft.textContent = '作答后显示解析';
+      fa.textContent = '先做题';
+      foldContent.classList.remove('open');
+    }
+
+    prevBtn.disabled = state.pos === 0;
+    nextBtn.textContent = state.pos + 1 >= total ? '已是最后一题' : '下一题';
+    nextBtn.disabled = state.pos + 1 >= total;
+
+    var done = 0, right = 0;
+    state.queue.forEach(function (k) {
+      var r = state.ans[g.id + '#' + k];
+      if (r) { done++; if (r.ok) right++; }
+    });
+    scoreDom.textContent = done
+      ? '已答 ' + done + ' / ' + total + ' 题，答对 ' + right + ' 题' + (done === total ? '　（可以交卷了）' : '')
+      : '还没开始作答';
+  }
+
+  /* ---------- 作答 ---------- */
+  function pick(L) {
+    var it = item(), key = curKey();
+    if (state.ans[key]) return;
+    state.ans[key] = { val: L, ok: L === it.answer };
+    save();
+    render();
+    if (!state.ans[key].ok) {
+      // 答错时把解析展开，让人立刻看到为什么
+      foldContent.classList.add('open');
+    }
+  }
+
+  function submitFill() {
+    var inp = document.getElementById('fillInput');
+    if (!inp) return;
+    var val = inp.value.trim();
+    if (!val) { inp.focus(); return; }
+    var it = item(), key = curKey();
+    state.ans[key] = { val: val, ok: isRight(it, val) };
+    save();
+    render();
+    if (!state.ans[key].ok) foldContent.classList.add('open');
+  }
+
+  /* ---------- 交卷 ---------- */
+  function finish() {
+    var g = group(), total = state.queue.length, done = 0, right = 0, wrongs = [];
+    state.queue.forEach(function (k) {
+      var r = state.ans[g.id + '#' + k];
+      var it = g.items[k];
+      if (r) { done++; if (r.ok) right++; else wrongs.push({ k: k, it: it }); }
+    });
+    document.getElementById('resultScore').textContent = right + ' / ' + total;
+    document.getElementById('resultSub').textContent = done < total
+      ? '还有 ' + (total - done) + ' 题没做，先做完再交卷更准。'
+      : (right / total >= 0.9 ? '这一组可以过了，换下一组。' : (right / total >= 0.7 ? '把错的题重做一遍，再走。' : '先回知识点看一眼（首页「知识」页），再重做。'));
+    var wl = document.getElementById('wrongList');
+    wl.innerHTML = '';
+    if (!wrongs.length) { wl.textContent = '没有错题。'; }
+    else {
+      wl.textContent = '错题：' + wrongs.map(function (w) {
+        return '第 ' + (state.queue.indexOf(w.k) + 1) + ' 题（' + w.it.answer + '）';
+      }).join('、');
+    }
+    resultDom.classList.add('on');
+    resultDom.scrollIntoView({ block: 'nearest' });
+  }
+
+  function redoWrong() {
+    var g = group(), wrongIdx = [];
+    state.queue.forEach(function (k) {
+      var r = state.ans[g.id + '#' + k];
+      if (r && !r.ok) wrongIdx.push(k);
+    });
+    if (!wrongIdx.length) { return; }
+    wrongIdx.forEach(function (k) { delete state.ans[g.id + '#' + k]; });
+    state.queue = wrongIdx;
+    state.pos = 0;
+    resultDom.classList.remove('on');
+    save();
+    render();
+  }
+
+  function restart() {
+    state.queue = group().items.map(function (_, k) { return k; });
+    state.ans = {};
+    state.pos = 0;
+    resultDom.classList.remove('on');
+    save();
+    render();
+  }
+
+  /* ---------- 事件 ---------- */
+  prevBtn.onclick = function () { if (state.pos > 0) { state.pos--; save(); render(); } };
+  nextBtn.onclick = function () { if (state.pos + 1 < state.queue.length) { state.pos++; save(); render(); } };
+  submitBtn.onclick = submitFill;
+  finishBtn.onclick = finish;
+  foldTrigger.onclick = function () {
+    if (!state.ans[curKey()]) { return; }   // 没作答不开放解析，避免直接看答案
+    foldContent.classList.toggle('open');
+  };
+  document.getElementById('redoWrongBtn').onclick = redoWrong;
+  document.getElementById('restartBtn').onclick = restart;
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') { if (!nextBtn.disabled) nextBtn.click(); }
+    if (e.key === 'ArrowLeft') { if (!prevBtn.disabled) prevBtn.click(); }
+  });
+
+  switchGroup(0);
+})();
+</script>
+</body>
+</html>

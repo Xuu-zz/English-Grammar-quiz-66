@@ -1,0 +1,2863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F7F3EC">
+<title>译林六上 · 变式题工厂</title>
+<style>
+  :root{
+    --paper:#F7F3EC;--card:#fff;--ink:#1A1713;--ink2:#544E45;--ink3:#8B8375;
+    --line:#E7DFD2;--line2:#D8CFBF;--accent:#0C6A57;--accent-soft:#E7F1EE;
+    --gold:#A06E22;--gold-soft:#F8EEDB;--ok:#177A4F;--ok-soft:#E7F3EC;--bad:#AE3524;--bad-soft:#FAEAE6;
+    --en:"Iowan Old Style",Palatino,Georgia,"Times New Roman",serif;
+    --zh:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--zh);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;padding:0 14px 92px}
+  .app{max-width:720px;margin:0 auto}
+  header{position:sticky;top:0;z-index:10;background:var(--paper);padding:12px 0 8px;border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+  .kick{font-size:10.5px;letter-spacing:.14em;color:var(--ink3)}
+  h1{margin:2px 0 0;font-size:18px}
+  h1 small{font-size:11.5px;font-weight:400;color:var(--ink3);margin-left:5px}
+  .stat{font-size:11.5px;color:var(--ink3);text-align:right;white-space:nowrap}
+  .stat b{font-family:var(--en);font-size:16px;color:var(--accent)}
+  h2.sec{font-size:12px;letter-spacing:.08em;color:var(--ink3);font-weight:600;margin:22px 0 8px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .panel+.panel{margin-top:10px}
+  .rows{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 13px;background:none;border:0;
+    border-bottom:1px solid var(--line);text-align:left;cursor:pointer}
+  .row:last-child{border-bottom:0}
+  .row:hover{background:#FBF8F2}
+  .row .idx{font-family:var(--en);font-size:16px;font-weight:600;color:var(--accent);width:34px;flex:0 0 auto}
+  .row .mid{flex:1;min-width:0}
+  .row .t{font-weight:600;font-size:15px;display:block}
+  .row .s{font-size:12px;color:var(--ink3);display:block;margin-top:1px}
+  .row .arrow{color:var(--ink3);font-size:17px}
+  .meter{height:3px;background:var(--line);border-radius:2px;margin-top:6px;overflow:hidden}
+  .meter i{display:block;height:100%;background:var(--accent)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:11px;
+    border:1px solid var(--accent);background:var(--accent);color:#fff;font-weight:600;font-size:15px;cursor:pointer}
+  .btn.ghost{background:var(--card);color:var(--accent);border-color:var(--line2)}
+  .btn.sm{min-height:36px;padding:0 12px;font-size:13.5px;border-radius:9px}
+  .btn.block{width:100%}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap}
+  .chips{display:flex;gap:6px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line2);background:var(--card);color:var(--ink2);border-radius:999px;
+    padding:6px 11px;font-size:12.5px;cursor:pointer}
+  .chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .qbar{height:3px;background:var(--line);border-radius:2px;margin:12px 0 6px;overflow:hidden}
+  .qbar i{display:block;height:100%;background:var(--accent);transition:width .2s}
+  .qmeta{display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink3);margin:8px 0 12px}
+  .qmeta .tag{color:var(--gold)}
+  .stem{font-family:var(--en);font-size:18.5px;line-height:1.7;white-space:pre-wrap;margin:0 0 14px}
+  .stem .cn{display:block;font-family:var(--zh);font-size:13px;color:var(--ink3);margin-top:4px}
+  .opts{display:flex;flex-direction:column;gap:7px}
+  .opt{display:flex;gap:11px;align-items:flex-start;width:100%;text-align:left;background:var(--card);
+    border:1px solid var(--line2);border-radius:11px;padding:10px 12px;min-height:46px;cursor:pointer;font-size:16px}
+  .opt .lt{font-family:var(--en);font-weight:600;width:22px;height:22px;flex:0 0 auto;border:1px solid var(--line2);
+    border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink2);margin-top:1px}
+  .opt .tx{font-family:var(--en);font-size:16.5px;line-height:1.5}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .opt.sel .lt{background:var(--accent);border-color:var(--accent);color:#fff}
+  .opt.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .opt.ok .lt{background:var(--ok);border-color:var(--ok);color:#fff}
+  .opt.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .opt.bad .lt{background:var(--bad);border-color:var(--bad);color:#fff}
+  .field{margin-top:12px}
+  .field input,.field textarea{width:100%;font-family:var(--en);font-size:17px;padding:10px 12px;
+    border:1px solid var(--line2);border-radius:11px;background:var(--card);color:var(--ink)}
+  .field textarea{min-height:70px;resize:vertical}
+  .field input:focus,.field textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+  .hint{font-size:11.5px;color:var(--ink3);margin-top:5px}
+  .fb{border:1px solid var(--line);border-radius:14px;background:var(--card);margin-top:16px;overflow:hidden}
+  .fb .h{padding:10px 13px;font-weight:700;font-size:14px;display:flex;justify-content:space-between;gap:8px}
+  .fb.ok .h{background:var(--ok-soft);color:var(--ok)}
+  .fb.bad .h{background:var(--bad-soft);color:var(--bad)}
+  .fb .b{padding:4px 13px 13px}
+  .kv{display:grid;grid-template-columns:46px 1fr;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .kv:last-child{border-bottom:0}
+  .kv .k{color:var(--ink3);font-size:12px}
+  .kv .v{color:var(--ink2);line-height:1.65}
+  .kv .v.en{font-family:var(--en);font-size:15.5px;color:var(--ink)}
+  .know{margin-top:10px;border:1px solid var(--line);border-radius:11px;background:#FCFAF5;overflow:hidden}
+  .know .kh{padding:9px 12px;font-size:13px;font-weight:700;color:var(--gold);display:flex;justify-content:space-between;cursor:pointer}
+  .know .kb{padding:0 12px 12px;font-size:13.5px;color:var(--ink2);display:none;line-height:1.7}
+  .know.open .kb{display:block}
+  .know .f{font-family:var(--en);font-size:14.5px;color:var(--accent);display:block;margin-bottom:4px}
+  .know .e{font-family:var(--en);font-size:14px;color:var(--ink);display:block;margin-bottom:6px}
+  .acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .res{text-align:center;padding:22px 14px}
+  .res .big{font-family:var(--en);font-size:38px;font-weight:700;letter-spacing:.02em}
+  .res .sub{font-size:13px;color:var(--ink3);margin-top:4px}
+  .taglist{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .tg{font-size:12px;padding:4px 9px;border-radius:999px;background:var(--card);border:1px solid var(--line2);color:var(--ink2)}
+  .tg.bad{border-color:#E7C3B9;background:var(--bad-soft);color:var(--bad)}
+  .empty{text-align:center;padding:32px 16px;color:var(--ink3)}
+  nav{position:fixed;left:0;right:0;bottom:0;background:rgba(247,243,236,.98);border-top:1px solid var(--line2);
+    padding:5px 6px calc(5px + env(safe-area-inset-bottom));display:flex;max-width:720px;margin:0 auto;z-index:20}
+  nav button{flex:1;background:none;border:0;padding:7px 2px;font-size:11px;color:var(--ink3);display:flex;
+    flex-direction:column;align-items:center;gap:2px;min-height:48px}
+  nav button .g{font-size:16px;line-height:1}
+  nav button[aria-current="true"]{color:var(--accent);font-weight:600}
+  .toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#1A1713;color:#fff;padding:8px 15px;
+    border-radius:999px;font-size:13px;z-index:99}
+  footer{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.75}
+  @media(max-width:420px){.stem{font-size:17.5px}body{padding:0 11px 88px}}
+  @media print{nav,header,.btn,.btnrow,.acts,.qbar,.chips{display:none!important}body{padding:0;background:#fff}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <div class="kick">译林版（三起）· 六年级上册 · 变式训练</div>
+      <h1>变式题工厂<small>U1–U8 · 18 类考点</small></h1>
+    </div>
+    <div class="stat" id="topStat"></div>
+  </header>
+  <main id="view"></main>
+</div>
+<nav id="nav">
+  <button data-nav="home" aria-current="true"><span class="g">✎</span>练</button>
+  <button data-nav="map"><span class="g">⌘</span>考点</button>
+  <button data-nav="errors"><span class="g">✓</span>错题</button>
+  <button data-nav="teach"><span class="g">师</span>讲评</button>
+</nav>
+<script>
+/* 译林版（三起）六年级上册 2026 秋 · 单元知识库
+   来源标注：
+   full  = 教材+教师资料包（U2/U3，最准）
+   test  = 公开单元卷/课件（U1/U4/U5）
+   theme = 按单元主题与教参整理（U6/U7/U8，词汇请以课本词汇表为准） */
+const UNITS = [
+{
+  id: 'u1', no: 'U1', title: 'Try your best', cn: '全力以赴', theme: '梦想与职业', src: 'test',
+  words: [
+    ['pilot','n.','飞行员'],['doctor','n.','医生'],['nurse','n.','护士'],['writer','n.','作家'],
+    ['singer','n.','歌手'],['dancer','n.','舞蹈演员'],['player','n.','运动员；选手'],['farmer','n.','农民'],
+    ['driver','n.','司机'],['policeman','n.','警察（复 policemen）'],['cook','n./v.','厨师；烹饪'],
+    ['worker','n.','工人'],['dream','n.','梦想'],['future','n.','未来'],['best','adj./adv.','最好的'],
+    ['hard','adv./adj.','努力地；困难的'],['plane','n.','飞机'],['sick','adj.','生病的'],['hospital','n.','医院']
+  ],
+  phrases: [
+    ['try one\'s best','尽某人最大努力'],['be good at doing sth','擅长做某事'],['have a try','试一试'],
+    ['want to be','想要成为'],['make one\'s dream come true','让梦想成真'],['work hard','努力工作/学习'],
+    ['help sick people','帮助生病的人'],['in the future','在未来'],['give up','放弃'],['of course','当然']
+  ],
+  patterns: [
+    {en:'What do you want to be? — I want to be a pilot.', cn:'你想成为什么？——我想当飞行员。', note:'问职业理想，答 want to be + a/an + 职业'},
+    {en:'What does your father do? — He is a doctor.', cn:'你爸爸做什么工作？——他是医生。', note:'问职业两种问法：What do you do? / What do you want to be?'},
+    {en:'She is good at drawing.', cn:'她擅长画画。', note:'at 是介词，后面动词加 -ing'},
+    {en:'You should try your best.', cn:'你应该尽最大努力。', note:'should + 动词原形，表建议'},
+    {en:'Then you can make your dream come true.', cn:'那样你就能让梦想成真。', note:'make + 宾语 + 形容词/动词原形'}
+  ],
+  grammar: [
+    {t:'be good at + 动词-ing', f:'主语 + be good at + doing', eg:'He is good at swimming.', warn:'at 是介词 → 动词必须 -ing（× good at draw）'},
+    {t:'want to be + 职业', f:'主语 + want to be + a/an + 职业名词', eg:'I want to be a writer.', warn:'元音音素前用 an：an artist / an engineer'},
+    {t:'职业名词后缀', f:'动词/名词 + -er/-or/-ist', eg:'teach→teacher, write→writer, sing→singer, dance→dancer, play→player, drive→driver, farm→farmer', warn:'policeman 复数是 policemen；cook 既是动词也是“厨师”'},
+    {t:'should + 动词原形', f:'主语 + should + 动词原形', eg:'You should study hard.', warn:'should 后永远原形，不加 to、不加 -s'},
+    {t:'一般过去时（复习）', f:'主语 + 动词过去式', eg:'He asked me for help.', warn:'U1 已开始出现过去时叙述，为 U2 做铺垫'}
+  ],
+  traps: [
+    'be good at draw × → be good at drawing √',
+    'I want to be pilot. × → I want to be a pilot. √',
+    'He should to try his best. × → He should try his best. √',
+    'make my dream come true（come 不加 comes）',
+    'policeman 的复数是 policemen，不是 policemans'
+  ]
+},
+{
+  id: 'u2', no: 'U2', title: 'Honesty', cn: '诚实', theme: '诚实与勇气', src: 'full',
+  words: [
+    ['honesty','n.','诚实；正直'],['honest','adj.','诚实的'],['lie','n./v.','谎言；说谎'],
+    ['truth','n.','真相；事实'],['storybook','n.','故事书'],['diary','n.','日记'],['entry','n.','（日记的）一则'],
+    ['repair','v.','修理；修补'],['break','v.','弄坏；打破'],['careful','adj.','小心的；仔细的'],
+    ['carefully','adv.','认真地；仔细地'],['whose','pron.','谁的'],['schoolbag','n.','书包'],
+    ['fun','n.','乐趣（不可数）'],['important','adj.','重要的'],['feel','v.','感觉'],['mistake','n.','错误']
+  ],
+  phrases: [
+    ['tell a lie / tell lies','说谎'],['tell the truth','说真话'],['on one\'s way home','在某人回家的路上'],
+    ['give sth to sb','把某物给某人'],['begin to do sth','开始做某事'],['try to do sth','努力/试图做某事'],
+    ['try one\'s best','尽某人最大努力'],['want to do sth','想要做某事'],['say sorry to sb','向某人道歉'],
+    ['feel good','感觉（心情）好'],['walk to + 地点','步行去某地'],['look at sth','看着某物'],
+    ['be honest with sb','对某人诚实'],['make a mistake','犯错']
+  ],
+  patterns: [
+    {en:'Whose book is this? — It\'s Bobby\'s.', cn:'这是谁的书？——是博比的。', note:'whose + 名词 + be + this/that；答语可用名词所有格或 mine/yours'},
+    {en:'I can give it to Mrs Fox tomorrow.', cn:'我明天可以把它给狐狸太太。', note:'give + 代词 + to + sb；代词 it/them 不能放中间'},
+    {en:'Sam began to read the book. It was great fun.', cn:'萨姆开始读这本书。太有趣了。', note:'fun 不可数，不说 a great fun'},
+    {en:'Oh no, I broke it!', cn:'哦不，我把它弄坏了！', note:'break–broke–broken'},
+    {en:'Did you see my storybook yesterday? — No, I didn\'t.', cn:'你昨天看见我的故事书了吗？——没有。', note:'Did 问必须 did/didn\'t 答，这是本单元最大失分点'},
+    {en:'Sam did not feel good.', cn:'萨姆心情不好。', note:'did not + 动词原形（× didn\'t felt）'},
+    {en:'It was not easy, but he tried his best.', cn:'这不容易，但他尽了最大努力。', note:'but 连接转折，写作高分句'},
+    {en:'It is important to be honest.', cn:'诚实很重要。', note:'It is + adj + to do sth，it 是形式主语'},
+    {en:'Honesty is important.', cn:'诚实很重要。', note:'抽象名词作主语，谓语用单数 is'},
+    {en:'Why should you be honest? — Because …', cn:'你为什么要诚实？——因为……', note:'Why 问，Because 答；should 后原形'}
+  ],
+  grammar: [
+    {t:'一般过去时 · 四种句式', f:'肯定：主语+过去式 ／ 否定：主语+didn\'t+原形 ／ 一般疑问：Did+主语+原形? ／ 特殊疑问：疑问词+did+主语+原形?', eg:'Sam broke the book. / Sam didn\'t break the book. / Did Sam break the book? / When did Sam break the book?', warn:'did/didn\'t 后面一定回原形；be 动词的过去式不加 did'},
+    {t:'规则动词 -ed 四条加法', f:'一般 +ed ／ 以 e 结尾 +d ／ 辅音+y 变 y 为 i +ed ／ 重读闭音节双写 +ed', eg:'walk→walked, like→liked, try→tried, stop→stopped', warn:'studied 不是 studyed；stopped 双写 p'},
+    {t:'过去时间标志词', f:'yesterday / last week / … ago / one day / just now / in 1930 / at that time', eg:'He found it on his way home yesterday.', warn:'看到这些词先判断时态，再动笔'},
+    {t:'名词性物主代词', f:'mine / yours / his / hers / its / ours / theirs', eg:'It\'s mine. = It\'s my book.', warn:'名词性物主代词后面不能再加名词（× mine book）'},
+    {t:'抽象名词作主语', f:'Honesty / Happiness / Friendship + is …', eg:'Honesty is important.', warn:'不能用 are'}
+  ],
+  traps: [
+    'No, I don\'t. ×（回答 Did you…?）→ No, I didn\'t. √',
+    'He didn\'t broke it. × → He didn\'t break it. √',
+    'It was a great fun. × → It was great fun. √',
+    'I can give Mrs Fox it. × → I can give it to Mrs Fox. √',
+    'He tried his bestly. × → He tried his best. √',
+    'Honesty are important. × → Honesty is important. √',
+    'in my way home × → on my way home √',
+    'He repaired the book careful. × → carefully √',
+    'Why should you to be honest? × → Why should you be honest? √',
+    'It is important be honest. × → It is important to be honest. √'
+  ]
+},
+{
+  id: 'u3', no: 'U3', title: 'Great people', cn: '伟人', theme: '人物与贡献', src: 'full',
+  words: [
+    ['great','adj.','伟大的；杰出的'],['people','n.','人们（本身是复数）'],['teach','v.','教（taught）'],
+    ['poet','n.','诗人'],['poem','n.','诗'],['nurse','n.','护士'],['sick','adj.','生病的'],
+    ['scientist','n.','科学家'],['prize','n.','奖；奖品'],['musician','n.','音乐家'],['inventor','n.','发明家'],
+    ['develop','v.','培育；发展'],['hybrid','adj.','杂交的'],['feed','v.','喂养；养活（fed）'],
+    ['field','n.','田地；领域'],['dream','n./v.','梦想'],['hero','n.','英雄（heroes）'],
+    ['paper','n.','纸（不可数）'],['cheap','adj.','便宜的'],['dear','adj.','昂贵的（=expensive）'],
+    ['silk','n.','丝绸'],['bamboo','n.','竹子'],['country','n.','国家（countries）'],['difficult','adj.','困难的']
+  ],
+  phrases: [
+    ['stop doing sth','停止做某事'],['stop to do sth','停下来去做另一件事'],['make sb/sth + adj.','使……变得……'],
+    ['make sb do sth','让某人做某事'],['the answer to …','……的答案'],['try to do sth','努力做某事'],
+    ['try doing sth','试着做某事（看效果）'],['help sb (to) do sth','帮助某人做某事'],['in one\'s own way','以某人自己的方式'],
+    ['want to do = would like to do','想要做某事'],['do sth for sb','替某人做某事'],['ask sb to do sth','让某人做某事'],
+    ['talk / think about sth','谈论/思考某事'],['take sb to + 地点','带某人去某地'],['thanks for doing sth','感谢你做某事'],
+    ['be happy/glad/sorry to do sth','做某事很高兴/抱歉'],['be famous for / as','因……而著名 / 作为……而著名'],
+    ['do the shopping/cleaning','购物/打扫'],['be born in / on','出生于'],['at the age of + 数字','在……岁时'],
+    ['work on sth','致力于；从事'],['come true','实现'],['give up (doing) sth','放弃（做）某事'],
+    ['keep doing sth','一直做某事'],['enjoy doing sth','喜欢做某事'],['see sb do sth','看见某人做某事（全过程）'],
+    ['see sb doing sth','看见某人正在做某事'],['grow up','长大'],['pass away','去世（委婉）'],
+    ['do studies on sth','对……进行研究'],['be like','像……'],['learn from sb','向某人学习']
+  ],
+  patterns: [
+    {en:'Confucius was a great teacher. He taught people to be kind and honest.', cn:'孔子是伟大的老师。他教人们善良诚实。', note:'teach sb to do sth；teach–taught'},
+    {en:'Li Bai was a famous poet. He wrote many beautiful poems.', cn:'李白是著名诗人。他写了许多优美的诗。', note:'poet 是人，poem 是诗，可数'},
+    {en:'She was the first woman to win a Nobel Prize.', cn:'她是第一位获得诺贝尔奖的女性。', note:'the first + 名词 + to do sth'},
+    {en:'He was a great musician. He wrote a lot of famous music.', cn:'他是伟大的音乐家。他写了许多著名音乐。', note:'music 不可数，musician 可数'},
+    {en:'Yuan Longping developed hybrid rice. He helped feed people around the world.', cn:'袁隆平培育了杂交水稻。他帮助养活了世界各地的人。', note:'develop / feed–fed'},
+    {en:'Cai Lun was a great Chinese inventor. He made cheap paper.', cn:'蔡伦是伟大的中国发明家。他造出了便宜的纸。', note:'invent–inventor–invention'},
+    {en:'It was very difficult, but he never gave up.', cn:'这非常困难，但他从未放弃。', note:'转折 + 过去时'},
+    {en:'He kept thinking and trying.', cn:'他不停地思考和尝试。', note:'keep doing'},
+    {en:'How did his dreams come true? — He never gave up and worked hard.', cn:'他的梦想是怎么实现的？——他从不放弃，努力工作。', note:'How + did + 主语 + 原形'},
+    {en:'Why was he a great scientist? — Because he helped feed people.', cn:'他为什么是伟大的科学家？——因为他帮助养活了人们。', note:'Why + was；Because 答'}
+  ],
+  grammar: [
+    {t:'过去时特殊疑问句', f:'有 be：疑问词 + was/were + 主语? ／ 实义动词：疑问词 + did + 主语 + 原形?', eg:'Who was Yuan Longping? / When did he develop hybrid rice?', warn:'疑问词后紧跟 did，动词回原形'},
+    {t:'动词后面跟 to do 还是 doing', f:'+to do：want, would like, try(努力), begin, start, decide, hope, plan, learn, ask sb, be the first to ／ +doing：enjoy, keep, finish, practise, give up, be good at, thanks for, how about, stop(停止)', eg:'He wanted to make paper. / He kept thinking.', warn:'keep/give up/be good at 后面只能 doing'},
+    {t:'+ sb + do（省 to）', f:'make / let / see / watch / hear + sb + 动词原形', eg:'I saw him go to school. / His words made me laugh.', warn:'see sb do 全过程；see sb doing 正在进行'},
+    {t:'because 从句与主谓一致', f:'主句 + because + 原因从句；everyone/someone 作主语用单数', eg:'His dreams came true because he never gave up. / Everyone has a dream.', warn:'because 不能与 so 连用'},
+    {t:'序数词 + to do（拔高）', f:'the first/second + 名词 + to do sth', eg:'She was the first woman to win the prize.', warn:'to 不能省略'},
+    {t:'字母组合 ar 的读音', f:'/ɑː/ car, farm, park ／ /ɔː/ war, warm ／ /ə/ 在非重读音节', eg:'farm /fɑːm/', warn:'warm 中 ar 读 /ɔː/'}
+  ],
+  traps: [
+    'He is born in 1930. × → He was born in 1930. √',
+    'He goed to school yesterday. × → went √',
+    'He didn\'t gave up. × → didn\'t give up √',
+    'He kept to think. × → kept thinking √',
+    'He gave up to smoke. × → gave up smoking √',
+    'I saw him to go to school. × → saw him go √',
+    'the answer of the question × → the answer to the question √',
+    'Many peoples came here. × → Many people came here. √',
+    'He is famous as his songs. × → famous for his songs √',
+    'Everyone are here. × → Everyone is here. √',
+    'He passed away by illness. × → He passed away in 2021. √',
+    'many beautiful poem × → many beautiful poems √'
+  ]
+},
+{
+  id: 'u4', no: 'U4', title: 'Getting together', cn: '团聚', theme: '重阳节与家人', src: 'test',
+  words: [
+    ['together','adv.','一起'],['grandpa','n.','爷爷；外公'],['grandma','n.','奶奶；外婆'],
+    ['grandparent','n.','祖父母'],['ninth','num.','第九'],['lunar','adj.','农历的'],['month','n.','月'],
+    ['climb','v.','爬；攀登'],['mountain','n.','山'],['chat','v.','聊天'],['dinner','n.','晚餐'],
+    ['card','n.','卡片'],['wish','v./n.','祝愿'],['visit','v.','拜访'],['hold','v.','举行；握住（held）'],
+    ['cry','v.','哭（cried）'],['dry','adj./v.','干的；弄干（dried）'],['old','adj.','年老的'],
+    ['festival','n.','节日'],['respect','v./n.','尊敬'],['love','n./v.','爱']
+  ],
+  phrases: [
+    ['get together','聚在一起'],['climb a mountain','爬山'],['chat with sb','和某人聊天'],
+    ['have dinner together','一起吃晚饭'],['make a card for sb','为某人做卡片'],['wish sb a long life','祝某人长寿'],
+    ['on the ninth day of the ninth lunar month','在农历九月初九'],['take care of','照顾'],
+    ['look after','照顾'],['at the Double Ninth Festival','在重阳节']
+  ],
+  patterns: [
+    {en:'It\'s on the ninth day of the ninth lunar month.', cn:'它在农历九月初九。', note:'具体某一天用 on；序数词前加 the'},
+    {en:'We get together and have a big dinner.', cn:'我们聚在一起吃顿大餐。', note:'一般现在时描述习俗'},
+    {en:'What did you do for your grandparents?', cn:'你为爷爷奶奶做了什么？', note:'What + did + 主语 + 原形'},
+    {en:'Let\'s make a card for Grandpa.', cn:'我们给爷爷做张卡片吧。', note:'Let\'s + 原形；make sth for sb'},
+    {en:'We should respect and love old people.', cn:'我们应该尊敬、关爱老人。', note:'should + 原形，主题升华句'}
+  ],
+  grammar: [
+    {t:'序数词与日期', f:'one→first, two→second, three→third, five→fifth, nine→ninth, twelve→twelfth, twenty→twentieth', eg:'on the fifth of March = on March 5th', warn:'ninth 去掉 e；twelfth 是 ve→f；具体某天用 on'},
+    {t:'不规则动词 hold / cry / dry', f:'hold→held；cry→cried；dry→dried', eg:'We held a party. / The baby cried.', warn:'辅音+y 变 y 为 i 再加 ed'},
+    {t:'一般过去时叙述节日经历', f:'主语 + 过去式 + 时间', eg:'Last year we climbed a mountain with Grandpa.', warn:'叙述去年的事整段都要过去时'},
+    {t:'look after / take care of', f:'look after sb = take care of sb', eg:'We look after our grandparents.', warn:'代词放中间：look after them'}
+  ],
+  traps: [
+    'in the ninth day × → on the ninth day √',
+    'nineth × → ninth √',
+    'holded a party × → held a party √',
+    'cryed × → cried √',
+    'Look after they. × → Look after them. √'
+  ]
+},
+{
+  id: 'u5', no: 'U5', title: 'Keeping it clean', cn: '保持清洁', theme: '城市清洁与责任', src: 'test',
+  words: [
+    ['clean','adj./v.','干净的；打扫'],['dirty','adj.','脏的'],['rubbish','n.','垃圾（不可数）'],
+    ['bin','n.','垃圾桶'],['litter','n./v.','垃圾；乱扔'],['plastic','n./adj.','塑料'],
+    ['pick','v.','捡；摘'],['throw','v.','扔（threw）'],['drop','v.','掉落；扔下'],
+    ['skin','n.','皮；果皮'],['waste','n./v.','废物；浪费'],['lake','n.','湖'],['group','n.','小组'],
+    ['tidy','adj./v.','整洁的；整理'],['sweep','v.','扫（swept）'],['smoke','n./v.','烟；吸烟'],
+    ['air','n.','空气'],['park','n.','公园'],['clean-up','n.','清洁活动']
+  ],
+  phrases: [
+    ['pick up','捡起'],['pick it up','把它捡起来'],['put … into the bin','把……放进垃圾桶'],
+    ['throw … on the ground','把……扔在地上'],['keep … clean','保持……干净'],['take part in','参加'],
+    ['at the same time','同时'],['do the cleaning','打扫卫生'],['a clean-up group','清洁小组'],
+    ['make … dirty','把……弄脏']
+  ],
+  patterns: [
+    {en:'What makes our city dirty? — Rubbish makes our city dirty.', cn:'什么让我们的城市变脏？——垃圾。', note:'make + 宾语 + 形容词'},
+    {en:'What can we do to keep it clean? — We can pick up the rubbish.', cn:'我们能做什么来保持清洁？——我们可以捡垃圾。', note:'to keep 表目的'},
+    {en:'We should put the waste into the bin.', cn:'我们应该把垃圾放进垃圾桶。', note:'should + 原形'},
+    {en:'We pick up plastic and fruit skin, and put all waste into rubbish bins.', cn:'我们捡塑料和果皮，把所有垃圾放进垃圾桶。', note:'并列谓语时态一致'},
+    {en:'We talk happily and work at the same time.', cn:'我们一边开心聊天一边干活。', note:'at the same time 同时'}
+  ],
+  grammar: [
+    {t:'make + 宾语 + 形容词', f:'主语 + make(s) + 宾语 + adj.', eg:'Rubbish makes the city dirty.', warn:'形容词作宾补，不加 to be'},
+    {t:'should / shouldn\'t + 原形', f:'We should (not) + 动词原形', eg:'We shouldn\'t throw rubbish everywhere.', warn:'shouldn\'t = should not'},
+    {t:'动名词短语作主语', f:'Doing sth + is + adj.', eg:'Keeping the city clean is important.', warn:'谓语用单数 is'},
+    {t:'代词放中间', f:'动词 + 代词 + 副词/介词', eg:'pick it up / throw them away', warn:'× pick up it'},
+    {t:'不可数名词', f:'rubbish / litter / waste / plastic 不可数', eg:'a piece of rubbish', warn:'× rubbishes'}
+  ],
+  traps: [
+    'pick up it × → pick it up √',
+    'many rubbishes × → much rubbish / a lot of rubbish √',
+    'Rubbish make the city dirty. × → makes √',
+    'We should to keep it clean. × → should keep √',
+    'throw it on the ground 中 on 不能换成 in'
+  ]
+},
+{
+  id: 'u6', no: 'U6', title: 'Going green', cn: '绿色生活', theme: '环保与节约', src: 'theme',
+  words: [
+    ['earth','n.','地球'],['protect','v.','保护'],['save','v.','节约；拯救'],['energy','n.','能源（不可数）'],
+    ['water','n./v.','水；浇水'],['electricity','n.','电（不可数）'],['reuse','v.','再利用'],
+    ['recycle','v.','回收利用'],['reduce','v.','减少'],['plastic bag','n.','塑料袋'],['tree','n.','树'],
+    ['plant','n./v.','植物；种植'],['waste','v./n.','浪费；废物'],['environment','n.','环境'],
+    ['green','adj.','绿色的；环保的'],['natural','adj.','自然的'],['instead','adv.','代替'],
+    ['off','adv.','关掉'],['light','n.','灯']
+  ],
+  phrases: [
+    ['go green','过绿色生活'],['save water / energy','节约用水/能源'],['plant trees','种树'],
+    ['reuse old things','再利用旧物'],['recycle paper','回收纸'],['turn off the lights','关灯'],
+    ['instead of','代替；而不是'],['take a bag with you','随身带袋子'],['protect the Earth','保护地球'],
+    ['a green life','绿色生活']
+  ],
+  patterns: [
+    {en:'We should save water and energy.', cn:'我们应该节约水和能源。', note:'should + 原形'},
+    {en:'Instead of throwing it away, we can reuse it.', cn:'与其扔掉，我们可以再利用。', note:'instead of + 动词-ing'},
+    {en:'It is important to protect the Earth.', cn:'保护地球很重要。', note:'It is + adj + to do'},
+    {en:'We can turn off the lights when we leave.', cn:'离开时我们可以关灯。', note:'when 引导时间状语从句'},
+    {en:'Going green starts with small things.', cn:'绿色生活从小事做起。', note:'动名词作主语，谓语 is/starts'}
+  ],
+  grammar: [
+    {t:'should / shouldn\'t 提建议', f:'We should (not) + 原形', eg:'We shouldn\'t waste water.', warn:'后接原形'},
+    {t:'instead of + doing', f:'instead of + 名词/动词-ing', eg:'We can walk instead of taking a car.', warn:'of 是介词 → doing'},
+    {t:'动名词作主语', f:'Doing sth + is …', eg:'Reusing old things is good for the Earth.', warn:'谓语单数'},
+    {t:'不可数名词', f:'energy / electricity / water / waste', eg:'a lot of energy', warn:'× energies'}
+  ],
+  traps: [
+    'instead of throw it away × → instead of throwing it away √',
+    'save energies × → save energy √',
+    'We should to plant trees. × → should plant √',
+    'Reuse old things are good. × → is good √'
+  ]
+},
+{
+  id: 'u7', no: 'U7', title: 'Old things, new life', cn: '旧物新用', theme: '旧物改造与创意', src: 'theme',
+  words: [
+    ['old','adj.','旧的'],['new','adj.','新的'],['life','n.','生命；生活'],
+    ['bottle','n.','瓶子'],['jar','n.','罐子'],['box','n.','盒子'],['cloth','n.','布'],
+    ['button','n.','纽扣'],['cut','v.','剪（cut-cut）'],['glue','v./n.','粘；胶水'],
+    ['decorate','v.','装饰'],['useful','adj.','有用的'],['creative','adj.','有创意的'],
+    ['vase','n.','花瓶'],['bag','n.','包'],['toy','n.','玩具'],['piece','n.','一块；一件']
+  ],
+  phrases: [
+    ['turn A into B','把A变成B'],['make B out of A','用A做成B'],['make use of','利用'],
+    ['cut … into …','把……剪成……'],['a piece of','一块/一件'],['old clothes','旧衣服'],
+    ['give sth a new life','给某物新生命'],['by hand','手工']
+  ],
+  patterns: [
+    {en:'We can turn an old bottle into a vase.', cn:'我们可以把旧瓶子变成花瓶。', note:'turn A into B'},
+    {en:'My mum made a bag out of old clothes.', cn:'我妈妈用旧衣服做了个包。', note:'make B out of A'},
+    {en:'First we cut the box, and then we decorated it.', cn:'我们先剪盒子，然后装饰它。', note:'制作过程用过去时 + first/then/finally'},
+    {en:'Old things can have a new life.', cn:'旧物可以有新生命。', note:'主题句'}
+  ],
+  grammar: [
+    {t:'turn … into … / make … out of …', f:'turn A into B（变成）／ make B out of A（用A做B）', eg:'He turned the jar into a pen holder.', warn:'介词 into / out of 不能混'},
+    {t:'制作过程用一般过去时', f:'First … Next … Then … Finally …', eg:'First I cut it. Then I glued it.', warn:'整段时态一致'},
+    {t:'cut–cut–cut', f:'cut 三种形式同形', eg:'I cut the paper.', warn:'× cutted'},
+    {t:'动名词作主语', f:'Making toys out of old boxes is fun.', eg:'', warn:'谓语用单数'}
+  ],
+  traps: [
+    'turn the bottle in a vase × → into √',
+    'make a bag of old clothes × → out of √',
+    'cutted × → cut √',
+    'a piece of papers × → a piece of paper √'
+  ]
+},
+{
+  id: 'u8', no: 'U8', title: 'Then and now', cn: '过去与现在', theme: '生活变化', src: 'theme',
+  words: [
+    ['then','adv.','那时'],['now','adv.','现在'],['past','n.','过去'],['ago','adv.','以前'],
+    ['change','v./n.','改变'],['village','n.','村庄'],['city','n.','城市'],['road','n.','路'],
+    ['telephone','n.','电话'],['mobile phone','n.','手机'],['radio','n.','收音机'],
+    ['newspaper','n.','报纸'],['Internet','n.','互联网'],['online','adj./adv.','在线的'],
+    ['life','n.','生活'],['used to','phr.','过去常常'],['modern','adj.','现代的'],['convenient','adj.','方便的']
+  ],
+  phrases: [
+    ['in the past','在过去'],['these days','如今'],['used to do sth','过去常常做某事'],
+    ['there was / there were','过去有'],['there is / there are','现在有'],
+    ['more and more','越来越多'],['shop online','网上购物'],['change a lot','变化很大'],
+    ['keep in touch with','与……保持联系']
+  ],
+  patterns: [
+    {en:'There was no Internet then. Now there is Wi-Fi everywhere.', cn:'那时没有互联网。现在到处都有无线网。', note:'there be 的过去式与现在式对比'},
+    {en:'People used to write letters, but now they send emails.', cn:'人们过去写信，现在发邮件。', note:'used to + 原形，表过去常常'},
+    {en:'Life has changed a lot.', cn:'生活变化很大。', note:'现在完成时（认读即可）'},
+    {en:'My hometown is more modern than before.', cn:'我的家乡比以前更现代了。', note:'比较级 + than'}
+  ],
+  grammar: [
+    {t:'there be 的过去式', f:'There was + 单数/不可数 ／ There were + 复数', eg:'There was a small shop. There were no cars.', warn:'就近原则看最近的名词'},
+    {t:'used to + 原形', f:'主语 + used to + 动词原形', eg:'He used to walk to school.', warn:'used to do（过去常常）≠ be used to doing（习惯于）'},
+    {t:'过去与现在对比写作', f:'In the past, … Now, …', eg:'In the past, few people had cars. Now many families have one.', warn:'两段时态分开：过去段过去时，现在段现在时'},
+    {t:'比较级', f:'A + is + 比较级 + than + B', eg:'Life is better than before.', warn:'good→better, many→more'}
+  ],
+  traps: [
+    'There were a shop. × → There was a shop. √',
+    'He used to walked. × → used to walk √',
+    'Now people used to use phones. × → Now people use phones. √',
+    'more easier × → easier √'
+  ]
+}
+];
+
+const PASSAGES = {
+ "C": {
+  "title": "完形填空 · 邻居王奶奶",
+  "text": "Liu Tao's neighbour is Grandma Wang. She is over seventy, but she is always busy. Every morning she __1__ early and __2__ the small garden in front of the building. She often __3__ people in many ways: she takes children to school, she does the __4__ for old people, and she __5__ after sick neighbours.\n\nLast winter, Liu Tao was ill. Grandma Wang __6__ soup for him and __7__ him funny stories. “__8__ do you do so much for us?” Liu Tao asked. “__9__ I'm happy to help,” she said with a smile.\n\nGrandma Wang never wrote a book or won a prize, __10__ everyone in our street thinks she is a great person."
+ },
+ "A": {
+  "title": "阅读 A · 蔡伦与造纸术",
+  "text": "Cai Lun was a great Chinese inventor. He lived in the Han Dynasty, about 1,900 years ago. At that time, people wrote on bamboo or silk. But bamboo was heavy and silk was dear, so only a few people could read and write.\nCai Lun wanted to make cheap paper. He used tree bark (树皮), old cloth and fishing nets. It was very difficult at first, but he did not give up. He kept thinking and trying. Finally, he made cheap but good paper.\nCai Lun's paper helped more people read and write. It was very important. Today paper is everywhere in our life, and we should always remember this great inventor."
+ },
+ "B": {
+  "title": "阅读 B · 一则诚实的日记",
+  "text": "Sunday, April 6th   Rainy\nToday was a bad day for me. In the afternoon, I played football in the classroom. The ball hit Mrs Li's glass and it fell off the desk. I was afraid, so I put the broken glass into the bin and said nothing.\nAt night I could not sleep. I kept thinking about it. My mother saw my face and asked, “What's wrong?” I told her the truth.\n“Everyone makes mistakes,” she said. “The important thing is to be honest.”\nThis morning I went to Mrs Li's office and said sorry. To my surprise, she smiled. “Thank you for telling me the truth,” she said. “That is more important than the glass.”\nI felt much better. Now I know: honesty is not easy, but it always makes us free."
+ },
+ "INIT": {
+  "title": "首字母填空 · 袁隆平",
+  "text": "Yuan Longping was a great Chinese s______(1). He was b______(2) in 1930 in Beijing. At an early age, he liked f______(3). When he grew up, he s______(4) farming. In 1964, he began to work on hybrid rice. It was very d______(5), but he never g______(6) up. He k______(7) thinking and trying, and he always stayed in the f______(8). In 1973, he d______(9) hybrid rice. Now it grows in many countries and f______(10) people all over the world."
+ }
+};
+
+const BANK = [
+ {
+  "id": "b_mcq_1",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "— ______ book is this? — It's Bobby's.",
+  "options": [
+   "Who",
+   "Whose",
+   "Which",
+   "What"
+  ],
+  "answer": "B",
+  "point": "疑问词 whose",
+  "why": "问“谁的书”用 whose + 名词；Who 问“谁”，不能直接修饰 book。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "wh_word"
+ },
+ {
+  "id": "b_mcq_2",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Sam ______ a storybook on his way home yesterday.",
+  "options": [
+   "find",
+   "finds",
+   "found",
+   "finding"
+  ],
+  "answer": "C",
+  "point": "一般过去时",
+  "why": "yesterday 是过去时标志，find 的过去式是 found。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_mcq_3",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "— Did you see my storybook yesterday? — No, I ______.",
+  "options": [
+   "don't",
+   "didn't",
+   "wasn't",
+   "haven't"
+  ],
+  "answer": "B",
+  "point": "过去时简答",
+  "why": "Did 提问必须用 did 回答，且时态与问句一致；No, I didn't. 是固定答语。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_mcq_4",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Yuan Longping was born ______ 1930 ______ Beijing.",
+  "options": [
+   "in; in",
+   "on; in",
+   "in; on",
+   "on; on"
+  ],
+  "answer": "A",
+  "point": "be born in",
+  "why": "be born in + 年份/地点；be born on + 具体某一天（如 on May 1st）。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_mcq_5",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Cai Lun kept ______ and trying, and he never ______.",
+  "options": [
+   "think; give up",
+   "thinking; gave up",
+   "to think; gives up",
+   "thought; gave up"
+  ],
+  "answer": "B",
+  "point": "keep doing + 过去时",
+  "why": "keep 后接 doing；后半句 never 后用过去式 gave up，因为故事发生在过去。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_mcq_6",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "It was very difficult, ______ he didn't give up.",
+  "options": [
+   "and",
+   "so",
+   "but",
+   "because"
+  ],
+  "answer": "C",
+  "point": "连词",
+  "why": "前后是转折关系（困难，但没放弃），用 but。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_mcq_7",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Beethoven was a great ______. He wrote a lot of famous ______.",
+  "options": [
+   "musician; music",
+   "music; musician",
+   "musician; musics",
+   "musical; music"
+  ],
+  "answer": "A",
+  "point": "词族：music/musician",
+  "why": "人用 musician（可数）；music 不可数，没有复数是 musics。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_mcq_8",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Marie Curie was the first woman ______ a Nobel Prize.",
+  "options": [
+   "win",
+   "won",
+   "to win",
+   "winning"
+  ],
+  "answer": "C",
+  "point": "the first + 名词 + to do",
+  "why": "序数词 the first 修饰名词时，后面用动词不定式作定语。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_mcq_9",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "My mother often asks me ______ my homework first.",
+  "options": [
+   "do",
+   "to do",
+   "doing",
+   "did"
+  ],
+  "answer": "B",
+  "point": "ask sb to do sth",
+  "why": "ask sb to do sth 让某人做某事；否定是 ask sb not to do sth。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_mcq_10",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "— Why are you so happy? — ______ I have a good idea.",
+  "options": [
+   "So",
+   "Because",
+   "But",
+   "And"
+  ],
+  "answer": "B",
+  "point": "why–because",
+  "why": "Why 问原因，必须用 Because 引导的句子回答。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_mcq_11",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Everyone ______ a dream. We should work hard.",
+  "options": [
+   "have",
+   "has",
+   "is having",
+   "had"
+  ],
+  "answer": "B",
+  "point": "不定代词作主语",
+  "why": "everyone 作主语时谓语用第三人称单数；本句是普遍事实，用一般现在时。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "sva"
+ },
+ {
+  "id": "b_mcq_12",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Mrs Fox ______ us to write about our heroes last week.",
+  "options": [
+   "ask",
+   "asks",
+   "asked",
+   "asking"
+  ],
+  "answer": "C",
+  "point": "过去时 + ask sb to do",
+  "why": "last week 表明过去时；ask 的过去式是 asked。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_mcq_13",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "— How ______ school today? — It was great!",
+  "options": [
+   "is",
+   "was",
+   "did",
+   "does"
+  ],
+  "answer": "B",
+  "point": "How was…?",
+  "why": "问“今天在学校过得怎么样”，答句是 It was…，故问句用 was。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_mcq_14",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "Thanks for ______ the shopping for me every week.",
+  "options": [
+   "do",
+   "doing",
+   "to do",
+   "did"
+  ],
+  "answer": "B",
+  "point": "介词 + doing",
+  "why": "thanks for 中 for 是介词，后接动名词 doing。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_mcq_15",
+  "unit": "u2u3",
+  "kind": "choice",
+  "stem": "— ______ did his dreams come true? — He never gave up and worked hard.",
+  "options": [
+   "What",
+   "Why",
+   "How",
+   "When"
+  ],
+  "answer": "C",
+  "point": "特殊疑问词辨析",
+  "why": "答句讲的是“方式”（怎么做），用 How 提问。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "wh_word"
+ },
+ {
+  "id": "b_fill_1",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "________ (honest) is the best policy.",
+  "answer": "Honesty",
+  "accept": [
+   "Honesty"
+  ],
+  "point": "抽象名词作主语",
+  "why": "作主语要用名词 honesty，且位于句首需大写；谓语 is 与单数一致。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "past_form"
+ },
+ {
+  "id": "b_fill_2",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "It is important ________ (be) honest with our friends.",
+  "answer": "to be",
+  "accept": [
+   "to be"
+  ],
+  "point": "It is + adj + to do",
+  "why": "It 是形式主语，真正主语是动词不定式 to be honest。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_fill_3",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Yuan Longping did a lot of ________ (study) on rice.",
+  "answer": "studies",
+  "accept": [
+   "studies"
+  ],
+  "point": "study 的复数",
+  "why": "do studies on sth 对……做研究；study 作名词“研究”可数，复数是 studies。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_fill_4",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Tu Youyou is a great ________ (science). We are proud of her.",
+  "answer": "scientist",
+  "accept": [
+   "scientist"
+  ],
+  "point": "词族：science→scientist",
+  "why": "指人用 scientist；-ist 后缀常表示“……家/人”。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_fill_5",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Edison was a famous ________ (invent). He made many great ________ (invent).",
+  "answer": "inventor; inventions",
+  "accept": [
+   "inventor; inventions",
+   "inventor, inventions",
+   "inventor；inventions"
+  ],
+  "point": "词族：invent",
+  "why": "-or 指人（发明家），-ion 指物（发明物）；many 后接可数名词复数。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_fill_6",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Beethoven was a great ________ (music). His ________ (music) is still popular today.",
+  "answer": "musician; music",
+  "accept": [
+   "musician; music",
+   "musician, music",
+   "musician；music"
+  ],
+  "point": "词族：music",
+  "why": "第一空指人用 musician；第二空 music 不可数，不加 s。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_fill_7",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "The boy repaired the book ________ (careful).",
+  "answer": "carefully",
+  "accept": [
+   "carefully"
+  ],
+  "point": "形容词→副词",
+  "why": "修饰动词 repaired 要用副词 carefully。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_fill_8",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Many ________ (hero) are around us — our parents, our teachers and our friends.",
+  "answer": "heroes",
+  "accept": [
+   "heroes"
+  ],
+  "point": "名词复数",
+  "why": "以 o 结尾的名词多数加 -es：heroes, potatoes, tomatoes；photos, pianos 例外。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_fill_9",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "He liked ________ (farm) when he was a little boy.",
+  "answer": "farming",
+  "accept": [
+   "farming"
+  ],
+  "point": "like doing",
+  "why": "like doing sth 表示长期喜好；farm 的名词形式是 farming（农业）。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_fill_10",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Confucius ________ (teach) people to be kind and honest.",
+  "answer": "taught",
+  "accept": [
+   "taught"
+  ],
+  "point": "不规则动词过去式",
+  "why": "讲古人用过去时；teach 的过去式是 taught。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "past_form"
+ },
+ {
+  "id": "b_fill_11",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Lily sings ________ (well) than me, and she is also ________ (good) at English.",
+  "answer": "better; better",
+  "accept": [
+   "better; better",
+   "better, better",
+   "better；better"
+  ],
+  "point": "比较级",
+  "why": "than 提示比较级；well 的比较级是 better，be good at 的比较级也是 better。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_fill_12",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "We all know the ________ (important) of honesty.",
+  "answer": "importance",
+  "accept": [
+   "importance"
+  ],
+  "point": "词族：important→importance",
+  "why": "the … of 中间要用名词，important 的名词是 importance。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "word_family"
+ },
+ {
+  "id": "b_verb_1",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Look! The children ________ (play) football on the playground.",
+  "answer": "are playing",
+  "accept": [
+   "are playing"
+  ],
+  "point": "时态辨析：现在进行时",
+  "why": "Look! 提示动作正在进行，用 be + doing。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "continuous"
+ },
+ {
+  "id": "b_verb_2",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Sam ________ (break) the book last week, but he ________ (repair) it later.",
+  "answer": "broke; repaired",
+  "accept": [
+   "broke; repaired"
+  ],
+  "point": "一般过去时",
+  "why": "last week / later 都是过去时间；break–broke，repair–repaired。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "past_form"
+ },
+ {
+  "id": "b_verb_3",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "When he grew up, he began ________ (work) on hybrid rice.",
+  "answer": "to work / working",
+  "accept": [
+   "to work",
+   "working",
+   "to work / working"
+  ],
+  "point": "begin to do / doing",
+  "why": "begin 后可接 to do 或 doing，意思基本相同。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_verb_4",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "He never gave up ________ (try) new ideas.",
+  "answer": "trying",
+  "accept": [
+   "trying"
+  ],
+  "point": "give up doing",
+  "why": "give up 后接动名词；give up 的过去式是 gave up。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_verb_5",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "My father ________ (not go) to work yesterday.",
+  "answer": "didn't go",
+  "accept": [
+   "didn't go"
+  ],
+  "point": "过去时否定",
+  "why": "didn't + 动词原形，不能写 didn't went。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "past_form"
+ },
+ {
+  "id": "b_verb_6",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "I saw him ________ (go) to school just now.",
+  "answer": "go",
+  "accept": [
+   "go"
+  ],
+  "point": "see sb do sth",
+  "why": "see sb do sth 表示看见动作全过程，省略 to。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "past_form"
+ },
+ {
+  "id": "b_verb_7",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Would you like ________ (come) to my birthday party?",
+  "answer": "to come",
+  "accept": [
+   "to come"
+  ],
+  "point": "would like to do",
+  "why": "would like to do sth = want to do sth。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_verb_8",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Keep ________ (think), and you will find the answer.",
+  "answer": "thinking",
+  "accept": [
+   "thinking"
+  ],
+  "point": "keep doing",
+  "why": "keep doing sth 一直做某事。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "verb_pattern"
+ },
+ {
+  "id": "b_verb_9",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "The storybook ________ (be) on the desk an hour ago.",
+  "answer": "was",
+  "accept": [
+   "was"
+  ],
+  "point": "be 动词过去式",
+  "why": "an hour ago 是过去时间；主语单数用 was。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "be_past"
+ },
+ {
+  "id": "b_verb_10",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "Listen! Someone ________ (sing) in the next room.",
+  "answer": "is singing",
+  "accept": [
+   "is singing"
+  ],
+  "point": "现在进行时 + 不定代词作主语",
+  "why": "Listen! 提示正在进行；someone 作主语谓语用单数，故用 is singing。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "continuous"
+ },
+ {
+  "id": "b_tr_1",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：Yuan Longping was a Chinese rice scientist.\n要求：对划线部分（Yuan Longping）提问",
+  "answer": "Who was a Chinese rice scientist?",
+  "accept": [
+   "Who was a Chinese rice scientist?",
+   "Who was a Chinese rice scientist",
+   "Who was a Chinese rice scientist?",
+   "Who was a Chinese rice scientist?"
+  ],
+  "point": "句型转换",
+  "why": "划线部分指人且原句有 be 动词 → Who + was + 其他，语序不变。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_ask"
+ },
+ {
+  "id": "b_tr_2",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：His dreams came true because he never gave up.\n要求：对划线部分（because he never gave up）提问",
+  "answer": "Why did his dreams come true?",
+  "accept": [
+   "Why did his dreams come true?",
+   "Why did his dreams come true",
+   "Why did his dreams come true?",
+   "Why did his dreams come true?"
+  ],
+  "point": "句型转换",
+  "why": "问原因用 Why；原句是实义动词 came，加 did 并把 came 还原为 come。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_ask"
+ },
+ {
+  "id": "b_tr_3",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：He developed hybrid rice in 1973.\n要求：对划线部分（in 1973）提问",
+  "answer": "When did he develop hybrid rice?",
+  "accept": [
+   "When did he develop hybrid rice?",
+   "When did he develop hybrid rice",
+   "When did he develop hybrid rice?",
+   "When did he develop hybrid rice?"
+  ],
+  "point": "句型转换",
+  "why": "问时间用 When；did 后接动词原形 develop。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_ask"
+ },
+ {
+  "id": "b_tr_4",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：Sam broke the book last week.\n要求：改为否定句",
+  "answer": "Sam didn't break the book last week.",
+  "accept": [
+   "Sam didn't break the book last week.",
+   "Sam didn't break the book last week.",
+   "Sam did not break the book last week.",
+   "Sam didn't break the book last week."
+  ],
+  "point": "句型转换",
+  "why": "实义动词的否定用 didn't + 原形。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_neg"
+ },
+ {
+  "id": "b_tr_5",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：Cai Lun made paper with cheap things.\n要求：改为一般疑问句",
+  "answer": "Did Cai Lun make paper with cheap things?",
+  "accept": [
+   "Did Cai Lun make paper with cheap things?",
+   "Did Cai Lun make paper with cheap things",
+   "Did Cai Lun make paper with cheap things?",
+   "Did Cai Lun make paper with cheap things?"
+  ],
+  "point": "句型转换",
+  "why": "Did 提前，made 还原为 make。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_ask"
+ },
+ {
+  "id": "b_tr_6",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：I want to help Mrs Pig.\n要求：改为同义句（每空一词）",
+  "answer": "would like",
+  "accept": [
+   "would like",
+   "would like",
+   "would like",
+   "would like"
+  ],
+  "point": "句型转换",
+  "why": "want to do = would like to do。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_neg"
+ },
+ {
+  "id": "b_tr_7",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：The book is Bobby's.\n要求：对划线部分（Bobby's）提问",
+  "answer": "Whose book is it?",
+  "accept": [
+   "Whose book is it?",
+   "Whose book is it",
+   "Whose book is it?",
+   "Whose book is it?"
+  ],
+  "point": "句型转换",
+  "why": "问所属用 whose，后接名词 book。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_ask"
+ },
+ {
+  "id": "b_tr_8",
+  "unit": "u2u3",
+  "kind": "text",
+  "stem": "原句：It was not easy. He tried his best.\n要求：用 but 合并为一句",
+  "answer": "It was not easy, but he tried his best.",
+  "accept": [
+   "It was not easy, but he tried his best.",
+   "It was not easy, but he tried his best.",
+   "It was not easy, but he tried his best.",
+   "It was not easy, but he tried his best."
+  ],
+  "point": "句型转换",
+  "why": "两句是转折关系，用 but 连接，逗号前保留原句。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "transform_neg"
+ },
+ {
+  "id": "b_tl_1",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "你能从伟人身上学到什么？\nWhat can you ______ ______ great people?",
+  "answer": "learn from",
+  "accept": [
+   "learn from",
+   "learn from"
+  ],
+  "point": "完成句子",
+  "why": "learn from sb 向某人学习。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_2",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "他六岁时就开始干农活。\nHe began to work on the farm ______ ______ ______ ______ six.",
+  "answer": "at the age of",
+  "accept": [
+   "at the age of",
+   "at the age of"
+  ],
+  "point": "完成句子",
+  "why": "at the age of + 数字 = when he was … years old。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_3",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "她因为帮助别人而闻名。\nShe is ______ ______ helping others.",
+  "answer": "famous for",
+  "accept": [
+   "famous for",
+   "famous for"
+  ],
+  "point": "完成句子",
+  "why": "be famous for + 特点/原因；be famous as + 身份。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_4",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "汤姆昨天没有做作业。\nTom ______ ______ his homework yesterday.",
+  "answer": "didn't do",
+  "accept": [
+   "didn't do",
+   "didn't do"
+  ],
+  "point": "完成句子",
+  "why": "过去时否定：didn't + 动词原形。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_5",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "— 你昨天看到我的故事书了吗？— 不，我没有。\n— Did you see my storybook yesterday? — No, ______ ______.",
+  "answer": "I didn't",
+  "accept": [
+   "I didn't",
+   "I didn't"
+  ],
+  "point": "完成句子",
+  "why": "Did 问句用 did 简答，且与问句时态一致。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_6",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "我妈妈让我每天读书。\nMy mother ______ me ______ ______ every day.",
+  "answer": "asks; to read",
+  "accept": [
+   "asks; to read",
+   "asks",
+   "to read"
+  ],
+  "point": "完成句子",
+  "why": "ask sb to do sth；every day 提示一般现在时，主语第三人称单数用 asks。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_7",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "很抱歉我弄坏了你的书。\nI'm ______ I ______ your book.",
+  "answer": "sorry; broke",
+  "accept": [
+   "sorry; broke",
+   "sorry",
+   "broke"
+  ],
+  "point": "完成句子",
+  "why": "I'm sorry 道歉；break 的过去式 broke。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_8",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "不要放弃，继续努力！\nDon't ______ ______ and keep working hard!",
+  "answer": "give up",
+  "accept": [
+   "give up",
+   "give up"
+  ],
+  "point": "完成句子",
+  "why": "祈使句否定用 Don't + 动词原形。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_9",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "每个人都可以了不起。\nEveryone ______ ______ great.",
+  "answer": "can be",
+  "accept": [
+   "can be",
+   "can be"
+  ],
+  "point": "完成句子",
+  "why": "情态动词 can 后接动词原形 be。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_tl_10",
+  "unit": "u2u3",
+  "kind": "fill",
+  "stem": "诚实很重要。\n______ is important.",
+  "answer": "Honesty",
+  "accept": [
+   "Honesty",
+   "Honesty"
+  ],
+  "point": "完成句子",
+  "why": "抽象名词作主语，谓语用单数 is。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 2,
+  "tag": "phrase_fill"
+ },
+ {
+  "id": "b_cl_1",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 1 空：________",
+  "options": [
+   "get up",
+   "gets up",
+   "got up",
+   "getting up"
+  ],
+  "answer": "B",
+  "point": "一般现在时第三人称单数",
+  "why": "Every morning 表示习惯，主语 she 用 gets up。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_2",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 2 空：________",
+  "options": [
+   "clean",
+   "cleans",
+   "cleaned",
+   "cleaning"
+  ],
+  "answer": "B",
+  "point": "并列谓语时态一致",
+  "why": "与 gets up 并列，同样用第三人称单数 cleans。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_3",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 3 空：________",
+  "options": [
+   "help",
+   "helps",
+   "helped",
+   "helping"
+  ],
+  "answer": "B",
+  "point": "一般现在时",
+  "why": "often 表示经常性动作，主语 she 用 helps。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_4",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 4 空：________",
+  "options": [
+   "shopping",
+   "shop",
+   "shops",
+   "shopped"
+  ],
+  "answer": "A",
+  "point": "do the shopping",
+  "why": "do the shopping 购物（家务），shopping 在此为名词。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_5",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 5 空：________",
+  "options": [
+   "look",
+   "looks",
+   "looked",
+   "looking"
+  ],
+  "answer": "B",
+  "point": "look after 照顾",
+  "why": "与前面并列，用第三人称单数 looks after。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_6",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 6 空：________",
+  "options": [
+   "cook",
+   "cooks",
+   "cooked",
+   "cooking"
+  ],
+  "answer": "C",
+  "point": "一般过去时",
+  "why": "Last winter 是过去时间，用 cooked。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_7",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 7 空：________",
+  "options": [
+   "tell",
+   "tells",
+   "told",
+   "telling"
+  ],
+  "answer": "C",
+  "point": "不规则动词过去式",
+  "why": "与 cooked 并列，tell 的过去式是 told。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_8",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 8 空：________",
+  "options": [
+   "What",
+   "Why",
+   "How",
+   "When"
+  ],
+  "answer": "B",
+  "point": "why–because",
+  "why": "答句用 Because 说明问的是原因，故问句用 Why。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_9",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 9 空：________",
+  "options": [
+   "So",
+   "But",
+   "Because",
+   "Or"
+  ],
+  "answer": "C",
+  "point": "原因状语从句",
+  "why": "回答 Why 的提问用 Because。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_cl_10",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "C",
+  "stem": "第 10 空：________",
+  "options": [
+   "and",
+   "so",
+   "but",
+   "because"
+  ],
+  "answer": "C",
+  "point": "转折连词",
+  "why": "“没写书没获奖”与“大家都认为她伟大”是转折关系，用 but。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": "tense_signal"
+ },
+ {
+  "id": "b_rd_a_1",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "A",
+  "stem": "Cai Lun lived ______.",
+  "options": [
+   "in the Tang Dynasty",
+   "about 1,900 years ago",
+   "in a small village in Beijing",
+   "about 190 years ago"
+  ],
+  "answer": "B",
+  "point": "阅读理解 · 细节题",
+  "why": "原文 He lived in the Han Dynasty, about 1,900 years ago。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_a_2",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "A",
+  "stem": "What did people write on at that time?",
+  "options": [
+   "Paper and silk.",
+   "Bamboo and silk.",
+   "Bamboo and paper.",
+   "Cloth and paper."
+  ],
+  "answer": "B",
+  "point": "阅读理解 · 细节题",
+  "why": "原文 At that time, people wrote on bamboo or silk。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_a_3",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "A",
+  "stem": "Cai Lun used the following things to make paper EXCEPT ______.",
+  "options": [
+   "tree bark",
+   "old cloth",
+   "fishing nets",
+   "silk"
+  ],
+  "answer": "D",
+  "point": "阅读理解 · 细节判断题",
+  "why": "原文列出的材料是 tree bark, old cloth and fishing nets；silk 是当时书写用的材料，不是造纸材料。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_a_4",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "A",
+  "stem": "Why was Cai Lun's paper important?",
+  "options": [
+   "Because it was very dear.",
+   "Because it helped more people read and write.",
+   "Because it was made of bamboo.",
+   "Because only a few people could use it."
+  ],
+  "answer": "B",
+  "point": "阅读理解 · 因果细节题",
+  "why": "原文 Cai Lun's paper helped more people read and write. It was very important。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_a_5",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "A",
+  "stem": "What can we learn from Cai Lun?",
+  "options": [
+   "We should never give up and keep trying.",
+   "We should write on bamboo.",
+   "We should make paper every day.",
+   "We should only use cheap things."
+  ],
+  "answer": "A",
+  "point": "阅读理解 · 主旨/推断题",
+  "why": "他“did not give up. He kept thinking and trying”，这正是文章想告诉我们的道理。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_b_1",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "B",
+  "stem": "What did the writer break?",
+  "options": [
+   "A window.",
+   "Mrs Li's glass.",
+   "A football.",
+   "A desk."
+  ],
+  "answer": "B",
+  "point": "阅读理解 · 细节题",
+  "why": "原文 The ball hit Mrs Li's glass and it fell off the desk。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_b_2",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "B",
+  "stem": "How did the writer feel at first?",
+  "options": [
+   "Happy.",
+   "Angry.",
+   "Afraid.",
+   "Excited."
+  ],
+  "answer": "C",
+  "point": "阅读理解 · 细节/情感题",
+  "why": "原文 I was afraid, so I put the broken glass into the bin and said nothing。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_b_3",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "B",
+  "stem": "Who did the writer tell the truth to first?",
+  "options": [
+   "Mrs Li.",
+   "His/Her mother.",
+   "His/Her teacher.",
+   "His/Her classmate."
+  ],
+  "answer": "B",
+  "point": "阅读理解 · 细节题",
+  "why": "原文 My mother saw my face and asked… I told her the truth。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_b_4",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "B",
+  "stem": "What did Mrs Li think was more important?",
+  "options": [
+   "The glass.",
+   "The football match.",
+   "Telling the truth.",
+   "Saying nothing."
+  ],
+  "answer": "C",
+  "point": "阅读理解 · 细节题",
+  "why": "Mrs Li 说 That is more important than the glass，指“说实话”。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_rd_b_5",
+  "unit": "u2u3",
+  "kind": "choice",
+  "ctx": "B",
+  "stem": "What's the best title for the passage?",
+  "options": [
+   "A Bad Day",
+   "Telling the Truth",
+   "Mrs Li's Glass",
+   "A Football Match"
+  ],
+  "answer": "B",
+  "point": "阅读理解 · 主旨题",
+  "why": "全文围绕“犯错后说实话”展开，结尾点明 honesty is not easy, but it always makes us free。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ },
+ {
+  "id": "b_initial",
+  "unit": "u2u3",
+  "kind": "multi",
+  "stem": "首字母填空：根据首字母提示，填入合适的单词，使短文完整。",
+  "ctx": "INIT",
+  "blanks": [
+   {
+    "n": "1",
+    "answer": "scientist",
+    "why": "冠词 a + 形容词 great + 名词，指“科学家”"
+   },
+   {
+    "n": "2",
+    "answer": "born",
+    "why": "be born in 1930 出生于 1930 年，固定搭配"
+   },
+   {
+    "n": "3",
+    "answer": "farming",
+    "why": "liked + 名词/动名词；farming 意为“农业”"
+   },
+   {
+    "n": "4",
+    "answer": "studied",
+    "why": "When he grew up 提示过去时，study→studied"
+   },
+   {
+    "n": "5",
+    "answer": "difficult",
+    "why": "It was very + 形容词；与后面的 never gave up 形成转折"
+   },
+   {
+    "n": "6",
+    "answer": "gave",
+    "why": "never gave up 从不放弃，give 的过去式"
+   },
+   {
+    "n": "7",
+    "answer": "kept",
+    "why": "keep doing sth 一直做某事，keep 的过去式 kept"
+   },
+   {
+    "n": "8",
+    "answer": "fields",
+    "why": "stayed in the fields 待在田间，field 用复数"
+   },
+   {
+    "n": "9",
+    "answer": "developed",
+    "why": "developed hybrid rice 培育出杂交水稻，过去时"
+   },
+   {
+    "n": "10",
+    "answer": "feeds",
+    "why": "主语 it 为第三人称单数，一般现在时 feeds"
+   }
+  ],
+  "point": "语篇填空（时态 + 词形 + 拼写）",
+  "why": "先通读全文定时态，再逐空判断词性与形式。",
+  "src": "真题 · U2–U3 拔高卷",
+  "level": 3,
+  "tag": ""
+ }
+];
+
+/* 18 类考点的“知识点公式”——做题后展示，也可单独当语法卡看 */
+const TAG_KNOW = {
+  past_form: { t: '一般过去时 · 动词过去式', f: '肯定：主语 + 过去式', e: 'Sam broke the book last week.', w: '看到 yesterday / last week / … ago / just now / in 1930 就用过去式。规则动词加 -ed（e 结尾 +d；辅音+y 变 i+ed；重读闭音节双写）；不规则动词单独背：break–broke、find–found、teach–taught、keep–kept。' },
+  past_neg: { t: '过去时否定', f: '主语 + didn\'t + 动词原形', e: 'Sam didn\'t break the book.', w: 'didn\'t 后面一定回原形，× didn\'t broke；be 动词句直接加 not（was not / were not），不能又加 did。' },
+  past_yesno: { t: '过去时一般疑问与简答', f: 'Did + 主语 + 原形 …? ／ Yes, 主语 did. / No, 主语 didn\'t.', e: 'Did you see my storybook? — No, I didn\'t.', w: '用 don\'t 回答 Did…? 是本单元最大的失分点；也不能答 Yes, I saw.' },
+  be_past: { t: 'be 动词过去式', f: 'I/he/she/it + was ／ you/we/they + were', e: 'It was great fun. / They were happy.', w: '否定 wasn\'t / weren\'t；疑问把 was/were 提前，不加 did。' },
+  wh_word: { t: '特殊疑问词', f: '疑问词 + did + 主语 + 原形? ／ 疑问词 + was/were + 主语?', e: 'Who was Yuan Longping? / When did he develop hybrid rice?', w: 'Who 问人；Whose 问所属（后接名词）；When 时间；Where 地点；Why 原因（Because 答）；How 方式/感受。' },
+  word_family: { t: '词族与词形转换', f: '先判断空格要名词 / 形容词 / 副词，再变形', e: 'honesty / importance / carefully / scientist / inventor', w: 'honest→honesty；important→importance；careful→carefully；science→scientist；invent→inventor/invention；music→musician；farm→farming。' },
+  verb_pattern: { t: '动词后面跟 to do 还是 doing', f: '+to do ／ +doing ／ +sb do（省 to）', e: 'He wanted to make paper. / He kept thinking. / I saw him go.', w: '+to do：want, would like, begin, ask sb, be the first to；+doing：keep, give up, be good at, thanks for, enjoy, practise；+sb do：make, let, see, watch, hear。' },
+  plural: { t: '名词复数', f: '一般 +s；s/x/ch/sh +es；辅音+y→ies；o 结尾多加 es', e: 'heroes / knives / children / photos', w: 'heroes, potatoes, tomatoes；例外 photos, pianos；f/fe 改 v+es；不规则 child→children, man→men, mouse→mice。' },
+  ordinal: { t: '序数词与日期', f: 'one→first, two→second, three→third, five→fifth, nine→ninth, twelve→twelfth, twenty→twentieth', e: 'on the ninth day of the ninth lunar month', w: 'ninth 去 e；twelfth 是 ve→f；具体某天用 on，月份年份用 in。' },
+  prep_time: { t: '时间介词 in / on / at', f: 'in + 年/月/季节/朝代；on + 具体某天；at + 钟点/固定搭配', e: 'in 1930 / on May 1st / at the age of six', w: 'be born in 1930 in Beijing；只有具体到某一天才用 on。' },
+  sva: { t: '主谓一致', f: 'everyone / someone / honesty / news + 单数谓语', e: 'Everyone has a dream. / Honesty is important.', w: '不定代词作主语用单数；抽象名词不可数用 is；many 后接复数。' },
+  continuous: { t: '现在进行时', f: 'be + 动词-ing', e: 'Look! The children are playing football.', w: '标志词 Look! / Listen! / now；注意双写（swimming, chatting）和去 e（making）。' },
+  tense_signal: { t: '看标志词定时态', f: 'every day→现在时；yesterday→过去时；now→进行时；tomorrow→will + 原形', e: 'He goes to school every day. / He went yesterday.', w: '先找时间状语，再决定动词形式——这一步错了，后面全错。' },
+  whose: { t: '物主代词', f: '形容词性 my/your/her/our/their + 名词；名词性 mine/yours/hers/ours/theirs 单独用', e: 'It\'s my book. = It\'s mine.', w: '名词性物主代词后面不能再加名词（× mine book）；his 两种同形。' },
+  transform_neg: { t: '改否定句', f: '实义动词：主语 + didn\'t + 原形；be 动词：was not / were not', e: 'Sam didn\'t break the book.', w: '找到过去式，把它还原成原形；不要既加 didn\'t 又留过去式。' },
+  transform_ask: { t: '对划线部分提问', f: '疑问词 + did + 主语 + 原形? ／ 疑问词 + was/were + 主语?', e: 'When did he develop hybrid rice?', w: '口诀：一选疑问词，二加 did，三还原动词；原句有 be 就用 was/were。' },
+  phrase_fill: { t: '固定搭配', f: '整体记，不能逐词翻译', e: 'learn from / at the age of / be famous for / give up / take part in / used to', w: 'on one\'s way home（home 前不加 to）；instead of + doing；be famous for + 原因，as + 身份。' },
+  turn_into: { t: 'turn into / make out of', f: 'turn A into B ／ make B out of A ／ cut … into …', e: 'We can turn an old bottle into a vase.', w: '介词固定不能换：into 表结果，out of 表材料来源。' }
+};
+
+</script>
+<script>
+/* CORE：判分 + 变式题生成器（纯逻辑，可在 node 里单测） */
+var CORE = (function () {
+  /* ---------- 随机 ---------- */
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function pick(r, arr) { return arr[Math.floor(r() * arr.length)]; }
+  function shuffle(r, arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(r() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function hash(str) { var h = 2166136261; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+
+  /* ---------- 词库 ---------- */
+  var SUBJ = [
+    { n: 'Sam', be: 'was', pl: false }, { n: 'Bobby', be: 'was', pl: false },
+    { n: 'Mrs Fox', be: 'was', pl: false }, { n: 'I', be: 'was', pl: false },
+    { n: 'He', be: 'was', pl: false }, { n: 'She', be: 'was', pl: false },
+    { n: 'My father', be: 'was', pl: false }, { n: 'Yuan Longping', be: 'was', pl: false },
+    { n: 'We', be: 'were', pl: true }, { n: 'They', be: 'were', pl: true },
+    { n: 'You', be: 'were', pl: true }, { n: 'The children', be: 'were', pl: true },
+    { n: 'My friends', be: 'were', pl: true }, { n: 'Cai Lun', be: 'was', pl: false }
+  ];
+  var TIME = ['yesterday', 'last week', 'last Sunday', 'two days ago', 'just now', 'last year', 'this morning'];
+
+  /* 动词 + 宾语搭配（保证生成的句子成立） */
+  var VF = [
+    { v: 'break', p: 'broke', o: 'the glass', u: 'u2' },
+    { v: 'find', p: 'found', o: 'a storybook', u: 'u2' },
+    { v: 'repair', p: 'repaired', o: 'the book', u: 'u2' },
+    { v: 'see', p: 'saw', o: 'a film', u: 'u2' },
+    { v: 'read', p: 'read', o: 'a story', u: 'u2' },
+    { v: 'feel', p: 'felt', o: 'happy', u: 'u2' },
+    { v: 'say', p: 'said', o: 'sorry to him', u: 'u2' },
+    { v: 'give', p: 'gave', o: 'the book to me', u: 'u2' },
+    { v: 'go', p: 'went', o: 'to the park', u: 'u3' },
+    { v: 'make', p: 'made', o: 'a card', u: 'u3' },
+    { v: 'write', p: 'wrote', o: 'a poem', u: 'u3' },
+    { v: 'teach', p: 'taught', o: 'us English', u: 'u3' },
+    { v: 'keep', p: 'kept', o: 'a diary', u: 'u3' },
+    { v: 'win', p: 'won', o: 'a prize', u: 'u3' },
+    { v: 'grow', p: 'grew', o: 'rice', u: 'u3' },
+    { v: 'feed', p: 'fed', o: 'the animals', u: 'u3' },
+    { v: 'take', p: 'took', o: 'a photo', u: 'u3' },
+    { v: 'think', p: 'thought', o: 'about it', u: 'u3' },
+    { v: 'buy', p: 'bought', o: 'a present', u: 'u3' },
+    { v: 'hold', p: 'held', o: 'a party', u: 'u4' },
+    { v: 'cry', p: 'cried', o: 'loudly', u: 'u4' },
+    { v: 'climb', p: 'climbed', o: 'a mountain', u: 'u4' },
+    { v: 'visit', p: 'visited', o: 'my grandparents', u: 'u4' },
+    { v: 'walk', p: 'walked', o: 'to school', u: 'u1' },
+    { v: 'practise', p: 'practised', o: 'singing', u: 'u1' },
+    { v: 'try', p: 'tried', o: 'his best', u: 'u1' },
+    { v: 'stop', p: 'stopped', o: 'and rested', u: 'u5' },
+    { v: 'pick', p: 'picked', o: 'up the litter', u: 'u5' },
+    { v: 'clean', p: 'cleaned', o: 'the classroom', u: 'u5' },
+    { v: 'throw', p: 'threw', o: 'the rubbish into the bin', u: 'u5' },
+    { v: 'plant', p: 'planted', o: 'some trees', u: 'u6' },
+    { v: 'save', p: 'saved', o: 'a lot of water', u: 'u6' },
+    { v: 'reuse', p: 'reused', o: 'the old box', u: 'u7' },
+    { v: 'cut', p: 'cut', o: 'the paper', u: 'u7' },
+    { v: 'decorate', p: 'decorated', o: 'the bottle', u: 'u7' }
+  ];
+
+  var FAMILY = [
+    { root: 'honest', ans: 'Honesty', sent: '______ (honest) is the best policy.', point: 'honest → honesty（抽象名词）', why: '作主语要用名词 honesty，位于句首大写；抽象名词作主语谓语用单数 is。' },
+    { root: 'important', ans: 'importance', sent: 'We all know the ______ (important) of honesty.', point: 'important → importance', why: 'the … of 中间要用名词，important 的名词是 importance。' },
+    { root: 'careful', ans: 'carefully', sent: 'He repaired the book ______ (careful).', point: '形容词 → 副词', why: '修饰动词 repaired 要用副词 carefully。' },
+    { root: 'science', ans: 'scientist', sent: 'Tu Youyou is a great ______ (science).', point: 'science → scientist', why: '指人用 scientist，-ist 常表示“……家/人”。' },
+    { root: 'invent', ans: 'inventor', sent: 'Edison was a famous ______ (invent).', point: 'invent → inventor', why: '-or 指人（发明家），-ion 指物（invention）。' },
+    { root: 'music', ans: 'musician', sent: 'Beethoven was a great ______ (music).', point: 'music → musician', why: '指人用 musician；music 不可数。' },
+    { root: 'truth', ans: 'true', sent: 'The story is ______ (truth).', point: 'truth → true', why: '作表语要用形容词 true，truth 是名词。' },
+    { root: 'farm', ans: 'farming', sent: 'He liked ______ (farm) when he was a boy.', point: 'like + 名词/doing', why: 'like 后接名词或动名词；farming 意为“农业”。' },
+    { root: 'die', ans: 'died', sent: 'Yuan Longping ______ (die) in 2021.', point: 'die → died', why: '过去时间用过去式；die 的形容词是 dead，名词是 death。' },
+    { root: 'succeed', ans: 'successful', sent: 'He was ______ (succeed) at last.', point: 'succeed → successful', why: 'was 后接形容词 successful；名词是 success。' },
+    { root: 'care', ans: 'careless', sent: 'He is ______ (care) with his homework, so he makes many mistakes.', point: 'care → careless', why: '根据后句“常犯错”判断是“粗心的”，用 careless。' },
+    { root: 'fun', ans: 'funny', sent: 'It is a ______ (fun) story. We all laugh.', point: 'fun → funny', why: '“滑稽可笑的”用 funny；fun 是“乐趣”，不可数。' },
+    { root: 'hero', ans: 'heroes', sent: 'Many ______ (hero) are around us.', point: 'hero → heroes', why: '以 o 结尾多数加 -es：heroes, potatoes, tomatoes；photos, pianos 例外。' },
+    { root: 'study', ans: 'studies', sent: 'He did a lot of ______ (study) on rice.', point: 'study → studies（名词复数）', why: 'do studies on sth 对……做研究；study 作名词可数。' },
+    { root: 'predict', ans: 'prediction', sent: '', point: '', why: '' }
+  ].filter(function (x) { return x.sent; });
+
+  var PATTERN = [
+    { pre: 'She is good at', post: 'pictures.', base: 'draw', ing: 'drawing', note: 'be good at + doing（at 是介词）' },
+    { pre: 'He kept', post: 'and trying.', base: 'think', ing: 'thinking', note: 'keep doing sth 一直做某事' },
+    { pre: 'He never gave up', post: 'new ideas.', base: 'try', ing: 'trying', note: 'give up doing sth 放弃做某事' },
+    { pre: 'Thanks for', post: 'the shopping for me.', base: 'do', ing: 'doing', note: '介词 for 后接动名词' },
+    { pre: 'I want', post: 'you.', base: 'help', ing: 'to help', note: 'want to do sth' },
+    { pre: 'Would you like', post: 'to my party?', base: 'come', ing: 'to come', note: 'would like to do sth' },
+    { pre: 'My mother asked me', post: 'my homework first.', base: 'do', ing: 'to do', note: 'ask sb to do sth' },
+    { pre: 'He began', post: 'on hybrid rice.', base: 'work', ing: 'to work', note: 'begin to do / begin doing 都可以' },
+    { pre: 'I saw him', post: 'to school just now.', base: 'go', ing: 'go', note: 'see sb do sth 看见全过程，省 to' },
+    { pre: 'The teacher made us', post: 'the text.', base: 'read', ing: 'read', note: 'make sb do sth 省略 to' },
+    { pre: 'Stop', post: ', please. The class begins.', base: 'talk', ing: 'talking', note: 'stop doing 停止正在做的事' },
+    { pre: 'We can help', post: 'the city clean.', base: 'keep', ing: 'keep', note: 'help sb (to) do sth' }
+  ];
+
+  var PLURAL = [
+    { s: 'hero', p: 'heroes', why: '以 o 结尾多数加 -es（heroes, potatoes, tomatoes）；photos, pianos 例外。' },
+    { s: 'potato', p: 'potatoes', why: '以 o 结尾加 -es。' },
+    { s: 'tomato', p: 'tomatoes', why: '以 o 结尾加 -es。' },
+    { s: 'photo', p: 'photos', why: 'photo 是例外，直接加 -s。' },
+    { s: 'piano', p: 'pianos', why: 'piano 是例外，直接加 -s。' },
+    { s: 'child', p: 'children', why: '不规则复数 child→children。' },
+    { s: 'man', p: 'men', why: '不规则复数 man→men。' },
+    { s: 'woman', p: 'women', why: '不规则复数 woman→women。' },
+    { s: 'policeman', p: 'policemen', why: 'man 结尾的合成词变 men。' },
+    { s: 'mouse', p: 'mice', why: '不规则复数 mouse→mice。' },
+    { s: 'knife', p: 'knives', why: 'f/fe 结尾多改 v 加 -es。' },
+    { s: 'leaf', p: 'leaves', why: 'f 结尾改 v 加 -es。' },
+    { s: 'box', p: 'boxes', why: 's/x/ch/sh 结尾加 -es。' },
+    { s: 'country', p: 'countries', why: '辅音字母+y，变 y 为 i 加 -es。' },
+    { s: 'story', p: 'stories', why: '辅音字母+y，变 y 为 i 加 -es。' },
+    { s: 'poem', p: 'poems', why: '一般情况直接加 -s。' }
+  ];
+
+  var ORD = [
+    ['one', 'first', '1st'], ['two', 'second', '2nd'], ['three', 'third', '3rd'],
+    ['four', 'fourth', '4th'], ['five', 'fifth', '5th'], ['six', 'sixth', '6th'],
+    ['seven', 'seventh', '7th'], ['eight', 'eighth', '8th'], ['nine', 'ninth', '9th'],
+    ['ten', 'tenth', '10th'], ['eleven', 'eleventh', '11th'], ['twelve', 'twelfth', '12th'],
+    ['twenty', 'twentieth', '20th'], ['thirty-one', 'thirty-first', '31st']
+  ];
+
+  var POSS = [
+    { adj: 'my', nom: 'mine' }, { adj: 'your', nom: 'yours' }, { adj: 'his', nom: 'his' },
+    { adj: 'her', nom: 'hers' }, { adj: 'our', nom: 'ours' }, { adj: 'their', nom: 'theirs' }
+  ];
+
+  var PHRASE = [
+    { cn: '向某人学习', en: 'learn from sb', key: 'learn from' },
+    { cn: '在……岁时', en: 'at the age of', key: 'at the age of' },
+    { cn: '因……而著名', en: 'be famous for', key: 'famous for' },
+    { cn: '放弃', en: 'give up', key: 'give up' },
+    { cn: '一直做某事', en: 'keep doing sth', key: 'keep doing' },
+    { cn: '擅长做某事', en: 'be good at doing sth', key: 'good at' },
+    { cn: '在某人回家的路上', en: 'on one\'s way home', key: 'on my way home' },
+    { cn: '把某物给某人', en: 'give sth to sb', key: 'give it to' },
+    { cn: '让梦想成真', en: 'make one\'s dream come true', key: 'come true' },
+    { cn: '参加', en: 'take part in', key: 'take part in' },
+    { cn: '照顾', en: 'look after', key: 'look after' },
+    { cn: '把……放进垃圾桶', en: 'put … into the bin', key: 'into the bin' },
+    { cn: '代替；而不是', en: 'instead of', key: 'instead of' },
+    { cn: '把A变成B', en: 'turn A into B', key: 'turn it into' },
+    { cn: '过去常常做某事', en: 'used to do sth', key: 'used to' }
+  ];
+
+  /* ---------- 工具 ---------- */
+  function pastRule(v) {
+    if (/e$/.test(v)) return { form: v + 'd', rule: '以不发音的 e 结尾，直接加 -d' };
+    if (/[^aeiou]y$/.test(v)) return { form: v.slice(0, -1) + 'ied', rule: '辅音字母 + y 结尾，变 y 为 i 再加 -ed' };
+    if (/^[^aeiou]*[aeiou][^aeiouwxy]$/.test(v) && v.length <= 5) return { form: v + v.slice(-1) + 'ed', rule: '重读闭音节（辅-元-辅），双写末尾字母再加 -ed' };
+    return { form: v + 'ed', rule: '一般情况直接加 -ed' };
+  }
+
+  function norm(s) {
+    if (s === null || s === undefined) return '';
+    var t = String(s).toLowerCase().trim();
+    t = t.replace(/[，,；;\/、]/g, ';');
+    t = t.replace(/\s*;\s*/g, ';');
+    t = t.replace(/[.。!！?？]+$/g, '');
+    t = t.replace(/\s+/g, ' ');
+    t = t.replace(/’/g, "'");
+    return t;
+  }
+
+  function check(item, input) {
+    if (!item) return false;
+    if (item.options) return String(input).toUpperCase() === String(item.answer).toUpperCase();
+    var acc = (item.accept && item.accept.length ? item.accept : [item.answer]);
+    var n = norm(input);
+    for (var i = 0; i < acc.length; i++) if (norm(acc[i]) === n) return true;
+    return false;
+  }
+
+  /* ---------- 生成器 ---------- */
+  var GENS = {};
+
+  GENS.past_form = {
+    label: '动词过去式', tag: 'past_form', desc: '看到 yesterday / last week 就用过去式', unit: 'u2',
+    mk: function (r) {
+      var f = pick(r, VF), s = pick(r, SUBJ), t = pick(r, TIME);
+      var reg = /ed$/.test(f.p) && f.p !== 'fed' && f.p !== 'read';
+      var rule = reg && f.p === pastRule(f.v).form ? pastRule(f.v).rule : '';
+      return {
+        stem: s.n + ' ______ (' + f.v + ') ' + f.o + ' ' + t + '.',
+        answer: f.p, point: '一般过去时：不规则/规则动词',
+        why: t + ' 是过去时间标志 → 用过去式。' + (rule ? f.v + ' ' + rule + '，所以填 ' + f.p + '。' : f.v + ' 是不规则动词，过去式是 ' + f.p + '，要单独记。'),
+        level: 1
+      };
+    }
+  };
+
+  GENS.past_neg = {
+    label: '过去时否定', tag: 'past_neg', desc: 'didn\'t 后面一定回原形', unit: 'u2',
+    mk: function (r) {
+      var f = pick(r, VF), s = pick(r, SUBJ), t = pick(r, TIME);
+      return {
+        stem: s.n + ' ______ (not ' + f.v + ') ' + f.o + ' ' + t + '.',
+        answer: "didn't " + f.v, accept: ["didn't " + f.v, 'did not ' + f.v],
+        point: '过去时否定：didn\'t + 动词原形',
+        why: '过去时否定用 didn\'t，后面动词必须回原形。× didn\'t ' + f.p + '，√ didn\'t ' + f.v + '。',
+        level: 1
+      };
+    }
+  };
+
+  GENS.past_yesno = {
+    label: 'Did 问句与简答', tag: 'past_yesno', desc: 'Did 问 → did/didn\'t 答', unit: 'u2',
+    mk: function (r) {
+      var f = pick(r, VF);
+      var yes = r() > 0.5;
+      var opts = yes ? ['Yes, I did.', 'Yes, I do.', 'Yes, I was.', 'Yes, I am.'] : ['No, I didn\'t.', 'No, I don\'t.', 'No, I wasn\'t.', 'No, I haven\'t.'];
+      var ans = opts[0];
+      var sh = shuffle(r, opts);
+      return {
+        stem: '— Did you ' + f.v + ' ' + f.o + ' yesterday?\n— ______',
+        options: sh, answer: String.fromCharCode(65 + sh.indexOf(ans)),
+        point: '过去时一般疑问句的简答',
+        why: 'Did 提问必须用 did/didn\'t 回答，时态要一致：' + ans + '。用 do/don\'t 是本单元最大的失分点。',
+        level: 2
+      };
+    }
+  };
+
+  GENS.be_past = {
+    label: 'was / were', tag: 'be_past', desc: 'be 动词的过去式', unit: 'u2',
+    mk: function (r) {
+      var s = pick(r, SUBJ), t = pick(r, TIME);
+      var opts = ['was', 'were', 'is', 'are'];
+      var sh = shuffle(r, opts);
+      return {
+        stem: s.n + ' ______ at home ' + t + '.',
+        options: sh, answer: String.fromCharCode(65 + sh.indexOf(s.be)),
+        point: 'be 动词过去式：am/is→was，are→were',
+        why: '主语 ' + s.n + ' 是' + (s.pl ? '复数' : '单数') + '，' + t + ' 是过去时间，所以用 ' + s.be + '。',
+        level: 1
+      };
+    }
+  };
+
+  GENS.wh_word = {
+    label: '疑问词辨析', tag: 'wh_word', desc: 'Who / Whose / When / Why / How', unit: 'u3',
+    mk: function (r) {
+      var modes = [
+        { q: '— ______ book is this?  — It\'s Bobby\'s.', a: 'Whose', why: '问“谁的书”用 whose + 名词；who 问“谁”，不能修饰 book。', opts: ['Who', 'Whose', 'Which', 'What'] },
+        { q: '— ______ did his dreams come true?  — He never gave up and worked hard.', a: 'How', why: '答句讲的是“方式”，用 How 提问。', opts: ['What', 'Why', 'How', 'When'] },
+        { q: '— ______ are you so happy?  — Because I have a good idea.', a: 'Why', why: 'Because 回答原因 → 问句用 Why。', opts: ['When', 'Why', 'How', 'Where'] },
+        { q: '— ______ did he develop hybrid rice?  — In 1973.', a: 'When', why: '答句是时间 → 用 When。', opts: ['Where', 'When', 'Who', 'Why'] },
+        { q: '— ______ was Yuan Longping?  — He was a Chinese rice scientist.', a: 'Who', why: '问“是谁/身份”用 Who + was。', opts: ['What', 'Who', 'Whose', 'How'] },
+        { q: '— ______ did Cai Lun want to make?  — Cheap paper.', a: 'What', why: '答句是物 → 问宾语用 What。', opts: ['What', 'Who', 'When', 'How'] },
+        { q: '— ______ was school today?  — It was great!', a: 'How', why: '问“今天过得怎么样”用 How was…?', opts: ['What', 'How', 'Where', 'Who'] }
+      ];
+      var m = pick(r, modes);
+      var sh = shuffle(r, m.opts);
+      return {
+        stem: m.q, options: sh, answer: String.fromCharCode(65 + sh.indexOf(m.a)),
+        point: '特殊疑问词辨析', why: m.why, level: 2
+      };
+    }
+  };
+
+  GENS.word_family = {
+    label: '词族变形', tag: 'word_family', desc: 'honest→honesty 这一类的“适当形式”', unit: 'u3',
+    mk: function (r) {
+      var f = pick(r, FAMILY);
+      return {
+        stem: f.sent, answer: f.ans, point: f.point, why: f.why, level: 2
+      };
+    }
+  };
+
+  GENS.verb_pattern = {
+    label: 'to do 还是 doing', tag: 'verb_pattern', desc: '搭配决定形式，这是最大得分区', unit: 'u3',
+    mk: function (r) {
+      var p = pick(r, PATTERN);
+      var wrong1 = p.ing === 'to ' + p.base ? p.base : 'to ' + p.base;
+      var wrong2 = p.ing === p.base + 'ing' ? p.base : p.base + 'ing';
+      var wrong3 = p.base + 's';
+      var opts = [p.ing, wrong1, wrong3];
+      if (wrong2 !== p.ing && opts.indexOf(wrong2) < 0) opts.push(wrong2);
+      opts = shuffle(r, opts);
+      return {
+        stem: p.pre + ' ______ (' + p.base + ') ' + p.post,
+        options: opts, answer: String.fromCharCode(65 + opts.indexOf(p.ing)),
+        point: '动词搭配：' + p.note,
+        why: p.note + '，所以用 ' + p.ing + '。',
+        level: 2
+      };
+    }
+  };
+
+  GENS.plural = {
+    label: '名词复数', tag: 'plural', desc: 'heroes / knives / children', unit: 'u3',
+    mk: function (r) {
+      var p = pick(r, PLURAL);
+      var frames = [
+        'There are many ______ (' + p.s + ') in the story.',
+        'We saw two ______ (' + p.s + ') in the park.',
+        'The book is about some ______ (' + p.s + ').'
+      ];
+      return {
+        stem: pick(r, frames), answer: p.p, point: '名词复数：' + p.s + ' → ' + p.p,
+        why: p.why, level: 1
+      };
+    }
+  };
+
+  GENS.ordinal = {
+    label: '序数词与日期', tag: 'ordinal', desc: 'ninth / twelfth / on the … of …', unit: 'u4',
+    mk: function (r) {
+      var o = pick(r, ORD);
+      var mode = r();
+      if (mode < 0.5) {
+        return {
+          stem: 'It\'s on the ______ (' + o[0] + ') day of the ninth lunar month.',
+          answer: o[1], point: '序数词：' + o[0] + ' → ' + o[1],
+          why: '表示“第几个”用序数词，前面加 the：' + o[1] + '（缩写 ' + o[2] + '）。' + (o[1] === 'ninth' ? '注意 nine 去 e 加 th。' : '') + (o[1] === 'twelfth' ? '注意 twelve 变 ve 为 f 再加 th。' : ''),
+          level: 2
+        };
+      }
+      return {
+        stem: '— When is the Double Ninth Festival?\n— It\'s ______ the ninth day of the ninth lunar month.',
+        options: ['in', 'on', 'at', 'for'], answer: 'B',
+        point: '时间介词：具体某一天用 on',
+        why: '具体到某一天（the ninth day）用 on；月份/年份用 in，钟点用 at。', level: 2
+      };
+    }
+  };
+
+  GENS.prep_time = {
+    label: 'in / on / at', tag: 'prep_time', desc: '年份、日期、岁数的介词', unit: 'u3',
+    mk: function (r) {
+      var modes = [
+        { s: 'Yuan Longping was born ______ 1930 ______ Beijing.', o: ['in; in', 'on; in', 'in; on', 'on; on'], a: 'A', why: 'be born in + 年份/地点；只有具体到某一天才用 on（on May 1st）。' },
+        { s: 'The Double Ninth Festival is ______ the ninth day of the ninth lunar month.', o: ['in', 'on', 'at', 'by'], a: 'B', why: '具体某一天用 on。' },
+        { s: 'He began to work on the farm ______ the age of six.', o: ['in', 'on', 'at', 'for'], a: 'C', why: '固定搭配 at the age of + 数字。' },
+        { s: 'We have an English class ______ Monday morning.', o: ['in', 'on', 'at', 'to'], a: 'B', why: '具体到某天的上午/下午用 on；泛指上午用 in the morning。' },
+        { s: 'Cai Lun lived ______ the Han Dynasty.', o: ['in', 'on', 'at', 'from'], a: 'A', why: '朝代/世纪/年份前用 in。' }
+      ];
+      var m = pick(r, modes);
+      return { stem: m.s, options: m.o, answer: m.a, point: '时间介词 in / on / at', why: m.why, level: 2 };
+    }
+  };
+
+  GENS.sva = {
+    label: '主谓一致', tag: 'sva', desc: 'everyone / honesty 作主语用单数', unit: 'u2',
+    mk: function (r) {
+      var modes = [
+        { s: 'Everyone ______ a dream. We should work hard.', o: ['have', 'has', 'is having', 'had'], a: 'B', why: 'everyone 作主语，谓语用第三人称单数 has。' },
+        { s: 'Honesty ______ important.', o: ['are', 'is', 'were', 'be'], a: 'B', why: '抽象名词 honesty 不可数，谓语用 is。' },
+        { s: 'Listen! Someone ______ in the next room.', o: ['sing', 'sings', 'is singing', 'are singing'], a: 'C', why: 'Listen! 提示现在进行时；someone 作主语用单数 is singing。' },
+        { s: 'Many ______ are around us — our parents, our teachers and our friends.', o: ['hero', 'heros', 'heroes', 'heroies'], a: 'C', why: 'many 后接复数；hero→heroes。' },
+        { s: 'The news ______ good.', o: ['are', 'is', 'were', 'be'], a: 'B', why: 'news 是不可数名词，谓语用单数。' }
+      ];
+      var m = pick(r, modes);
+      return { stem: m.s, options: m.o, answer: m.a, point: '主谓一致', why: m.why, level: 2 };
+    }
+  };
+
+  GENS.continuous = {
+    label: '现在进行时', tag: 'continuous', desc: 'Look! / Listen! → be + doing', unit: 'u1',
+    mk: function (r) {
+      var acts = [
+        { s: 'The children', v: 'play', o: 'football on the playground', be: 'are', ing: 'playing' },
+        { s: 'Sam', v: 'read', o: 'a storybook', be: 'is', ing: 'reading' },
+        { s: 'My mother', v: 'cook', o: 'dinner', be: 'is', ing: 'cooking' },
+        { s: 'The boys', v: 'swim', o: 'in the lake', be: 'are', ing: 'swimming' },
+        { s: 'Grandma', v: 'chat', o: 'with her friends', be: 'is', ing: 'chatting' }
+      ];
+      var a = pick(r, acts);
+      var cue = r() > 0.5 ? 'Look!' : 'Listen!';
+      return {
+        stem: cue + ' ' + a.s + ' ______ (' + a.v + ') ' + a.o + '.',
+        answer: a.ing, accept: [a.ing, a.be + ' ' + a.ing],
+        point: '现在进行时：be + 动词-ing',
+        why: cue + ' 提示动作正在进行，用 be + doing；主语 ' + a.s + ' 用 ' + a.be + '，所以是 ' + a.be + ' ' + a.ing + '。',
+        level: 2
+      };
+    }
+  };
+
+  GENS.tense_signal = {
+    label: '看标志词定时态', tag: 'tense_signal', desc: 'yesterday / every day / now / tomorrow', unit: 'u2',
+    mk: function (r) {
+      var modes = [
+        { s: 'Sam ______ a storybook on his way home yesterday.', v: 'find', o: ['find', 'finds', 'found', 'finding'], a: 'C', why: 'yesterday 是过去时间标志 → found。' },
+        { s: 'Mrs Fox ______ us to write about our heroes last week.', v: 'ask', o: ['ask', 'asks', 'asked', 'asking'], a: 'C', why: 'last week 是过去时间 → asked。' },
+        { s: 'He ______ to school by bike every day.', v: 'go', o: ['go', 'goes', 'went', 'going'], a: 'B', why: 'every day 表习惯；主语 he → goes。' },
+        { s: 'She ______ her homework now.', v: 'do', o: ['do', 'does', 'did', 'is doing'], a: 'D', why: 'now 提示正在进行 → is doing。' },
+        { s: 'We ______ a party next Sunday.', v: 'have', o: ['have', 'had', 'are having', 'will have'], a: 'D', why: 'next Sunday 是将来时间 → will + 原形。' },
+        { s: 'Confucius ______ people to be kind and honest.', v: 'teach', o: ['teach', 'teaches', 'taught', 'teaching'], a: 'C', why: '讲古人的事用过去时 → taught。' }
+      ];
+      var m = pick(r, modes);
+      return { stem: m.s, options: m.o, answer: m.a, point: '时态标志词判断', why: m.why, level: 2 };
+    }
+  };
+
+  GENS.whose = {
+    label: '名词性物主代词', tag: 'whose', desc: 'mine / yours / his / hers', unit: 'u2',
+    mk: function (r) {
+      var pool = POSS.filter(function (p) { return p.adj !== p.nom; });
+      var p = pick(r, pool);
+      var allNom = ['mine', 'yours', 'hers', 'ours', 'theirs'];
+      var CN = { my: '我的', your: '你的', her: '她的', our: '我们的', their: '他们的' };
+      var mode = r() > 0.5;
+      var wrongs = shuffle(r, allNom.filter(function (x) { return x !== p.nom; })).slice(0, 2);
+      if (mode) {
+        var opts2 = shuffle(r, [p.nom].concat(wrongs, [p.adj + ' book']));
+        return {
+          stem: '— Whose book is this?  — It\'s ______. (这本书是' + CN[p.adj] + ')',
+          options: opts2, answer: String.fromCharCode(65 + opts2.indexOf(p.nom)),
+          point: '名词性物主代词单独使用',
+          why: '问 whose 后用名词性物主代词 ' + p.nom + '，后面不能再加名词（× ' + p.nom + ' book）。',
+          level: 2
+        };
+      }
+      var opts3 = shuffle(r, [p.nom].concat(wrongs, [p.adj]));
+      return {
+        stem: 'This is ' + p.adj + ' book. That one is ______.',
+        options: opts3, answer: String.fromCharCode(65 + opts3.indexOf(p.nom)),
+        point: '形容词性 vs 名词性物主代词',
+        why: '第一句 ' + p.adj + ' book 后面有名词，用形容词性；第二句后面没有名词，用名词性 ' + p.nom + '。',
+        level: 2
+      };
+    }
+  };
+
+  GENS.transform_neg = {
+    label: '改否定句', tag: 'transform_neg', desc: '实义动词用 didn\'t + 原形', unit: 'u2',
+    mk: function (r) {
+      var f = pick(r, VF), s = pick(r, SUBJ), t = pick(r, TIME);
+      var src = s.n + ' ' + f.p + ' ' + f.o + ' ' + t + '.';
+      var ans = s.n + " didn't " + f.v + ' ' + f.o + ' ' + t + '.';
+      return {
+        stem: '改为否定句：\n' + src,
+        answer: ans, accept: [ans, s.n + ' did not ' + f.v + ' ' + f.o + ' ' + t + '.'],
+        point: '过去时否定句改写',
+        why: '找到过去式 ' + f.p + '，把助动词 didn\'t 放在主语后，动词还原成 ' + f.v + '。',
+        level: 3
+      };
+    }
+  };
+
+  GENS.transform_ask = {
+    label: '对划线部分提问', tag: 'transform_ask', desc: 'Who / When / Why / How + did', unit: 'u3',
+    mk: function (r) {
+      var modes = [
+        { src: 'Yuan Longping was a Chinese rice scientist.', focus: 'Yuan Longping', ans: 'Who was a Chinese rice scientist?', why: '划线部分指人且原句是 be 动词 → Who + was + 其他，语序不变。' },
+        { src: 'His dreams came true because he never gave up.', focus: 'because he never gave up', ans: 'Why did his dreams come true?', why: '问原因用 Why；原句是实义动词 came，加 did 并把 came 还原为 come。' },
+        { src: 'He developed hybrid rice in 1973.', focus: 'in 1973', ans: 'When did he develop hybrid rice?', why: '问时间用 When；did 后接动词原形 develop。' },
+        { src: 'He worked hard to make his dream come true.', focus: 'to make his dream come true', ans: 'Why did he work hard?', why: '问目的/原因用 Why，加 did 后 work 还原为原形。' },
+        { src: 'Cai Lun made paper with cheap things.', focus: 'with cheap things', ans: 'How did Cai Lun make paper?', why: '问“用什么方式”用 How。' },
+        { src: 'Sam broke the book last week.', focus: 'last week', ans: 'When did Sam break the book?', why: '问时间用 When；did 后 break 用原形。' }
+      ];
+      var m = pick(r, modes);
+      return {
+        stem: '对划线部分提问（' + m.focus + '）：\n' + m.src,
+        answer: m.ans, accept: [m.ans, m.ans.replace(/\?$/, ''), m.ans.replace(/^Why/, 'why')],
+        point: '过去时特殊疑问句改写',
+        why: m.why + ' 口诀：疑问词 + did + 主语 + 动词原形。',
+        level: 3
+      };
+    }
+  };
+
+  GENS.phrase_fill = {
+    label: '固定搭配填空', tag: 'phrase_fill', desc: '汉译英常考短语', unit: 'u3',
+    mk: function (r) {
+      var frames = [
+        { p: 'learn from', s: 'What can you ______ great people?', cn: '你能从伟人身上学到什么？', why: 'learn from sb 向某人学习。' },
+        { p: 'at the age of', s: 'He began to work on the farm ______ six.', cn: '他六岁时就开始干农活。', why: 'at the age of + 数字 = when he was … years old。' },
+        { p: 'famous for', s: 'She is ______ helping others.', cn: '她因为帮助别人而闻名。', why: 'be famous for + 特点/原因；be famous as + 身份。' },
+        { p: 'give up', s: 'Don\'t ______ and keep working hard!', cn: '不要放弃，继续努力！', why: '祈使句否定 Don\'t + 动词原形；give up 放弃。' },
+        { p: 'take part in', s: 'Why don\'t you ______ the school play?', cn: '你为什么不参加学校的话剧？', why: 'Why don\'t you + 动词原形，表建议；take part in 参加。' },
+        { p: 'look after', s: 'We should ______ old people.', cn: '我们应该照顾老人。', why: 'look after = take care of 照顾。' },
+        { p: 'on my way home', s: 'I found the book ______ .', cn: '我在回家的路上找到了这本书。', why: 'on one\'s way home 在某人回家的路上，home 前不加 to。' },
+        { p: 'instead of', s: 'We can walk ______ taking a car.', cn: '我们可以走路而不是坐车。', why: 'instead of + 名词/doing，of 是介词。' },
+        { p: 'used to', s: 'People ______ write letters, but now they send emails.', cn: '人们过去写信，现在发邮件。', why: 'used to + 动词原形，表过去常常。' },
+        { p: 'come true', s: 'If you never give up, your dream will ______ .', cn: '如果你永不放弃，梦想就会实现。', why: 'come true 实现，主语是梦想。' }
+      ];
+      var f = pick(r, frames);
+      return {
+        stem: '根据汉语完成句子（每空一词）：\n' + f.cn + '\n' + f.s,
+        answer: f.p, point: '固定搭配', why: f.why, level: 2
+      };
+    }
+  };
+
+  GENS.turn_into = {
+    label: 'turn into / make out of', tag: 'turn_into', desc: 'U7 旧物改造的两个介词', unit: 'u7',
+    mk: function (r) {
+      var modes = [
+        { s: 'We can turn an old bottle ______ a vase.', o: ['into', 'in', 'out of', 'for'], a: 'A', why: 'turn A into B 把 A 变成 B。' },
+        { s: 'My mum made a bag ______ old clothes.', o: ['into', 'out of', 'from', 'with'], a: 'B', why: 'make B out of A 用 A 做成 B。' },
+        { s: 'First we cut the box ______ small pieces.', o: ['into', 'out of', 'on', 'at'], a: 'A', why: 'cut … into … 把……剪成……。' },
+        { s: 'Old things can have a new ______ .', o: ['life', 'live', 'living', 'lives'], a: 'A', why: 'have a new life 获得新生命，life 是名词。' }
+      ];
+      var m = pick(r, modes);
+      return { stem: m.s, options: m.o, answer: m.a, point: 'U7 固定搭配', why: m.why, level: 2 };
+    }
+  };
+
+  var ORDER = ['past_form', 'past_neg', 'past_yesno', 'be_past', 'wh_word', 'word_family', 'verb_pattern',
+    'plural', 'ordinal', 'prep_time', 'sva', 'continuous', 'tense_signal', 'whose', 'transform_neg',
+    'transform_ask', 'phrase_fill', 'turn_into'];
+
+  function generate(tag, seed) {
+    var g = GENS[tag] || GENS.past_form;
+    var r = mulberry32(seed === undefined ? Math.floor(Math.random() * 1e9) : seed);
+    var it = g.mk(r);
+    it.tag = tag;
+    it.id = 'g_' + tag + '_' + (seed === undefined ? Math.floor(Math.random() * 1e9) : seed);
+    it.gen = true;
+    return it;
+  }
+
+  function variants(item, n, seedBase) {
+    var tag = item && item.tag && GENS[item.tag] ? item.tag : 'past_form';
+    var base = seedBase === undefined ? hash(String(item && item.stem || '') + Date.now()) : seedBase;
+    var out = [];
+    for (var i = 0; i < (n || 3); i++) out.push(generate(tag, base + i * 7919 + 13));
+    return out;
+  }
+
+  return {
+    GENS: GENS, ORDER: ORDER, generate: generate, variants: variants,
+    check: check, norm: norm, pastRule: pastRule, hash: hash, mulberry32: mulberry32
+  };
+})();
+
+
+
+</script>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'yl6a_var_v1';
+  var view = document.getElementById('view');
+
+  /* ---------- 单元 → 考点 ---------- */
+  var UNIT_TAGS = {
+    u1: ['continuous', 'verb_pattern', 'word_family', 'tense_signal'],
+    u2: ['past_form', 'past_neg', 'past_yesno', 'be_past', 'whose', 'sva', 'transform_neg'],
+    u3: ['wh_word', 'word_family', 'verb_pattern', 'plural', 'prep_time', 'transform_ask', 'phrase_fill'],
+    u4: ['ordinal', 'prep_time', 'past_form'],
+    u5: ['tense_signal', 'sva', 'verb_pattern'],
+    u6: ['phrase_fill', 'verb_pattern', 'sva'],
+    u7: ['turn_into', 'past_form', 'verb_pattern'],
+    u8: ['past_form', 'be_past', 'tense_signal', 'word_family']
+  };
+  function unitOf(id) { for (var i = 0; i < UNITS.length; i++) if (UNITS[i].id === id) return UNITS[i]; return null; }
+  function bankOf(u) { return BANK.filter(function (x) { return x.unit === u; }); }
+
+  /* ---------- 存储 ---------- */
+  var DB = (function () {
+    try {
+      var d = JSON.parse(localStorage.getItem(KEY) || '{}');
+      return { tag: d.tag || {}, wrong: d.wrong || {}, day: d.day || {}, last: d.last || null };
+    } catch (e) { return { tag: {}, wrong: {}, day: {}, last: null }; }
+  })();
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) {} }
+  function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function record(tag, ok) {
+    var t = DB.tag[tag] || (DB.tag[tag] = { n: 0, ok: 0 }); t.n++; if (ok) t.ok++;
+    var k = today(); var d = DB.day[k] || (DB.day[k] = { n: 0, ok: 0 }); d.n++; if (ok) d.ok++;
+    if (!ok) DB.wrong[tag] = (DB.wrong[tag] || 0) + 1;
+    save();
+  }
+  function tagRate(tag) { var t = DB.tag[tag]; return t && t.n ? Math.round(t.ok / t.n * 100) : -1; }
+  function totals() {
+    var n = 0, ok = 0;
+    for (var k in DB.tag) { n += DB.tag[k].n; ok += DB.tag[k].ok; }
+    var d = DB.day[today()] || { n: 0, ok: 0 };
+    return { n: n, ok: ok, rate: n ? Math.round(ok / n * 100) : 0, dn: d.n, drate: d.n ? Math.round(d.ok / d.n * 100) : 0 };
+  }
+
+  /* ---------- 工具 ---------- */
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function letter(i) { return String.fromCharCode(65 + i); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function toast(m) {
+    var d = document.createElement('div'); d.className = 'toast'; d.textContent = m;
+    document.body.appendChild(d); setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 1600);
+  }
+  function speak(t) {
+    try {
+      if (!window.speechSynthesis) return;
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(String(t)); u.lang = 'en-US'; u.rate = .85;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+
+  /* ---------- 状态 ---------- */
+  var S = { view: 'home', unit: null, tag: null, q: null, tab: 'all' };
+
+  /* ---------- 首页 ---------- */
+  function vHome() {
+    var t = totals();
+    document.getElementById('topStat').innerHTML =
+      '今日 <b>' + t.dn + '</b> 题 · 正确率 <b>' + t.drate + '%</b>';
+    var h = '';
+    h += '<h2 class="sec">按单元练 · 生成同类变式</h2><div class="rows">';
+    UNITS.forEach(function (U) {
+      var tags = UNIT_TAGS[U.id] || [];
+      var b = bankOf(U.id);
+      var seen = 0, okc = 0;
+      tags.forEach(function (g) { var s = DB.tag[g]; if (s) { seen += s.n; okc += s.ok; } });
+      var pct = seen ? Math.round(okc / seen * 100) : 0;
+      h += '<button class="row" data-act="unit" data-id="' + U.id + '">' +
+        '<span class="idx">' + U.no + '</span><span class="mid">' +
+        '<span class="t">' + esc(U.title) + ' <span style="font-weight:400;font-size:12px;color:var(--ink3)">' + esc(U.cn) + '</span></span>' +
+        '<span class="s">' + tags.length + ' 类考点' + (b.length ? ' · 真题 ' + b.length + ' 道' : '') + (seen ? ' · 已练 ' + seen + ' 题' : '') + '</span>' +
+        (seen ? '<span class="meter"><i style="width:' + pct + '%"></i></span>' : '') +
+        '</span><span class="arrow">›</span></button>';
+    });
+    h += '</div>';
+    h += '<h2 class="sec">整卷与错题</h2><div class="rows">' +
+      '<button class="row" data-act="exam"><span class="idx">▤</span><span class="mid"><span class="t">U2–U3 拔高卷（真题）</span>' +
+      '<span class="s">' + BANK.filter(function (b) { return b.kind !== 'multi' && !b.ctx; }).length + ' 道原题：选择、适当形式、动词填空、句型转换、完成句子</span></span><span class="arrow">›</span></button>' +
+      '<button class="row" data-act="errors"><span class="idx">✓</span><span class="mid"><span class="t">错得最多的考点</span>' +
+      '<span class="s">' + (Object.keys(DB.wrong).length ? '按错误次数排，直接生成一组' : '还没有错题记录') + '</span></span><span class="arrow">›</span></button>' +
+      '</div>';
+    h += '<footer>变式题由 18 条语法模板现场生成，每题都带考点与解析；固定题来自《U2–U3 拔高测试卷》。<br>' +
+      '记录只存本机浏览器；换设备用「讲评 → 导出」搬数据。</footer>';
+    return h;
+  }
+
+  /* ---------- 单元页 ---------- */
+  function vUnit(id) {
+    var U = unitOf(id), tags = UNIT_TAGS[id] || [];
+    var h = '<div style="display:flex;gap:12px;align-items:flex-start;margin:14px 0 4px">' +
+      '<div style="font-family:var(--en);font-size:30px;line-height:1;color:var(--accent);font-weight:600">' + U.no + '</div>' +
+      '<div><h2 style="margin:0;font-size:20px">' + esc(U.title) + '</h2>' +
+      '<div style="font-size:13px;color:var(--ink3)">' + esc(U.cn) + ' · ' + esc(U.theme) + '</div></div></div>';
+    h += '<div class="btnrow" style="margin:12px 0">' +
+      '<button class="btn sm" data-act="mixed" data-id="' + id + '">本单元混合练（10 题）</button>' +
+      '<button class="btn sm ghost" data-act="know" data-id="' + id + '">先看知识点</button></div>';
+    h += '<h2 class="sec">选一个考点，只练这一类</h2><div class="rows">';
+    tags.forEach(function (g) {
+      var G = CORE.GENS[g]; if (!G) return;
+      var r = tagRate(g);
+      h += '<button class="row" data-act="tag" data-id="' + g + '" data-unit="' + id + '">' +
+        '<span class="idx" style="font-size:12px">' + (r < 0 ? '·' : r + '%') + '</span>' +
+        '<span class="mid"><span class="t">' + esc(G.label) + '</span><span class="s">' + esc(G.desc) + '</span></span>' +
+        '<span class="arrow">›</span></button>';
+    });
+    h += '</div>';
+    h += '<p style="font-size:12px;color:var(--ink3);margin-top:10px">点进去先选题数（5 / 10 / 20），做错可以「再来一道同考点」一直练到对。</p>';
+    return h;
+  }
+
+  /* ---------- 知识点页 ---------- */
+  function vKnow(id) {
+    var U = unitOf(id || 'u2'), tags = UNIT_TAGS[U.id] || [];
+    var h = '<div class="chips">' + UNITS.map(function (x) {
+      return '<button class="chip' + (x.id === U.id ? ' on' : '') + '" data-act="know" data-id="' + x.id + '">' + x.no + ' ' + esc(x.title) + '</button>';
+    }).join('') + '</div>';
+    h += '<h2 class="sec">' + U.no + ' 的核心语法（' + tags.length + ' 类）</h2>';
+    tags.forEach(function (g) {
+      var K = TAG_KNOW[g], G = CORE.GENS[g];
+      if (!K) return;
+      h += '<div class="panel"><h3 style="margin:0 0 6px;font-size:15px">' + esc(K.t) + '</h3>' +
+        '<div style="font-family:var(--en);font-size:15px;color:var(--accent)">' + esc(K.f) + '</div>' +
+        '<div style="font-family:var(--en);font-size:14px;color:var(--ink);margin-top:6px">' + esc(K.e) + '</div>' +
+        '<div style="background:var(--gold-soft);border:1px solid #E8D6B4;border-radius:9px;padding:9px 11px;margin-top:9px;font-size:13px;color:#6B4A16">' + esc(K.w) + '</div>' +
+        (G ? '<div class="btnrow" style="margin-top:9px"><button class="btn sm ghost" data-act="tag" data-id="' + g + '" data-unit="' + U.id + '">只练这一类</button></div>' : '') +
+        '</div>';
+    });
+    return h;
+  }
+
+  /* ---------- 选题数 ---------- */
+  function vCount(unit, tag) {
+    var G = CORE.GENS[tag];
+    var h = '<div style="margin-top:16px">' +
+      '<div style="font-size:12px;color:var(--ink3)">' + (unit ? unitOf(unit).no + ' · ' : '') + '</div>' +
+      '<h2 style="margin:4px 0 6px;font-size:20px">' + esc(G.label) + '</h2>' +
+      '<div style="font-size:13.5px;color:var(--ink2)">' + esc(G.desc) + '</div>';
+    var K = TAG_KNOW[tag];
+    if (K) h += '<div class="know open" style="margin-top:12px"><div class="kh"><span>' + esc(K.t) + '</span><span style="font-weight:400">考点</span></div>' +
+      '<div class="kb"><span class="f">' + esc(K.f) + '</span><span class="e">' + esc(K.e) + '</span>' + esc(K.w) + '</div></div>';
+    h += '<h2 class="sec">这组做几道？</h2><div class="btnrow">' +
+      '<button class="btn" data-act="start" data-tag="' + tag + '" data-n="5">5 题</button>' +
+      '<button class="btn" data-act="start" data-tag="' + tag + '" data-n="10">10 题</button>' +
+      '<button class="btn ghost" data-act="start" data-tag="' + tag + '" data-n="20">20 题</button></div>';
+    h += '<p style="font-size:12px;color:var(--ink3);margin-top:12px">同一个考点，每次的题干、主语、时间、动词都不一样——练的是规则，不是背题。</p></div>';
+    return h;
+  }
+
+  /* ---------- 答题 ---------- */
+  function vQuiz() {
+    var q = S.q, it = q.items[q.i];
+    if (!it) return vResult();
+    var h = '<div class="qbar"><i style="width:' + Math.round(q.i / q.items.length * 100) + '%"></i></div>';
+    h += '<div class="qmeta"><span>第 ' + (q.i + 1) + '/' + q.items.length + ' 题 · ' + esc(q.title) + '</span>' +
+      '<span class="tag">' + esc(it.tagLabel || '') + '</span></div>';
+    h += '<div class="stem">' + fmt(it.stem) + '</div>';
+    if (it.kind === 'choice') {
+      h += '<div class="opts">';
+      it.options.forEach(function (o, i) {
+        var cls = 'opt';
+        if (q.submitted) { if (letter(i) === it.answer) cls += ' ok'; else if (q.pick === letter(i)) cls += ' bad'; }
+        else if (q.pick === letter(i)) cls += ' sel';
+        h += '<button class="' + cls + '" data-act="pick" data-id="' + letter(i) + '"' + (q.submitted ? ' disabled' : '') + '>' +
+          '<span class="lt">' + letter(i) + '</span><span class="tx">' + esc(o) + '</span></button>';
+      });
+      h += '</div>';
+    } else if (it.kind === 'text') {
+      h += '<div class="field"><textarea id="ansInput" placeholder="写出完整句子" ' + (q.submitted ? 'disabled' : '') + '>' + esc(q.input) + '</textarea>' +
+        '<div class="hint">大小写、句末标点不严格扣分；didn\'t 与 did not 都算对。</div></div>';
+    } else {
+      h += '<div class="field"><input id="ansInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="填横线上的内容" value="' + esc(q.input) + '" ' + (q.submitted ? 'disabled' : '') + '>' +
+        '<div class="hint">多个空用分号隔开，如 inventor; inventions。</div></div>';
+    }
+    if (!q.submitted) h += '<div class="btnrow" style="margin-top:16px"><button class="btn block" data-act="submit">提交</button></div>';
+    else h += vFb(it, q.ok);
+    return h;
+  }
+
+  function fmt(s) {
+    var p = String(s).split('\n'), o = esc(p[0]);
+    for (var i = 1; i < p.length; i++) o += '<span class="cn">' + esc(p[i]) + '</span>';
+    return o;
+  }
+
+  function vFb(it, ok) {
+    var K = TAG_KNOW[it.tag] || null;
+    var h = '<div class="fb ' + (ok ? 'ok' : 'bad') + '"><div class="h"><span>' + (ok ? '✓ 正确' : '✗ 再看一步') + '</span>' +
+      '<span style="font-weight:400;font-size:11.5px">' + esc(it.point || '') + '</span></div><div class="b">';
+    if (!ok) h += '<div class="kv"><div class="k">答案</div><div class="v en">' + esc(it.kind === 'choice' ? it.answer + '. ' + it.options[it.answer.charCodeAt(0) - 65] : it.answer) + '</div></div>';
+    h += '<div class="kv"><div class="k">为什么</div><div class="v">' + esc(it.why) + '</div></div>';
+    if (K) h += '<div class="know' + (ok ? '' : ' open') + '"><div class="kh" data-act="fold"><span>' + esc(K.t) + '</span><span style="font-weight:400">展开公式</span></div>' +
+      '<div class="kb"><span class="f">' + esc(K.f) + '</span><span class="e">' + esc(K.e) + '</span>' + esc(K.w) + '</div></div>';
+    h += '<div class="acts">';
+    if (it.tag) h += '<button class="btn sm ghost" data-act="again-tag">再来一道同考点</button>';
+    h += '<button class="btn sm" data-act="next">' + (S.q.i + 1 >= S.q.items.length ? '看结果' : '下一题') + '</button>';
+    h += '</div></div></div>';
+    return h;
+  }
+
+  function vResult() {
+    var q = S.q, n = q.res.length, ok = q.res.filter(Boolean).length;
+    var pct = n ? Math.round(ok / n * 100) : 0;
+    var bad = {};
+    q.items.forEach(function (it, i) { if (q.res[i] === false) bad[it.tag] = (bad[it.tag] || 0) + 1; });
+    var h = '<div class="panel res"><div style="font-size:12px;color:var(--ink3);letter-spacing:.1em">' + esc(q.title) + '</div>' +
+      '<div class="big">' + ok + ' / ' + n + '</div><div class="sub">正确率 ' + pct + '%' +
+      (pct >= 90 ? ' · 这一组可以过了' : pct >= 70 ? ' · 错的考点再练一组' : ' · 先看知识点，再来') + '</div></div>';
+    var keys = Object.keys(bad);
+    if (keys.length) {
+      h += '<h2 class="sec">错的考点（点一下只练这一类）</h2><div class="taglist">';
+      keys.forEach(function (g) {
+        h += '<button class="tg bad" data-act="tag" data-id="' + g + '">' + esc(CORE.GENS[g] ? CORE.GENS[g].label : g) + ' ×' + bad[g] + '</button>';
+      });
+      h += '</div>';
+    }
+    h += '<div class="btnrow" style="margin-top:16px">' +
+      (keys.length ? '<button class="btn" data-act="drill-wrong">只练错的考点</button>' : '') +
+      '<button class="btn ghost" data-act="repeat">再来一组</button>' +
+      '<button class="btn ghost" data-act="home">回首页</button></div>';
+    return h;
+  }
+
+  /* ---------- 组卷 ---------- */
+  function buildTags(tags, n) {
+    var items = [];
+    for (var i = 0; i < n; i++) {
+      var g = tags[i % tags.length];
+      var it = CORE.generate(g, Math.floor(Math.random() * 1e9));
+      it.tagLabel = CORE.GENS[g].label;
+      items.push(it);
+    }
+    return shuffle(items);
+  }
+  function startQuiz(items, title, key) {
+    if (!items.length) { toast('没有可用题目'); return; }
+    S.q = { items: items, i: 0, pick: null, input: '', submitted: false, ok: null, res: [], title: title, key: key || '' };
+    S.view = 'quiz'; render(); window.scrollTo(0, 0);
+  }
+
+  /* ---------- 错题 ---------- */
+  function vErrors() {
+    var arr = Object.keys(DB.wrong).map(function (g) { return { g: g, n: DB.wrong[g] }; }).sort(function (a, b) { return b.n - a.n; });
+    var h = '<div style="margin-top:14px"><h2 style="margin:0;font-size:20px">错题（按考点）</h2>' +
+      '<div style="font-size:13px;color:var(--ink3);margin-top:3px">每错一题记一次；点考点直接生成一组同类变式</div></div>';
+    if (!arr.length) return h + '<div class="empty"><div style="font-size:28px;color:var(--line2);font-family:var(--en)">空</div><p>还没有错题记录。</p></div>';
+    h += '<div class="btnrow" style="margin:12px 0"><button class="btn sm" data-act="drill-wrong">练错的考点（10 题）</button>' +
+      '<button class="btn sm ghost" data-act="print">打印</button></div><div class="rows">';
+    arr.forEach(function (o) {
+      var G = CORE.GENS[o.g]; var r = tagRate(o.g);
+      h += '<button class="row" data-act="tag" data-id="' + o.g + '"><span class="idx" style="font-size:12px">' + (r < 0 ? '·' : r + '%') + '</span>' +
+        '<span class="mid"><span class="t">' + esc(G ? G.label : o.g) + '</span><span class="s">错 ' + o.n + ' 次' + (G ? ' · ' + esc(G.desc) : '') + '</span></span>' +
+        '<span class="arrow">›</span></button>';
+    });
+    h += '</div>';
+    return h;
+  }
+
+  /* ---------- 讲评 ---------- */
+  function vTeach() {
+    var t = totals();
+    var rows = CORE.ORDER.map(function (g) {
+      var s = DB.tag[g]; if (!s) return null;
+      return { g: g, n: s.n, pct: Math.round(s.ok / s.n * 100) };
+    }).filter(Boolean).sort(function (a, b) { return a.pct - b.pct; });
+    var h = '<div style="margin-top:14px"><h2 style="margin:0;font-size:20px">讲评台</h2>' +
+      '<div style="font-size:13px;color:var(--ink3);margin-top:3px">先看数据 → 再讲错因 → 变式再练</div></div>';
+    h += '<div class="panel" style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);text-align:center">' +
+      '<div><div style="font-size:11.5px;color:var(--ink3)">累计</div><div style="font-family:var(--en);font-size:22px">' + t.n + '</div></div>' +
+      '<div><div style="font-size:11.5px;color:var(--ink3)">正确率</div><div style="font-family:var(--en);font-size:22px">' + t.rate + '%</div></div>' +
+      '<div><div style="font-size:11.5px;color:var(--ink3)">考点数</div><div style="font-family:var(--en);font-size:22px">' + Object.keys(DB.tag).length + '</div></div></div>';
+    h += '<h2 class="sec">各考点正确率（最弱在最上）</h2>';
+    if (!rows.length) h += '<div class="panel" style="font-size:13.5px;color:var(--ink3)">还没有练习记录。做一组题后，这里会自动按考点排序。</div>';
+    else {
+      h += '<div class="panel">';
+      rows.forEach(function (o) {
+        var G = CORE.GENS[o.g];
+        h += '<div style="padding:8px 0;border-bottom:1px dashed var(--line)">' +
+          '<div style="display:flex;justify-content:space-between;font-size:14px"><span>' + esc(G ? G.label : o.g) + '</span>' +
+          '<span style="font-family:var(--en);color:' + (o.pct < 60 ? 'var(--bad)' : 'var(--accent)') + '">' + o.pct + '% <span style="font-size:11px;color:var(--ink3)">(' + o.n + ')</span></span></div>' +
+          '<div class="meter" style="margin-top:5px"><i style="width:' + o.pct + '%' + (o.pct < 60 ? ';background:var(--bad)' : '') + '"></i></div></div>';
+      });
+      h += '</div>';
+    }
+    h += '<h2 class="sec">三步讲评（1 课时）</h2><div class="panel">' +
+      '<div style="padding:8px 0;border-bottom:1px dashed var(--line)"><b>1 · 数据（5 分钟）</b><div style="font-size:13.5px;color:var(--ink2)">看上面最弱两项，通常是「动词搭配」和「不规则动词」。</div></div>' +
+      '<div style="padding:8px 0;border-bottom:1px dashed var(--line)"><b>2 · 归因（20 分钟）</b><div style="font-size:13.5px;color:var(--ink2)">每道错题只问三句：考什么？凭什么判断？错在哪一步？</div></div>' +
+      '<div style="padding:8px 0"><b>3 · 变式（15 分钟）</b><div style="font-size:13.5px;color:var(--ink2)">同一考点连做 10 道变式，换主语、换时间、换动词——会一类，而不是会一题。</div></div></div>';
+    h += '<h2 class="sec">数据</h2><div class="rows">' +
+      '<button class="row" data-act="export"><span class="idx">↓</span><span class="mid"><span class="t">导出记录</span><span class="s">JSON，换设备或给老师</span></span><span class="arrow">›</span></button>' +
+      '<button class="row" data-act="wipe"><span class="idx">×</span><span class="mid"><span class="t">清空本机记录</span><span class="s">只删这台设备</span></span><span class="arrow">›</span></button></div>';
+    return h;
+  }
+
+  /* ---------- 渲染 ---------- */
+  function render() {
+    var h;
+    if (S.view === 'home') h = vHome();
+    else if (S.view === 'unit') h = vUnit(S.unit);
+    else if (S.view === 'know') h = vKnow(S.unit);
+    else if (S.view === 'count') h = vCount(S.unit, S.tag);
+    else if (S.view === 'quiz') h = vQuiz();
+    else if (S.view === 'errors') h = vErrors();
+    else if (S.view === 'teach') h = vTeach();
+    else if (S.view === 'map') h = vMap();
+    else h = vHome();
+    document.getElementById('view').innerHTML = h;
+    var cur = { home: 'home', unit: 'home', know: 'map', count: 'home', quiz: 'home', errors: 'errors', teach: 'teach', map: 'map' }[S.view] || 'home';
+    Array.prototype.forEach.call(document.querySelectorAll('nav button'), function (b) {
+      b.setAttribute('aria-current', b.getAttribute('data-nav') === cur ? 'true' : 'false');
+    });
+    var el = document.getElementById('ansInput');
+    if (S.view === 'quiz' && el && !S.q.submitted) el.focus({ preventScroll: true });
+  }
+
+  function vMap() {
+    var h = '<div style="margin-top:14px"><h2 style="margin:0;font-size:20px">18 类考点</h2>' +
+      '<div style="font-size:13px;color:var(--ink3);margin-top:3px">点任意一类，直接生成一组；也可以从单元页进</div></div><div class="rows" style="margin-top:12px">';
+    CORE.ORDER.forEach(function (g) {
+      var G = CORE.GENS[g], r = tagRate(g);
+      h += '<button class="row" data-act="tag" data-id="' + g + '"><span class="idx" style="font-size:12px">' + (r < 0 ? '·' : r + '%') + '</span>' +
+        '<span class="mid"><span class="t">' + esc(G.label) + '</span><span class="s">' + esc(G.desc) + '</span></span><span class="arrow">›</span></button>';
+    });
+    h += '</div>';
+    return h;
+  }
+
+  /* ---------- 提交 ---------- */
+  function submit() {
+    var q = S.q, it = q.items[q.i];
+    if (q.submitted) return;
+    var ok;
+    if (it.kind === 'choice') {
+      if (!q.pick) { toast('先选一个'); return; }
+      ok = CORE.check(it, q.pick);
+    } else {
+      var el = document.getElementById('ansInput');
+      q.input = el ? el.value : '';
+      if (!String(q.input).trim()) { toast('先写下答案'); return; }
+      ok = CORE.check(it, q.input);
+    }
+    q.ok = ok; q.submitted = true; q.res[q.i] = ok;
+    record(it.tag, ok);
+    render();
+    var fb = document.querySelector('.fb');
+    if (fb) fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function next() {
+    var q = S.q;
+    if (q.i + 1 >= q.items.length) { q.i = q.items.length; render(); window.scrollTo(0, 0); return; }
+    q.i++; q.pick = null; q.input = ''; q.submitted = false; q.ok = null;
+    render(); window.scrollTo(0, 0);
+  }
+
+  function againTag() {
+    var q = S.q, it = q.items[q.i];
+    var n = CORE.generate(it.tag, Math.floor(Math.random() * 1e9));
+    n.tagLabel = CORE.GENS[it.tag].label;
+    q.items[q.i] = n;
+    q.pick = null; q.input = ''; q.submitted = false; q.ok = null;
+    render(); toast('换了一道同类题');
+  }
+
+  /* ---------- 事件 ---------- */
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-act]');
+    if (!el) return;
+    var act = el.getAttribute('data-act'), id = el.getAttribute('data-id');
+    if (act === 'home') { S.view = 'home'; render(); window.scrollTo(0, 0); }
+    else if (act === 'unit') { S.unit = id; S.view = 'unit'; render(); window.scrollTo(0, 0); }
+    else if (act === 'know') { S.unit = id; S.view = 'know'; render(); window.scrollTo(0, 0); }
+    else if (act === 'tag') { S.unit = el.getAttribute('data-unit') || S.unit; S.tag = id; S.view = 'count'; render(); window.scrollTo(0, 0); }
+    else if (act === 'start') {
+      var n = parseInt(el.getAttribute('data-n'), 10);
+      startQuiz(buildTags([S.tag], n), CORE.GENS[S.tag].label, 'tag:' + S.tag);
+    }
+    else if (act === 'mixed') {
+      var tags = UNIT_TAGS[id] || CORE.ORDER.slice(0, 4);
+      startQuiz(buildTags(tags, 10), unitOf(id).no + ' 混合', 'unit:' + id);
+    }
+    else if (act === 'exam') {
+      var items = BANK.filter(function (b) { return b.kind !== 'multi' && !b.ctx; }).map(function (b) {
+        if (b.kind === 'choice') return { kind: 'choice', stem: b.stem, options: b.options, answer: b.answer, point: b.point, why: b.why, tag: b.tag, tagLabel: TAG_KNOW[b.tag] ? TAG_KNOW[b.tag].t : '真题' };
+        return { kind: b.kind === 'text' ? 'text' : 'fill', stem: b.stem, answer: b.answer, accept: b.accept, point: b.point, why: b.why, tag: b.tag, tagLabel: TAG_KNOW[b.tag] ? TAG_KNOW[b.tag].t : '真题' };
+      });
+      startQuiz(shuffle(items), 'U2–U3 拔高卷 · 真题', 'exam');
+    }
+    else if (act === 'pick') { if (!S.q.submitted) { S.q.pick = id; render(); } }
+    else if (act === 'submit') submit();
+    else if (act === 'next') next();
+    else if (act === 'again-tag') againTag();
+    else if (act === 'fold') { var k = el.parentNode; k.classList.toggle('open'); }
+    else if (act === 'drill-wrong') {
+      var gs = Object.keys(DB.wrong).sort(function (a, b) { return DB.wrong[b] - DB.wrong[a]; }).slice(0, 4);
+      if (!gs.length) { toast('还没有错题'); return; }
+      startQuiz(buildTags(gs, 10), '只练错的考点', 'drill');
+    }
+    else if (act === 'repeat') {
+      var key = S.q && S.q.key || '';
+      if (key.indexOf('tag:') === 0) { var t = key.slice(4); startQuiz(buildTags([t], S.q.items.length), S.q.title, key); }
+      else if (key.indexOf('unit:') === 0) { var u = key.slice(5); startQuiz(buildTags(UNIT_TAGS[u], 10), S.q.title, key); }
+      else if (key === 'exam') { S.view = 'home'; render(); }
+      else { S.view = 'home'; render(); }
+    }
+    else if (act === 'errors') { S.view = 'errors'; render(); window.scrollTo(0, 0); }
+    else if (act === 'teach') { S.view = 'teach'; render(); window.scrollTo(0, 0); }
+    else if (act === 'map') { S.view = 'map'; render(); window.scrollTo(0, 0); }
+    else if (act === 'print') window.print();
+    else if (act === 'export') {
+      var blob = new Blob([JSON.stringify({ app: 'yl6a_var', ts: Date.now(), db: DB }, null, 1)], { type: 'application/json' });
+      var a = document.createElement('a'); var d = new Date();
+      a.href = URL.createObjectURL(blob);
+      a.download = '变式练习记录_' + d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2) + '.json';
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 400);
+      toast('已导出');
+    }
+    else if (act === 'wipe') {
+      if (!DB || !Object.keys(DB.tag).length) { toast('没有记录'); return; }
+      DB = { tag: {}, wrong: {}, day: {}, last: null }; save(); S.view = 'home'; render(); toast('已清空');
+    }
+  });
+
+  document.getElementById('nav').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-nav]'); if (!b) return;
+    var n = b.getAttribute('data-nav');
+    S.view = n; render(); window.scrollTo(0, 0);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    if (S.view !== 'quiz' || !S.q || !S.q.items[S.q.i]) return;
+    if (e.target && e.target.tagName === 'TEXTAREA') return;
+    e.preventDefault();
+    if (S.q.submitted) next(); else submit();
+  });
+
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.id === 'ansInput' && S.q) S.q.input = e.target.value;
+  });
+
+  window.__APP = { S: S, render: render, CORE: CORE, startQuiz: startQuiz };
+  render();
+})();
+</script>
+</body>
+</html>
